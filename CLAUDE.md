@@ -34,6 +34,8 @@ Stored locally in `assets/`. Use these local copies and don't link to the live s
 | Asset | File | Notes |
 |---|---|---|
 | Logo (wordmark) | `assets/logo/pv-logo.png` | Black ಪ್ರಜಾವಾಣಿ wordmark with Nandi on white, trimmed to 248×63 px. **Low resolution.** Ask the owner for a high-res SVG/PNG from the Prajavani design team before launch. |
+| Karunadotsava artwork | `assets/hero/karunadotsava-art-160.webp` | The central red "ಕ" artwork cut from Prajavani's campaign poster (`assets/hero/karunadotsava-poster.jpeg`, supplied by the owner). Only the artwork is used, not the poster text. Shown small in the masthead, after the Prajavani logo, with the title "ಕರುನಾಡೋತ್ಸವ". There is no separate hero section; the carousel follows the nav bar. |
+| Photos and videos | `assets/images/`, `assets/videos/` | Freely licensed Wikimedia Commons media, credited in `js/data.js` and the footer. Videos are compressed MP4 (H.264, ≤854px wide, ≤1 min) with a WebP poster. Keep new videos small; they load only when played. |
 | Headline font | `assets/fonts/PvHeadlineSemibold3.woff2` | Prajavani headline face, weight 600. Use for headlines, section titles and the carousel. |
 | Body font | `assets/fonts/PrajavaniTextRegular.woff2` | Weight 400. Use for body text, descriptions and menus. |
 | Body semibold | `assets/fonts/PrajavaniTextSemibold.woff2` | Weight 600. Use for category labels, buttons and emphasis. |
@@ -91,6 +93,17 @@ Define them as CSS custom properties in one place.
   look is borrowed: no code or assets from The Hindu.
 - Cards: one column on phone, two on tablet, three or four on desktop.
 - Test at 360px, 390px, 768px, 1024px and 1440px widths.
+
+## Poster maker
+
+- `js/poster.js` (section `#poster`, after the intro banner), modelled on the
+  greeting-card maker on prajavani.net/pages/dasara-special.
+- Two types, set in `POSTER` in `js/data.js`:
+  - "ನಾನು ಹೆಮ್ಮೆಯ ಕನ್ನಡಿಗ" for a personal photo in a round frame.
+  - "ನಮ್ಮ ಏರಿಯಾದಲ್ಲಿ ರಾಜ್ಯೋತ್ಸವ" for a public-programme photo in a wide frame.
+- Drawn on a 1080×1350 canvas entirely in the browser. **The photo is never
+  uploaded.** Keep it that way, and keep the privacy note accurate.
+- Colours on the canvas are read from the CSS tokens. Don't hard-code them in JS.
 
 ## Tech and structure
 

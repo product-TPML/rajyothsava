@@ -1,4 +1,4 @@
-/* Builds the page from js/data.js and wires up the menu panel and carousel. */
+/* Builds the page from js/data.js and wires up search, menu, carousel, videos and gallery. */
 (() => {
   "use strict";
 
@@ -36,16 +36,20 @@
     });
   }
 
+  const byline = (tag, author) => el(tag, { class: "byline" }, format(UI.byline, { author }));
+
+  /* data-text="key" fills an element's text from UI; these fill an attribute instead. */
+  const ATTRIBUTE_BINDINGS = { label: "aria-label", href: "href", placeholder: "placeholder" };
+
   function applyText() {
     document.querySelectorAll("[data-text]").forEach((node) => {
       node.textContent = UI[node.dataset.text];
     });
-    document.querySelectorAll("[data-label]").forEach((node) => {
-      node.setAttribute("aria-label", UI[node.dataset.label]);
-    });
-    document.querySelectorAll("[data-href]").forEach((node) => {
-      node.href = UI[node.dataset.href];
-    });
+    for (const [key, attribute] of Object.entries(ATTRIBUTE_BINDINGS)) {
+      document.querySelectorAll(`[data-${key}]`).forEach((node) => {
+        node.setAttribute(attribute, UI[node.dataset[key]]);
+      });
+    }
   }
 
   function renderNavigation() {
@@ -114,7 +118,8 @@
               "span",
               { class: "slide__body" },
               el("span", { class: "tag" }, section.kn),
-              el("span", { class: "slide__title" }, slide.title)
+              el("span", { class: "slide__title" }, slide.title),
+              byline("span", slide.author)
             )
           )
         )
@@ -150,7 +155,8 @@
             { class: "card__body" },
             el("span", { class: "tag" }, section.kn),
             el("h3", { class: "card__title" }, el("a", { class: "card__link", href: sectionHref(section) }, story.title)),
-            el("p", { class: "card__summary" }, story.summary)
+            el("p", { class: "card__summary" }, story.summary),
+            byline("p", story.author)
           )
         );
       })
@@ -173,11 +179,203 @@
   }
 
   function renderCredits() {
+    const items = [
+      ...Object.values(IMAGES).map(({ alt, credit }) => ({ label: alt, credit })),
+      ...VIDEOS.map(({ title, credit }) => ({ label: title, credit })),
+    ];
     document.getElementById("credits-list").append(
-      ...Object.values(IMAGES).map(({ alt, credit }) =>
-        el("li", {}, el("a", { href: credit.source }, alt), ` – ${credit.author}, ${credit.license}`)
+      ...items.map(({ label, credit }) =>
+        el("li", {}, el("a", { href: credit.source }, label), ` – ${credit.author}, ${credit.license}`)
       )
     );
+  }
+
+  /* Video gallery: one player plus a playlist; choosing an item loads and plays it. */
+  function setupVideos() {
+    const player = document.getElementById("video-player");
+    const list = document.getElementById("video-list");
+
+    const items = VIDEOS.map((video, i) =>
+      el(
+        "li",
+        {},
+        el(
+          "button",
+          { class: "video-list__item", type: "button", "data-index": i },
+          el(
+            "span",
+            { class: "video-list__thumb" },
+            el("img", { class: "media__img", src: `assets/videos/${video.file}-poster.webp`, alt: "", loading: "lazy" }),
+            el("span", { class: "video-list__duration" }, video.duration)
+          ),
+          el(
+            "span",
+            { class: "video-list__text" },
+            el("span", { class: "video-list__title" }, video.title),
+            el("span", { class: "byline" }, format(UI.videoCredit, { author: video.credit.author }))
+          )
+        )
+      )
+    );
+    list.append(...items);
+
+    function load(index, { autoplay }) {
+      const video = VIDEOS[index];
+      player.src = `assets/videos/${video.file}.mp4`;
+      player.poster = `assets/videos/${video.file}-poster.webp`;
+      document.getElementById("video-tag").textContent = sectionsById[video.section].kn;
+      document.getElementById("video-title").textContent = video.title;
+      document.getElementById("video-summary").textContent = video.summary;
+      document.getElementById("video-credit").textContent = format(UI.videoCredit, { author: video.credit.author });
+      items.forEach((item, i) => item.firstChild.setAttribute("aria-current", String(i === index)));
+      // Picking another video quickly interrupts the previous play() request; that is expected.
+      if (autoplay) player.play().catch(() => {});
+    }
+
+    list.addEventListener("click", (event) => {
+      const button = event.target.closest(".video-list__item");
+      if (button) load(Number(button.dataset.index), { autoplay: true });
+    });
+
+    load(0, { autoplay: false });
+  }
+
+  /* Photo gallery: a mosaic of thumbnails that open a full-screen viewer. */
+  function setupGallery() {
+    const list = document.getElementById("gallery-list");
+    const lightbox = document.getElementById("lightbox");
+    const image = document.getElementById("lightbox-img");
+    let current = 0;
+
+    list.append(
+      ...GALLERY.map((key, i) =>
+        el(
+          "li",
+          { class: i === 0 ? "gallery__cell gallery__cell--lead" : "gallery__cell" },
+          el(
+            "button",
+            {
+              class: "gallery__item",
+              type: "button",
+              "data-index": i,
+              "aria-label": format(UI.galleryOpen, { caption: IMAGES[key].alt }),
+            },
+            photo(key, { sizes: i === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 50vw" }),
+            el("span", { class: "gallery__caption", "aria-hidden": "true" }, IMAGES[key].alt)
+          )
+        )
+      )
+    );
+
+    function show(index) {
+      current = (index + GALLERY.length) % GALLERY.length;
+      const { alt, credit } = IMAGES[GALLERY[current]];
+      image.src = `assets/images/${GALLERY[current]}-1280.webp`;
+      image.alt = alt;
+      document.getElementById("lightbox-caption").textContent = alt;
+      document.getElementById("lightbox-credit").textContent = format(UI.photoCredit, { author: credit.author });
+      document.getElementById("lightbox-count").textContent = format(UI.slideOf, { n: current + 1, total: GALLERY.length });
+    }
+
+    list.addEventListener("click", (event) => {
+      const button = event.target.closest(".gallery__item");
+      if (!button) return;
+      show(Number(button.dataset.index));
+      lightbox.showModal();
+    });
+    lightbox.querySelector(".lightbox__close").addEventListener("click", () => lightbox.close());
+    lightbox.querySelectorAll(".lightbox__arrow").forEach((button) => {
+      button.addEventListener("click", () => show(current + Number(button.dataset.step)));
+    });
+    lightbox.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") show(current - 1);
+      if (event.key === "ArrowRight") show(current + 1);
+    });
+    addSwipe(lightbox.querySelector(".lightbox__figure"), (step) => show(current + step));
+  }
+
+  /*
+   * Live search over every article (carousel + highlights): matches headline,
+   * summary, author and section name. On phones the field opens from an icon.
+   */
+  function setupSearch() {
+    const root = document.querySelector(".search");
+    const toggle = root.querySelector(".search__toggle");
+    const form = document.getElementById("search-form");
+    const input = document.getElementById("search-input");
+    const results = document.getElementById("search-results");
+    const status = document.getElementById("search-status");
+    const list = document.getElementById("search-list");
+
+    const articles = [...SLIDES, ...HIGHLIGHTS].map((article) => {
+      const section = sectionsById[article.section];
+      return {
+        ...article,
+        sectionName: section.kn,
+        href: sectionHref(section),
+        text: [article.title, article.summary, article.author, section.kn, section.en].join(" ").toLowerCase(),
+      };
+    });
+
+    function hideResults() {
+      results.hidden = true;
+    }
+
+    function setOpen(open) {
+      root.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+      if (open) input.focus();
+      else hideResults();
+    }
+
+    function update() {
+      const query = input.value.trim().toLowerCase();
+      if (!query) {
+        hideResults();
+        return;
+      }
+      const matches = articles.filter((article) => article.text.includes(query));
+      status.textContent = matches.length ? format(UI.searchResults, { n: matches.length }) : UI.searchNoResults;
+      list.replaceChildren(
+        ...matches.map((article) =>
+          el(
+            "li",
+            {},
+            el(
+              "a",
+              { class: "search__result", href: article.href },
+              el("span", { class: "search__result-title" }, article.title),
+              el("span", { class: "search__result-meta" }, `${article.sectionName} · ${format(UI.byline, { author: article.author })}`)
+            )
+          )
+        )
+      );
+      results.hidden = false;
+    }
+
+    input.addEventListener("input", update);
+    input.addEventListener("focus", update);
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      list.querySelector("a")?.click();
+    });
+    toggle.addEventListener("click", () => setOpen(!root.classList.contains("is-open")));
+    list.addEventListener("click", (event) => {
+      if (!event.target.closest("a")) return;
+      input.value = "";
+      setOpen(false);
+    });
+    root.addEventListener("focusout", (event) => {
+      if (!root.contains(event.relatedTarget)) hideResults();
+    });
+    root.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      hideResults();
+      if (root.classList.contains("is-open")) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
   }
 
   function setupMenu() {
@@ -188,6 +386,32 @@
     panel.addEventListener("click", (event) => {
       if (event.target === panel || event.target.closest("a")) panel.close();
     });
+  }
+
+  /*
+   * Calls onSwipe(1) for a leftward drag and onSwipe(-1) for a rightward one (touch or mouse).
+   * Returns a function that tells click handlers whether the last gesture was a swipe.
+   */
+  function addSwipe(element, onSwipe) {
+    let startX = null;
+    let swiped = false;
+    element.addEventListener("pointerdown", (event) => {
+      startX = event.clientX;
+      swiped = false;
+    });
+    element.addEventListener("pointerup", (event) => {
+      if (startX === null) return;
+      const distance = event.clientX - startX;
+      startX = null;
+      if (Math.abs(distance) > SWIPE_PX) {
+        swiped = true;
+        onSwipe(distance < 0 ? 1 : -1);
+      }
+    });
+    element.addEventListener("pointercancel", () => {
+      startX = null;
+    });
+    return () => swiped;
   }
 
   /* Signed distance from the front card, taking the shorter way round the loop. */
@@ -238,30 +462,12 @@
       root.classList.toggle("is-paused", userPaused);
     }
 
-    // Swipe (touch or mouse drag) moves one card; a tap on a side card brings it forward.
-    let swipeStartX = null;
-    let swiped = false;
-    track.addEventListener("pointerdown", (event) => {
-      swipeStartX = event.clientX;
-      swiped = false;
-    });
-    track.addEventListener("pointerup", (event) => {
-      if (swipeStartX === null) return;
-      const distance = event.clientX - swipeStartX;
-      swipeStartX = null;
-      if (Math.abs(distance) > SWIPE_PX) {
-        swiped = true;
-        show(current + (distance < 0 ? 1 : -1));
-      }
-    });
-    track.addEventListener("pointercancel", () => {
-      swipeStartX = null;
-    });
+    // Swipe moves one card; a tap on a side card brings it forward instead of following its link.
+    const wasSwipe = addSwipe(track, (step) => show(current + step));
     track.addEventListener("click", (event) => {
       const index = slides.indexOf(event.target.closest(".slide"));
-      if (swiped || index !== current) event.preventDefault();
-      if (!swiped && index !== current) show(index);
-      swiped = false;
+      if (wasSwipe() || index !== current) event.preventDefault();
+      if (!wasSwipe() && index !== current) show(index);
     });
 
     root.querySelectorAll(".carousel__arrow").forEach((button) => {
@@ -306,6 +512,9 @@
   renderHighlights();
   renderDirectory();
   renderCredits();
+  setupSearch();
   setupMenu();
   setupCarousel();
+  setupVideos();
+  setupGallery();
 })();
