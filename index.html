@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="kn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ ವಿಶೇಷ | ಪ್ರಜಾವಾಣಿ</title>
+  <meta name="description" content="ಪ್ರಜಾವಾಣಿ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ ವಿಶೇಷ – ನಾಡು, ನುಡಿ, ಕಲೆ ಮತ್ತು ಪರಂಪರೆಯ ಕಥನಗಳು.">
+  <meta name="theme-color" content="#A80F22">
+  <link rel="preload" href="assets/fonts/PvHeadlineSemibold3.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/PrajavaniTextRegular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body id="top">
+  <a class="skip-link" href="#main" data-text="skipLink"></a>
+
+  <div class="top-strip">
+    <div class="container top-strip__inner">
+      <span data-text="topStrip"></span>
+      <span class="top-strip__date" data-text="topStripDate"></span>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="container masthead__inner">
+      <a class="brand" href="#top" data-label="homeLabel">
+        <img class="brand__logo" src="assets/logo/pv-logo.png" alt="ಪ್ರಜಾವಾಣಿ" width="248" height="63">
+        <span class="brand__tagline" data-text="tagline"></span>
+      </a>
+      <a class="button button--outline masthead__action" data-text="headerAction" data-href="headerActionUrl"></a>
+    </div>
+  </header>
+
+  <nav class="site-nav" data-label="navLabel">
+    <div class="container site-nav__inner">
+      <ul class="site-nav__list" id="nav-list"></ul>
+      <button class="site-nav__more" type="button" aria-haspopup="dialog" aria-controls="menu-panel">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <span data-text="menuButton"></span>
+      </button>
+    </div>
+  </nav>
+
+  <dialog class="menu-panel" id="menu-panel" aria-labelledby="menu-panel-title">
+    <div class="menu-panel__inner">
+      <div class="menu-panel__header">
+        <h2 class="menu-panel__title" id="menu-panel-title" data-text="menuTitle"></h2>
+        <button class="icon-button menu-panel__close" type="button" data-label="menuClose">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <ul class="menu-panel__list" id="menu-panel-list"></ul>
+    </div>
+  </dialog>
+
+  <main id="main">
+    <section class="featured" aria-labelledby="featured-title">
+      <div class="container">
+        <h2 class="section-title" id="featured-title" data-text="featuredTitle"></h2>
+        <div class="carousel" aria-roledescription="carousel" aria-labelledby="featured-title">
+          <div class="carousel__stage">
+            <ul class="carousel__track" id="carousel-track"></ul>
+            <button class="carousel__button carousel__arrow carousel__arrow--prev" type="button" data-step="-1" data-label="carouselPrev">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <button class="carousel__button carousel__arrow carousel__arrow--next" type="button" data-step="1" data-label="carouselNext">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="carousel__caption" id="carousel-caption"></p>
+          <div class="carousel__controls">
+            <div class="carousel__dots" id="carousel-dots"></div>
+            <button class="carousel__button carousel__toggle" type="button">
+              <svg class="icon icon--pause" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>
+              <svg class="icon icon--play" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro">
+      <div class="container intro__inner">
+        <blockquote class="intro__quote">
+          <p data-text="introQuote"></p>
+          <footer data-text="introQuoteBy"></footer>
+        </blockquote>
+        <div class="intro__body">
+          <p data-text="introText"></p>
+          <a class="button button--accent" href="#sections" data-text="introAction"></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="highlights" aria-labelledby="highlights-title">
+      <div class="container">
+        <h2 class="section-title" id="highlights-title" data-text="highlightsTitle"></h2>
+        <ul class="card-grid" id="highlights-list"></ul>
+      </div>
+    </section>
+
+    <section class="directory" id="sections" aria-labelledby="sections-title">
+      <div class="container">
+        <h2 class="section-title" id="sections-title" data-text="sectionsTitle"></h2>
+        <ol class="directory__grid" id="directory-list"></ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="flag-bar" aria-hidden="true"></div>
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <span class="site-footer__logo">
+          <img src="assets/logo/pv-logo.png" alt="ಪ್ರಜಾವಾಣಿ" width="248" height="63" loading="lazy">
+        </span>
+        <p data-text="footerAbout"></p>
+      </div>
+      <nav class="site-footer__nav" aria-labelledby="footer-sections-title">
+        <h2 class="site-footer__heading" id="footer-sections-title" data-text="footerSectionsTitle"></h2>
+        <ul class="site-footer__links" id="footer-links"></ul>
+      </nav>
+      <details class="site-footer__credits">
+        <summary data-text="footerCreditsTitle"></summary>
+        <ul id="credits-list"></ul>
+      </details>
+    </div>
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <span data-text="footerCopyright"></span>
+        <span data-text="footerDraftNote"></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
