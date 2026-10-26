@@ -457,7 +457,7 @@ const POSTER = {
 
 /*
  * Opening animation, played once per visit before the site appears.
- * figures → flown through in this order, alternating red and yellow. art names a
+ * figures → flown past in this order, alternating red and black. art names a
  *           silhouette in js/opening-art.js (stand-in shapes for now, see README).
  * finale  → the closing screen with the map and flag.
  * timing  → milliseconds. Length = (figures + 1) × figureMs + finaleMs (map and flag)

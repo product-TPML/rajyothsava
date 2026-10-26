@@ -9,10 +9,9 @@ Open `index.html` in a browser. There's no build step.
 
 A short flight into the screen (about 11 seconds) plays once per visit before the site appears:
 
-1. The camera flies through silhouettes of Kannada personalities, which alternate red and yellow.
-2. The Karnataka map arrives and tilts into a platform.
-3. A flagpole rises from the map and the Kannada flag is hoisted and waves.
-4. The closing message stays on screen for 3 seconds, with a "ವಿಶೇಷ ಸಂಚಿಕೆ ಓದಿ" button.
+1. The camera flies past silhouettes of Kannada personalities, which alternate red and black and sweep away to the left and right.
+2. The Karnataka map, filled with the waving Kannada flag, flies in at the same speed and settles in front.
+3. The closing message stays on screen for 3 seconds, with a "ವಿಶೇಷ ಸಂಚಿಕೆ ಓದಿ" button.
 
 Readers can tap anywhere, press **Skip** or the button, or press Esc to jump straight to the site. It never plays for readers who have reduced motion turned on.
 
@@ -22,6 +21,7 @@ Readers can tap anywhere, press **Skip** or the button, or press Esc to jump str
 
 ## Temporary / to replace before launch
 
+- [ ] **Opening replays on every refresh:** this is for review only. Set `REPLAY_ON_REFRESH` to `false` in the small script in the `<head>` of `index.html`, so readers see it once per visit.
 - [ ] **Opening silhouettes:** the current ones are simple stand-in shapes. They'll be replaced with final artwork for the chosen personalities.
 - [ ] **Opening personalities:** the current list is a placeholder (Basavanna, Kittur Rani Chennamma, Kempegowda, Sir M. Visvesvaraya, Kuvempu, Gangubai Hangal, Dr Rajkumar) and needs editorial approval.
 - [ ] **Closing message:** confirm "71ನೇ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ" is the right count for 2026, and approve the wording.

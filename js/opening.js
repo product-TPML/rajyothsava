@@ -1,10 +1,9 @@
 /*
- * Opening animation: a flight into the screen. The figures in OPENING rush toward
- * the reader one after another, alternating red and yellow; each one grows until
- * it fills the screen and the reader passes through it into its colour, where the
- * next figure is already approaching. Then the Karnataka map arrives, a flagpole
- * rises from it, the Kannada flag is hoisted and waves while the closing message
- * is held on screen, and the opening lifts away.
+ * Opening animation: a flight into the screen. The figures in OPENING come toward
+ * the reader one after another, alternating red and black, and sweep past to the
+ * left and right as the camera flies by them. Last comes the Karnataka map, filled
+ * with the waving Kannada flag, which settles in front while the closing message
+ * is held on screen, and then the opening lifts away.
  * The small script in <head> decides whether it plays (once per visit, never with
  * reduced motion); this file builds the scene; css/styles.css holds the timeline.
  */
@@ -12,15 +11,15 @@
   "use strict";
 
   const SVG = "http://www.w3.org/2000/svg";
-  const TONES = ["red", "yellow"]; // figure colours, in turn
-  const SPECKS = 28; // drifting specks that give the feeling of moving forward
-  const GOLDEN_ANGLE = 137.5;
+  const TONES = ["red", "ink"]; // figure colours, in turn
+  const STREAKS = 36; // lines rushing past on all sides, the sense of speed
+  const GOLDEN_ANGLE = 137.5; // spreads the streaks evenly around the circle
 
   /*
-   * The flag cloth, in the units of its SVG viewBox. A wave travels from the pole
-   * to the free end, growing as it goes; the cloth droops slightly at the end.
+   * The flag cloth behind the map, in the units of the map's SVG viewBox. A wave
+   * travels across it from left to right.
    */
-  const FLAG = { width: 300, height: 200, points: 40, wavelengths: 1.25, amplitude: 13, droop: 8, periodMs: 1200 };
+  const FLAG = { left: -4, top: -4, width: 261, height: 408, points: 40, wavelengths: 1.5, amplitude: 10, periodMs: 1800 };
 
   const opening = document.getElementById("opening");
   if (!document.documentElement.classList.contains("has-opening")) {
@@ -30,8 +29,6 @@
 
   const { figures, timing } = OPENING;
   const scene = document.getElementById("opening-scene");
-  const floods = document.getElementById("opening-floods");
-  const caption = document.getElementById("opening-caption");
   const flag = document.getElementById("opening-flag");
   const skip = document.getElementById("opening-skip");
   const background = [...document.body.children].filter((node) => node !== opening);
@@ -45,42 +42,43 @@
     return node;
   }
 
-  // Spread the specks evenly around the centre, away from the middle where the figures are.
-  function addSpecks() {
-    for (let i = 0; i < SPECKS; i++) {
-      const angle = (i * GOLDEN_ANGLE * Math.PI) / 180;
-      const radius = 18 + (i % 7) * 5; // vmin
+  // Streaks sit around the line of flight at varied distances, each starting its run at its own moment.
+  function addStreaks() {
+    for (let i = 0; i < STREAKS; i++) {
       scene.prepend(
-        create("span", i % 3 ? "opening__speck" : "opening__speck opening__speck--red", {
-          x: `${(Math.cos(angle) * radius).toFixed(1)}vmin`,
-          y: `${(Math.sin(angle) * radius).toFixed(1)}vmin`,
+        create("span", i % 3 ? "opening__streak" : "opening__streak opening__streak--red", {
+          angle: `${((i * GOLDEN_ANGLE) % 360).toFixed(1)}deg`,
+          radius: `${18 + (i % 6) * 7}vmin`,
           i,
-          specks: SPECKS,
+          streaks: STREAKS,
         })
       );
     }
   }
 
-  // Each figure brings a silhouette, its name, and the wash of colour left behind once the reader passes through it.
+  /*
+   * Each figure is a silhouette with its name beneath, moving as one; figures pass
+   * on the left and right in turn. Each is placed straight after the map, so later
+   * (farther) figures end up earlier in the page and are painted behind nearer ones.
+   */
   function addFigures() {
-    const monument = scene.querySelector(".opening__monument");
+    const map = scene.querySelector(".opening__map");
     figures.forEach((figure, i) => {
       const tone = TONES[i % TONES.length];
-      const silhouette = create("svg", `opening__figure opening__figure--${tone}`, { i }, SVG);
+      const holder = create("div", `opening__figure opening__figure--${tone}`, { i, side: i % 2 ? 1 : -1 });
+
+      const silhouette = create("svg", "opening__silhouette", {}, SVG);
       silhouette.setAttribute("viewBox", "0 0 200 200");
       for (const d of OPENING_ART[figure.art]) {
         const path = document.createElementNS(SVG, "path");
         path.setAttribute("d", d);
         silhouette.append(path);
       }
-      scene.insertBefore(silhouette, monument);
 
-      const name = create("span", `opening__name opening__name--${tone}`, { i });
+      const name = create("span", "opening__name", {});
       name.textContent = figure.name;
-      name.setAttribute("aria-hidden", "true");
-      caption.append(name);
-
-      floods.append(create("span", `opening__flood opening__flood--${tone}`, { i }));
+      holder.append(silhouette, name);
+      map.after(holder);
     });
   }
 
@@ -97,17 +95,18 @@
     opening.style.setProperty("--finale-ms", `${timing.finaleMs}ms`);
     opening.style.setProperty("--exit-ms", `${timing.exitMs}ms`);
 
-    addSpecks();
+    addStreaks();
     addFigures();
   }
 
   /*
-   * Returns a function that draws the flag at a given moment. Each point along the
-   * cloth rises and falls with the wave; highlight and shadow overlays brighten the
-   * folds turning toward the light and darken those turning away.
+   * Returns a function that draws the flag at a given moment: the edge between
+   * the yellow and red halves rises and falls with the wave, and highlight and
+   * shadow overlays brighten the folds turning toward the light and darken those
+   * turning away. The map's outline clips it all.
    */
   function flagDrawer() {
-    const [yellow, red, light, dark] = flag.querySelectorAll("path");
+    const red = flag.querySelector(".opening__cloth--red");
     const shades = ["light", "dark"].map((tone) => {
       const gradient = document.getElementById(`opening-flag-${tone}`);
       return Array.from({ length: FLAG.points + 1 }, (_, i) => {
@@ -117,34 +116,27 @@
         return stop;
       });
     });
-    const band = (upper, lower) => `M${upper.join(" ")} ${[...lower].reverse().join(" ")}Z`;
+    const bottom = FLAG.top + FLAG.height;
 
     return (time) => {
-      const top = [];
-      const middle = [];
-      const bottom = [];
+      const edge = [];
       for (let i = 0; i <= FLAG.points; i++) {
-        const along = i / FLAG.points; // 0 at the pole, 1 at the free end
+        const along = i / FLAG.points; // 0 at the left edge, 1 at the right
         const phase = 2 * Math.PI * (FLAG.wavelengths * along - time / FLAG.periodMs);
-        const lift = FLAG.amplitude * along * Math.sin(phase) + FLAG.droop * along * along;
-        const x = (along * FLAG.width).toFixed(1);
-        top.push(`${x} ${lift.toFixed(1)}`);
-        middle.push(`${x} ${(lift + FLAG.height / 2).toFixed(1)}`);
-        bottom.push(`${x} ${(lift + FLAG.height).toFixed(1)}`);
+        const x = FLAG.left + along * FLAG.width;
+        const y = FLAG.top + FLAG.height / 2 + FLAG.amplitude * Math.sin(phase);
+        edge.push(`${x.toFixed(1)} ${y.toFixed(1)}`);
 
-        const turn = Math.cos(phase) * Math.sqrt(along);
-        shades[0][i].setAttribute("stop-opacity", (Math.max(0, turn) * 0.3).toFixed(2));
-        shades[1][i].setAttribute("stop-opacity", (Math.max(0, -turn) * 0.35).toFixed(2));
+        const turn = Math.cos(phase);
+        shades[0][i].setAttribute("stop-opacity", (Math.max(0, turn) * 0.22).toFixed(2));
+        shades[1][i].setAttribute("stop-opacity", (Math.max(0, -turn) * 0.22).toFixed(2));
       }
-      yellow.setAttribute("d", band(top, middle));
-      red.setAttribute("d", band(middle, bottom));
-      light.setAttribute("d", band(top, bottom));
-      dark.setAttribute("d", light.getAttribute("d"));
+      red.setAttribute("d", `M${edge.join(" ")} ${FLAG.left + FLAG.width} ${bottom} ${FLAG.left} ${bottom}Z`);
     };
   }
 
-  // Wave the flag from the moment it starts to be hoisted until the opening closes.
-  function startFlag() {
+  // Wave the flag from the start until the opening closes.
+  function waveFlag() {
     const draw = flagDrawer();
     const wave = (time) => {
       draw(time);
@@ -156,6 +148,7 @@
   // The last figure has fully passed after (figures + 1) slots; then the finale runs and is held.
   function play() {
     opening.classList.add("opening--playing");
+    waveFlag();
     timer = setTimeout(leave, (figures.length + 1) * timing.figureMs + timing.finaleMs + timing.holdMs);
   }
 
@@ -185,7 +178,6 @@
   });
   opening.addEventListener("click", leave);
   opening.addEventListener("animationend", finish);
-  flag.addEventListener("animationstart", startFlag, { once: true });
   document.addEventListener("keydown", onKey);
 
   // A page opened in a background tab waits until the reader actually sees it.

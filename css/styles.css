@@ -2052,11 +2052,10 @@ button {
 
 /*
  * Shown only when the <head> script adds .has-opening. A 3D scene seen through
- * one perspective: specks stream past and the camera flies at a steady speed
- * through the figures, each growing until it fills the screen; its colour
- * (a "flood") stays behind as the backdrop for the next one.
- * Meanwhile the map approaches; in the finale it tilts back into a platform, a
- * flagpole rises from it, the flag is hoisted and the closing message appears.
+ * one perspective: streaks rush outward and the camera flies at a steady speed
+ * past the figures, which veer off to the left and right as it reaches them.
+ * Last comes the map, filled with the waving flag, at the same speed; it settles
+ * in front and the closing message appears.
  * js/opening.js sets the timing variables from OPENING in js/data.js and draws
  * the waving flag.
  */
@@ -2070,8 +2069,6 @@ button {
 
 .has-opening .opening {
   --size: min(84vw, 44vh, 520px);
-  --tilt: 58deg;
-  --speck-ms: 2400ms;
   --finale-start: calc((var(--figures) + 1) * var(--figure-ms));
 
   position: fixed;
@@ -2082,7 +2079,7 @@ button {
   background: var(--cream);
 }
 
-/* White band so the black wordmark always sits on white, whatever colour floods the stage. */
+/* White band so the black wordmark sits on white, as the brand rules ask. */
 .opening__header {
   position: relative;
   display: flex;
@@ -2115,55 +2112,61 @@ button {
   background: radial-gradient(circle at 50% 45%, var(--white), var(--cream) 75%);
 }
 
-.opening__floods {
-  position: absolute;
-  inset: 0;
-  display: grid;
-}
-
-.opening__flood {
-  grid-area: 1 / 1;
-  opacity: 0;
-}
-
-.opening__flood--red {
-  background: var(--red);
-}
-
-.opening__flood--yellow {
-  background: var(--yellow);
-}
-
-/* Every child sits in the centre; their depth comes from translateZ. */
+/*
+ * Every child sits in the centre; their depth comes from translateZ. Nearer
+ * things come later in the page (see js/opening.js), so they paint on top.
+ */
 .opening__scene {
   position: relative;
   display: grid;
   place-items: center;
   perspective: 900px;
-  transform-style: preserve-3d;
 }
 
 .opening__scene > * {
   grid-area: 1 / 1;
 }
 
-.opening__speck {
-  width: max(6px, calc(var(--size) * 0.014));
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--yellow);
+/*
+ * A thin strip lying along the line of flight, off to one side: turned by --angle
+ * around the centre, pushed out by --radius, then laid lengthways into the depth
+ * (rotateY). Perspective makes it look like a line streaming out from the centre.
+ * Its near end is bright and its far end fades away.
+ */
+.opening__streak {
+  width: 240px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--yellow), transparent);
   opacity: 0;
 }
 
-.opening__speck--red {
-  background: var(--red);
+.opening__streak--red {
+  background: linear-gradient(90deg, var(--red), transparent);
 }
 
+/* A silhouette with its name beneath, like the nameplate under a bust; they fly as one. */
 .opening__figure {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
   width: calc(var(--size) * 0.8);
+  opacity: 0;
+}
+
+.opening__silhouette {
+  width: 100%;
   aspect-ratio: 1;
   fill: currentColor;
   fill-rule: evenodd;
+}
+
+/* Sized from the scene so it shrinks and grows with the silhouette; takes the figure's colour. */
+.opening__name {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: calc(var(--size) * 0.075);
+  line-height: 1.3;
+  text-align: center;
   opacity: 0;
 }
 
@@ -2171,81 +2174,22 @@ button {
   color: var(--red);
 }
 
-.opening__figure--yellow {
-  color: var(--yellow);
+.opening__figure--ink {
+  color: var(--ink);
 }
 
-.opening__monument,
-.opening__landing,
-.opening__platform {
-  transform-style: preserve-3d;
-}
-
-/* No opacity on these 3D groups: it would flatten them. The map fades in on its own. */
-.opening__monument {
-  transform: translateZ(-1800px);
-}
-
-/* Holds the map back until the finale, then brings it forward and lower to leave room for the flag. */
-.opening__landing {
-  transform: translateZ(-1200px);
-}
-
-.opening__platform {
-  position: relative;
-  width: calc(var(--size) * 0.62);
-}
-
-/* The drop shadow lies in the map's plane, so once tilted it reads as the slab's front edge. */
 .opening__map {
   display: block;
-  width: 100%;
+  width: calc(var(--size) * 0.66);
   overflow: visible;
-  fill: var(--red);
-  stroke: var(--yellow);
-  stroke-width: 3;
+  opacity: 0;
+}
+
+.opening__map-outline {
+  fill: none;
+  stroke: var(--red-dark);
+  stroke-width: 2;
   stroke-linejoin: round;
-  filter: drop-shadow(0 10px 0 var(--red-deep));
-  opacity: 0;
-}
-
-/* Stands on the map near its centre; counter-rotated so it stays upright when the map tilts. */
-.opening__pole {
-  position: absolute;
-  bottom: 45%;
-  left: 50%;
-  width: max(4px, calc(var(--size) * 0.014));
-  height: calc(var(--size) * 0.85);
-  translate: -50% 0;
-  transform-origin: bottom center;
-  transform: rotateX(calc(var(--tilt) * -1)) scaleY(0);
-  transform-style: preserve-3d;
-  background: linear-gradient(90deg, var(--ink-muted), var(--paper) 45%, var(--ink-muted));
-}
-
-/* Gold finial on top of the pole. */
-.opening__pole::before {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  width: 250%;
-  aspect-ratio: 1;
-  translate: -50% 30%;
-  border-radius: 50%;
-  background: var(--yellow);
-}
-
-/* The cloth's shape and shading are redrawn every frame by js/opening.js. */
-.opening__flag {
-  position: absolute;
-  top: 0;
-  left: 100%;
-  width: calc(var(--size) * 0.46);
-  aspect-ratio: 300 / 240;
-  overflow: visible;
-  opacity: 0;
-  transform-origin: left center;
 }
 
 .opening__cloth--yellow {
@@ -2264,31 +2208,11 @@ button {
   stop-color: var(--ink);
 }
 
-/* Names and the closing message share one cell at the bottom of the stage. */
+/* The closing message, at the bottom of the stage. */
 .opening__caption {
   position: relative;
-  display: grid;
   padding: 0 var(--gutter) var(--space-5);
   text-align: center;
-}
-
-.opening__caption > * {
-  grid-area: 1 / 1;
-  align-self: end;
-}
-
-.opening__name {
-  font-family: var(--font-headline);
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.3;
-  opacity: 0;
-  pointer-events: none; /* faded-out names lie over the closing button */
-}
-
-/* A yellow figure is named while the red flood of the one before is behind it. */
-.opening__name--yellow {
-  color: var(--white);
 }
 
 /* Hidden (not just transparent) until it appears, so its button can't be reached early. */
@@ -2326,51 +2250,32 @@ button {
 
 /* ----- Timeline ----- */
 
-.opening--playing .opening__speck {
+/* Same depth run and pace as the figures, so lines and figures move as one; they die away as the map settles. */
+.opening--playing .opening__streak {
   animation:
-    opening-speck var(--speck-ms) linear calc(var(--i) / var(--specks) * var(--speck-ms) * -1) infinite,
+    opening-streak calc(var(--figure-ms) * 2) linear calc(var(--i) / var(--streaks) * var(--figure-ms) * -2) infinite,
     opening-vanish var(--figure-ms) ease-out var(--finale-start) forwards;
 }
 
+/* Two animations: steady forward motion (transform) and the sideways veer (translate), each with its own pace. */
 .opening--playing .opening__figure {
-  animation: opening-fly calc(var(--figure-ms) * 2) linear calc(var(--i) * var(--figure-ms)) both;
-}
-
-/* Switched on just before the figure vanishes past the camera, while it still fills the screen. */
-.opening--playing .opening__flood {
-  animation: opening-flood 60ms linear calc((var(--i) + 1.9) * var(--figure-ms)) forwards;
-}
-
-.opening--playing .opening__floods {
-  animation: opening-vanish 700ms ease-out var(--finale-start) forwards;
+  animation:
+    opening-fly calc(var(--figure-ms) * 2) linear calc(var(--i) * var(--figure-ms)) both,
+    opening-veer calc(var(--figure-ms) * 2) linear calc(var(--i) * var(--figure-ms)) both;
 }
 
 .opening--playing .opening__name {
   animation: opening-name calc(var(--figure-ms) * 2) var(--ease) calc(var(--i) * var(--figure-ms)) both;
 }
 
-.opening--playing .opening__monument {
-  animation: opening-approach var(--finale-start) linear forwards;
-}
-
+/*
+ * The map takes the slot after the last figure and travels the same 1600px in
+ * from the distance. Its easing starts at the figures' speed (1100px per
+ * figure-ms) and slows to a stop in front: the curve's opening slope of 2 over
+ * 2.9 slots matches that speed.
+ */
 .opening--playing .opening__map {
-  animation: opening-appear var(--finale-start) linear forwards;
-}
-
-.opening--playing .opening__landing {
-  animation: opening-land calc(var(--finale-ms) * 0.3) var(--ease) var(--finale-start) forwards;
-}
-
-.opening--playing .opening__platform {
-  animation: opening-tilt calc(var(--finale-ms) * 0.3) var(--ease) var(--finale-start) forwards;
-}
-
-.opening--playing .opening__pole {
-  animation: opening-pole calc(var(--finale-ms) * 0.2) var(--ease) calc(var(--finale-start) + var(--finale-ms) * 0.22) forwards;
-}
-
-.opening--playing .opening__flag {
-  animation: opening-hoist calc(var(--finale-ms) * 0.35) var(--ease) calc(var(--finale-start) + var(--finale-ms) * 0.38) forwards;
+  animation: opening-arrive calc(var(--figure-ms) * 2.9) cubic-bezier(0.25, 0.5, 0.5, 1) calc(var(--figures) * var(--figure-ms)) both;
 }
 
 .opening--playing .opening__finale {
@@ -2381,19 +2286,21 @@ button {
   animation: opening-lift var(--exit-ms) cubic-bezier(0.7, 0, 0.2, 1) forwards;
 }
 
-@keyframes opening-speck {
+/* Stops short of the camera (900px) by more than half its length, so no part passes behind it. */
+@keyframes opening-streak {
   from {
     opacity: 0;
-    transform: translate3d(var(--x), var(--y), -1600px);
+    transform: rotate(var(--angle)) translateX(var(--radius)) translateZ(-1600px) rotateY(90deg);
   }
 
-  30% {
-    opacity: 0.8;
+  20%,
+  85% {
+    opacity: 0.9;
   }
 
   to {
     opacity: 0;
-    transform: translate3d(var(--x), var(--y), 600px);
+    transform: rotate(var(--angle)) translateX(var(--radius)) translateZ(700px) rotateY(90deg);
   }
 }
 
@@ -2405,10 +2312,10 @@ button {
 
 /*
  * The camera's flight past one figure, at one steady speed: a straight run in
- * depth from far away to just short of the camera (perspective is 900px, so
- * z 860px is over 20x size and fills the screen). Every figure covers the same
- * distance in the same time, so the whole journey flows without pauses.
- * The camera heads for the centre of each figure.
+ * depth from far away to beside the camera (perspective is 900px, so z 820px is
+ * over 11x size). Every figure covers the same distance in the same time, so the whole
+ * journey flows without pauses. Near the end it turns slightly, as a figure
+ * passing close beside the reader would.
  */
 @keyframes opening-fly {
   0% {
@@ -2423,81 +2330,51 @@ button {
 
   100% {
     opacity: 0;
-    transform: translateZ(860px);
+    transform: translateZ(820px) rotateY(calc(var(--side) * -20deg));
   }
 }
 
-@keyframes opening-flood {
-  to {
-    opacity: 1;
+/* Straight ahead at first, then curving away to its side faster and faster, off the edge of the screen. */
+@keyframes opening-veer {
+  0%,
+  65% {
+    translate: 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.9, 0.55);
+  }
+
+  100% {
+    translate: calc(var(--side) * 110%) 0;
   }
 }
 
-/* Shown while the figure is nearest to life size, after the previous figure's colour has flooded the stage. */
+/* Fades in once the figure is near enough to read, then rides along with it. */
 @keyframes opening-name {
   0%,
-  48% {
+  25% {
     opacity: 0;
     transform: translateY(0.4em);
   }
 
-  56%,
-  74% {
-    opacity: 1;
-    transform: none;
-  }
-
-  84%,
+  38%,
   100% {
-    opacity: 0;
-  }
-}
-
-@keyframes opening-approach {
-  to {
+    opacity: 1;
     transform: none;
   }
 }
 
-@keyframes opening-appear {
-  40%,
-  to {
-    opacity: 1;
-  }
-}
-
-/* Left by half the flag's width so pole and flag together sit centred. */
-@keyframes opening-land {
-  to {
-    transform: translate(calc(var(--size) * -0.2), calc(var(--size) * 0.32));
-  }
-}
-
-@keyframes opening-tilt {
-  to {
-    transform: rotateX(var(--tilt));
-  }
-}
-
-@keyframes opening-pole {
-  to {
-    transform: rotateX(calc(var(--tilt) * -1));
-  }
-}
-
-@keyframes opening-hoist {
-  from {
+@keyframes opening-arrive {
+  0% {
     opacity: 0;
-    transform: translateY(calc(var(--size) * 0.55));
+    transform: translateZ(-1600px);
   }
 
-  15% {
+  10% {
     opacity: 1;
   }
 
-  to {
+  100% {
     opacity: 1;
-    transform: rotateY(-12deg);
+    transform: none;
   }
 }
 
@@ -2528,10 +2405,6 @@ button {
 
   .opening__logo {
     height: 40px;
-  }
-
-  .opening__name {
-    font-size: 2rem;
   }
 
   .opening__title {
