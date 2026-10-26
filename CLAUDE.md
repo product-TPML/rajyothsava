@@ -89,7 +89,7 @@ Define them as CSS custom properties in one place.
   carousel of thehindu.com and chosen by the owner. The current story is a tall
   portrait card in front, and neighbouring stories fan out behind it, smaller and dimmer.
   The headline sits on the card over a dark fade, and the front story's summary shows
-  below the stack. It supports swipe, tap-a-side-card, arrows, dots and pause. Only the
+  below the stack. It supports swipe, tap-a-side-card, arrows, pausing while hovered or focused (no dots or pause button, by the owner's choice). Only the
   look is borrowed: no code or assets from The Hindu.
 - Cards: one column on phone, two on tablet, three or four on desktop.
 - Test at 360px, 390px, 768px, 1024px and 1440px widths.

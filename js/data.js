@@ -6,11 +6,8 @@
 /* Interface text. Elements in index.html with data-text="key" receive these. */
 const UI = {
   skipLink: "ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ತೆರಳಿ",
-  topStrip: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ ವಿಶೇಷ ಸಂಚಿಕೆ",
-  topStripDate: "ನವೆಂಬರ್ 1, 2026",
   eventTitle: "ಕರುನಾಡೋತ್ಸವ",
   headerAction: "ಪ್ರಜಾವಾಣಿ ಮುಖಪುಟ",
-  searchOpen: "ಹುಡುಕಾಟ",
   searchLabel: "ಕಥನಗಳನ್ನು ಹುಡುಕಿ",
   searchPlaceholder: "ಕಥನ, ವಿಭಾಗ ಅಥವಾ ಲೇಖಕರ ಹೆಸರು",
   searchResults: "ಫಲಿತಾಂಶಗಳು: {n}",
@@ -25,13 +22,9 @@ const UI = {
   featuredTitle: "ಮುಖ್ಯ ಕಥನಗಳು",
   carouselPrev: "ಹಿಂದಿನ ಕಥನ",
   carouselNext: "ಮುಂದಿನ ಕಥನ",
-  carouselPause: "ಸ್ವಯಂ ಚಲನೆ ನಿಲ್ಲಿಸಿ",
-  carouselPlay: "ಸ್ವಯಂ ಚಲನೆ ಆರಂಭಿಸಿ",
-  carouselGoTo: "ಕಥನ {n}ಕ್ಕೆ ತೆರಳಿ",
   slideOf: "{n} / {total}",
 
-  introQuote: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗು ನೀ ಕನ್ನಡವಾಗಿರು",
-  introQuoteBy: "— ಕುವೆಂಪು",
+  quotesLabel: "ನುಡಿಮುತ್ತುಗಳು",
   introText:
     "ನಾಡು, ನುಡಿ, ಕಲೆ ಮತ್ತು ಪರಂಪರೆಯ ಸಂಭ್ರಮಕ್ಕೆ ಪ್ರಜಾವಾಣಿಯ ಈ ವಿಶೇಷ ಸಂಚಿಕೆ ಮೀಸಲು. " +
     "ಕರ್ನಾಟಕದ ಮೂಲೆಮೂಲೆಗಳ ಕಥನಗಳು, ಚಿತ್ರಗಳು ಮತ್ತು ಅಭಿಪ್ರಾಯಗಳನ್ನು ಒಂದೇ ಕಡೆ ಓದಿ.",
@@ -456,9 +449,22 @@ const POSTER = {
 };
 
 /*
+ * Quotes in the red banner, shown one at a time and changing by themselves.
+ * art names the speaker's silhouette in js/silhouette-art.js (see OPENING below).
+ * PLACEHOLDER: wording and attribution need editorial checking.
+ */
+const QUOTES = [
+  { text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗು ನೀ ಕನ್ನಡವಾಗಿರು", by: "ಕುವೆಂಪು", art: "kuvempu" },
+  { text: "ದಯವಿಲ್ಲದ ಧರ್ಮವದೇವುದಯ್ಯಾ? ದಯವೇ ಬೇಕು ಸಕಲ ಪ್ರಾಣಿಗಳೆಲ್ಲರಲ್ಲಿ", by: "ಬಸವಣ್ಣ", art: "basavanna" },
+  { text: "ಕೈಗಾರಿಕೀಕರಣ ಇಲ್ಲವೇ ವಿನಾಶ", by: "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ", art: "visvesvaraya" },
+  { text: "ಅಭಿಮಾನಿಗಳೇ ನಮ್ಮನೆ ದೇವರು", by: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
+];
+
+/*
  * Opening animation, played once per visit before the site appears.
- * figures → flown past in this order, alternating red and black. art names a
- *           silhouette in js/opening-art.js (stand-in shapes for now, see README).
+ * figures → flown past in this order (history order), alternating red and black.
+ *           art names a silhouette in js/silhouette-art.js, made by tools/silhouette-art.py
+ *           from the images in assets/silhouettes.
  * finale  → the closing screen with the map and flag.
  * timing  → milliseconds. Length = (figures + 1) × figureMs + finaleMs (map and flag)
  *           + holdMs (closing screen held), then exitMs while the opening lifts away.
@@ -469,17 +475,17 @@ const OPENING = {
   skipLabel: "ಪರಿಚಯ ಬಿಟ್ಟು ತಾಣಕ್ಕೆ ತೆರಳಿ",
   finale: {
     eyebrow: "71ನೇ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
-    title: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವದ ಶುಭಾಶಯಗಳು",
-    text: "ನಾಡು, ನುಡಿ ಮತ್ತು ಸಂಸ್ಕೃತಿಯ ಸಂಭ್ರಮವನ್ನು ಪ್ರಜಾವಾಣಿಯೊಂದಿಗೆ ಆಚರಿಸಿ",
+    title: "ಕರುನಾಡೋತ್ಸವ",
+    text: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವದ ಶುಭಾಶಯಗಳು. ನಾಡು, ನುಡಿ ಮತ್ತು ಸಂಸ್ಕೃತಿಯ ಸಂಭ್ರಮವನ್ನು ಪ್ರಜಾವಾಣಿಯೊಂದಿಗೆ ಆಚರಿಸಿ",
     enter: "ವಿಶೇಷ ಸಂಚಿಕೆ ಓದಿ",
   },
   figures: [
     { name: "ಬಸವಣ್ಣ", art: "basavanna" },
-    { name: "ಕಿತ್ತೂರು ರಾಣಿ ಚೆನ್ನಮ್ಮ", art: "chennamma" },
     { name: "ಕೆಂಪೇಗೌಡ", art: "kempegowda" },
+    { name: "ಒನಕೆ ಓಬವ್ವ", art: "obavva" },
+    { name: "ಕಿತ್ತೂರು ರಾಣಿ ಚೆನ್ನಮ್ಮ", art: "chennamma" },
     { name: "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ", art: "visvesvaraya" },
     { name: "ಕುವೆಂಪು", art: "kuvempu" },
-    { name: "ಗಂಗೂಬಾಯಿ ಹಾನಗಲ್", art: "gangubai" },
     { name: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
   ],
   timing: { figureMs: 600, finaleMs: 2600, holdMs: 3000, exitMs: 700 },

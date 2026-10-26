@@ -35,9 +35,9 @@
   let timer;
   let frame;
 
-  function create(tag, className, variables, namespace = "http://www.w3.org/1999/xhtml") {
-    const node = document.createElementNS(namespace, tag);
-    node.setAttribute("class", className);
+  function create(tag, className, variables) {
+    const node = document.createElement(tag);
+    node.className = className;
     for (const [name, value] of Object.entries(variables)) node.style.setProperty(`--${name}`, value);
     return node;
   }
@@ -65,19 +65,12 @@
     const map = scene.querySelector(".opening__map");
     figures.forEach((figure, i) => {
       const tone = TONES[i % TONES.length];
-      const holder = create("div", `opening__figure opening__figure--${tone}`, { i, side: i % 2 ? 1 : -1 });
-
-      const silhouette = create("svg", "opening__silhouette", {}, SVG);
-      silhouette.setAttribute("viewBox", "0 0 200 200");
-      for (const d of OPENING_ART[figure.art]) {
-        const path = document.createElementNS(SVG, "path");
-        path.setAttribute("d", d);
-        silhouette.append(path);
-      }
-
+      const exit = i % 2 ? "right" : "left";
+      const holder = create("div", `opening__figure opening__figure--${tone}`, { i, side: exit === "right" ? 1 : -1 });
       const name = create("span", "opening__name", {});
       name.textContent = figure.name;
-      holder.append(silhouette, name);
+      // Every figure faces the way it is going.
+      holder.append(drawSilhouette(figure.art, "opening", exit), name);
       map.after(holder);
     });
   }

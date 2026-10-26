@@ -1,4 +1,4 @@
-/* Builds the page from js/data.js and wires up search, menu, carousel, videos and gallery. */
+/* Builds the page from js/data.js and wires up search, menu, carousel, quotes, videos and gallery. */
 (() => {
   "use strict";
 
@@ -72,18 +72,7 @@
     );
 
     document.getElementById("menu-panel-list").append(
-      ...SECTIONS.map((section, i) =>
-        el(
-          "li",
-          {},
-          el(
-            "a",
-            { class: "menu-panel__link", href: sectionHref(section) },
-            el("span", { class: "menu-panel__num", "aria-hidden": "true" }, pad(i + 1)),
-            section.kn
-          )
-        )
-      )
+      ...SECTIONS.map((section) => el("li", {}, el("a", { class: "menu-panel__link", href: sectionHref(section) }, section.kn)))
     );
 
     document.getElementById("footer-links").append(
@@ -93,7 +82,6 @@
 
   function renderCarousel() {
     const track = document.getElementById("carousel-track");
-    const dots = document.getElementById("carousel-dots");
 
     SLIDES.forEach((slide, i) => {
       const section = sectionsById[slide.section];
@@ -124,15 +112,25 @@
           )
         )
       );
-
-      dots.append(
-        el("button", {
-          class: "carousel__dot",
-          type: "button",
-          "aria-label": format(UI.carouselGoTo, { n: i + 1 }),
-        })
-      );
     });
+  }
+
+  function renderQuotes() {
+    document.getElementById("quotes-list").append(
+      ...QUOTES.map((quote) =>
+        el(
+          "li",
+          { class: "quote" },
+          el("span", { class: "quote__portrait" }, drawSilhouette(quote.art, "quote", "right")), // facing the words
+          el(
+            "blockquote",
+            { class: "quote__words" },
+            el("p", { class: "quote__text" }, quote.text),
+            el("footer", { class: "quote__by" }, `— ${quote.by}`)
+          )
+        )
+      )
+    );
   }
 
   function renderHighlights() {
@@ -296,11 +294,14 @@
 
   /*
    * Live search over every article (carousel + highlights): matches headline,
-   * summary, author and section name. On phones the field opens from an icon.
+   * summary, author and section name. Phones find it at the top of the menu panel;
+   * wider screens show it in the masthead, next to the brand.
    */
   function setupSearch() {
     const root = document.querySelector(".search");
-    const toggle = root.querySelector(".search__toggle");
+    const wide = window.matchMedia("(min-width: 768px)");
+    const panelList = document.getElementById("menu-panel-list");
+    const brand = document.querySelector(".masthead .brand");
     const form = document.getElementById("search-form");
     const input = document.getElementById("search-input");
     const results = document.getElementById("search-results");
@@ -321,11 +322,9 @@
       results.hidden = true;
     }
 
-    function setOpen(open) {
-      root.classList.toggle("is-open", open);
-      toggle.setAttribute("aria-expanded", String(open));
-      if (open) input.focus();
-      else hideResults();
+    function place() {
+      if (wide.matches) brand.after(root);
+      else panelList.before(root);
     }
 
     function update() {
@@ -359,28 +358,27 @@
       event.preventDefault();
       list.querySelector("a")?.click();
     });
-    toggle.addEventListener("click", () => setOpen(!root.classList.contains("is-open")));
     list.addEventListener("click", (event) => {
       if (!event.target.closest("a")) return;
       input.value = "";
-      setOpen(false);
+      hideResults();
     });
     root.addEventListener("focusout", (event) => {
       if (!root.contains(event.relatedTarget)) hideResults();
     });
     root.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") return;
-      hideResults();
-      if (root.classList.contains("is-open")) {
-        setOpen(false);
-        toggle.focus();
-      }
+      if (event.key === "Escape") hideResults();
     });
+    wide.addEventListener("change", place);
+    place();
   }
 
   function setupMenu() {
     const panel = document.getElementById("menu-panel");
-    document.querySelector(".site-nav__more").addEventListener("click", () => panel.showModal());
+    // Opened from the masthead on phones and from the nav bar on wider screens.
+    document.querySelectorAll('[aria-controls="menu-panel"]').forEach((button) => {
+      button.addEventListener("click", () => panel.showModal());
+    });
     panel.querySelector(".menu-panel__close").addEventListener("click", () => panel.close());
     // Close on a backdrop click or after choosing a section.
     panel.addEventListener("click", (event) => {
@@ -421,6 +419,45 @@
   }
 
   /*
+   * Moves a rotating block on by itself every AUTOPLAY_MS, except with reduced motion,
+   * in a background tab, or while a mouse hovers or keyboard focus is inside (touch
+   * taps don't count as hover). Screen readers hear changes in `live` only while it
+   * isn't moving by itself.
+   */
+  function autoplay(root, live, advance) {
+    let timer = null;
+    let hovering = false;
+    let focused = false;
+
+    function sync() {
+      const playing = !reducedMotion.matches && !hovering && !focused && !document.hidden;
+      clearInterval(timer);
+      timer = playing ? setInterval(advance, AUTOPLAY_MS) : null;
+      live.setAttribute("aria-live", playing ? "off" : "polite");
+    }
+
+    root.addEventListener("pointerenter", (event) => {
+      hovering = event.pointerType === "mouse";
+      sync();
+    });
+    root.addEventListener("pointerleave", () => {
+      hovering = false;
+      sync();
+    });
+    root.addEventListener("focusin", () => {
+      focused = true;
+      sync();
+    });
+    root.addEventListener("focusout", (event) => {
+      focused = root.contains(event.relatedTarget);
+      sync();
+    });
+    document.addEventListener("visibilitychange", sync);
+    reducedMotion.addEventListener("change", sync);
+    sync();
+  }
+
+  /*
    * Stacked-card carousel: the current story sits in front, neighbours fan out
    * behind it. JS only sets each card's --offset/--distance; CSS does the layout.
    */
@@ -428,15 +465,9 @@
     const root = document.querySelector(".carousel");
     const track = document.getElementById("carousel-track");
     const caption = document.getElementById("carousel-caption");
-    const toggle = root.querySelector(".carousel__toggle");
     const slides = [...track.children];
-    const dots = [...root.querySelectorAll(".carousel__dot")];
 
     let current = 0;
-    let timer = null;
-    let userPaused = reducedMotion.matches;
-    let hovering = false;
-    let focused = false;
 
     function show(index) {
       current = (index + slides.length) % slides.length;
@@ -449,17 +480,7 @@
         slide.setAttribute("aria-hidden", String(!isCurrent));
         slide.querySelector(".slide__link").tabIndex = isCurrent ? 0 : -1;
       });
-      dots.forEach((dot, i) => dot.setAttribute("aria-current", String(i === current)));
       caption.textContent = SLIDES[current].summary;
-    }
-
-    function syncAutoplay() {
-      const playing = !userPaused && !hovering && !focused && !document.hidden;
-      clearInterval(timer);
-      timer = playing ? setInterval(() => show(current + 1), AUTOPLAY_MS) : null;
-      track.setAttribute("aria-live", playing ? "off" : "polite");
-      toggle.setAttribute("aria-label", userPaused ? UI.carouselPlay : UI.carouselPause);
-      root.classList.toggle("is-paused", userPaused);
     }
 
     // Swipe moves one card; a tap on a side card brings it forward instead of following its link.
@@ -473,48 +494,40 @@
     root.querySelectorAll(".carousel__arrow").forEach((button) => {
       button.addEventListener("click", () => show(current + Number(button.dataset.step)));
     });
-    dots.forEach((dot, i) => dot.addEventListener("click", () => show(i)));
-    toggle.addEventListener("click", () => {
-      userPaused = !userPaused;
-      syncAutoplay();
-    });
-
-    // Pause while a mouse hovers or keyboard focus is inside. Touch taps don't count as hover.
-    root.addEventListener("pointerenter", (event) => {
-      hovering = event.pointerType === "mouse";
-      syncAutoplay();
-    });
-    root.addEventListener("pointerleave", () => {
-      hovering = false;
-      syncAutoplay();
-    });
-    root.addEventListener("focusin", () => {
-      focused = true;
-      syncAutoplay();
-    });
-    root.addEventListener("focusout", (event) => {
-      focused = root.contains(event.relatedTarget);
-      syncAutoplay();
-    });
-    document.addEventListener("visibilitychange", syncAutoplay);
-    reducedMotion.addEventListener("change", (event) => {
-      if (event.matches) userPaused = true;
-      syncAutoplay();
-    });
 
     show(0);
-    syncAutoplay();
+    autoplay(root, track, () => show(current + 1));
+  }
+
+  /* Quotes in the red banner: one at a time, each beside its speaker's silhouette. */
+  function setupQuotes() {
+    const root = document.querySelector(".quotes");
+    const list = document.getElementById("quotes-list");
+    const quotes = [...list.children];
+    let current = 0;
+
+    function show(index) {
+      current = (index + quotes.length) % quotes.length;
+      quotes.forEach((quote, i) => quote.setAttribute("aria-hidden", String(i !== current)));
+    }
+
+    addSwipe(list, (step) => show(current + step));
+
+    show(0);
+    autoplay(root, list, () => show(current + 1));
   }
 
   applyText();
   renderNavigation();
   renderCarousel();
+  renderQuotes();
   renderHighlights();
   renderDirectory();
   renderCredits();
   setupSearch();
   setupMenu();
   setupCarousel();
+  setupQuotes();
   setupVideos();
   setupGallery();
 })();

@@ -62,13 +62,6 @@
 
   <a class="skip-link" href="#main" data-text="skipLink"></a>
 
-  <div class="top-strip">
-    <div class="container top-strip__inner">
-      <span data-text="topStrip"></span>
-      <span class="top-strip__date" data-text="topStripDate"></span>
-    </div>
-  </div>
-
   <header class="masthead">
     <div class="container masthead__inner">
       <h1 class="brand">
@@ -79,23 +72,10 @@
           <span class="brand__event-title" data-text="eventTitle"></span>
         </a>
       </h1>
-      <div class="search">
-        <button class="icon-button search__toggle" type="button" aria-expanded="false" aria-controls="search-form" data-label="searchOpen">
-          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
-        </button>
-        <form class="search__form" id="search-form" role="search">
-          <label class="visually-hidden" for="search-input" data-text="searchLabel"></label>
-          <div class="search__field">
-            <svg class="icon search__icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
-            <input class="search__input" id="search-input" type="search" autocomplete="off" data-placeholder="searchPlaceholder">
-          </div>
-          <div class="search__results" id="search-results" hidden>
-            <p class="search__status" id="search-status" aria-live="polite"></p>
-            <ul class="search__list" id="search-list"></ul>
-          </div>
-        </form>
-      </div>
       <a class="button button--outline masthead__action" data-text="headerAction" data-href="headerActionUrl"></a>
+      <button class="icon-button masthead__menu" type="button" aria-haspopup="dialog" aria-controls="menu-panel" data-label="menuTitle">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
     </div>
   </header>
 
@@ -116,6 +96,20 @@
         <button class="icon-button menu-panel__close" type="button" data-label="menuClose">
           <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
+      </div>
+      <!-- Phones keep the search here; js/main.js moves it into the masthead on wider screens. -->
+      <div class="search">
+        <form class="search__form" id="search-form" role="search">
+          <label class="visually-hidden" for="search-input" data-text="searchLabel"></label>
+          <div class="search__field">
+            <svg class="icon search__icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+            <input class="search__input" id="search-input" type="search" autocomplete="off" data-placeholder="searchPlaceholder">
+          </div>
+          <div class="search__results" id="search-results" hidden>
+            <p class="search__status" id="search-status" aria-live="polite"></p>
+            <ul class="search__list" id="search-list"></ul>
+          </div>
+        </form>
       </div>
       <ul class="menu-panel__list" id="menu-panel-list"></ul>
     </div>
@@ -160,23 +154,15 @@
             </button>
           </div>
           <p class="carousel__caption" id="carousel-caption"></p>
-          <div class="carousel__controls">
-            <div class="carousel__dots" id="carousel-dots"></div>
-            <button class="round-button carousel__toggle" type="button">
-              <svg class="icon icon--pause" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>
-              <svg class="icon icon--play" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>
-            </button>
-          </div>
         </div>
       </div>
     </section>
 
     <section class="intro">
       <div class="container intro__inner">
-        <blockquote class="intro__quote">
-          <p data-text="introQuote"></p>
-          <footer data-text="introQuoteBy"></footer>
-        </blockquote>
+        <div class="quotes" role="region" aria-roledescription="carousel" data-label="quotesLabel">
+          <ul class="quotes__list" id="quotes-list"></ul>
+        </div>
         <div class="intro__body">
           <p data-text="introText"></p>
           <a class="button button--accent" href="#sections" data-text="introAction"></a>
@@ -335,7 +321,8 @@
   </dialog>
 
   <script src="js/data.js"></script>
-  <script src="js/opening-art.js"></script>
+  <script src="js/silhouette-art.js"></script>
+  <script src="js/silhouette.js"></script>
   <script src="js/opening.js"></script>
   <script src="js/main.js"></script>
   <script src="js/poster.js"></script>
