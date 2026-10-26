@@ -31,21 +31,30 @@ const UI = {
   introAction: "ಎಲ್ಲ ವಿಭಾಗಗಳನ್ನು ನೋಡಿ",
 
   posterEyebrow: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್",
-  posterTitle: "ಕನ್ನಡದ ಹೆಮ್ಮೆ ಹಂಚಿಕೊಳ್ಳಿ.",
-  posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಅಥವಾ ನಿಮ್ಮ ಏರಿಯಾದ ರಾಜ್ಯೋತ್ಸವ ಕಾರ್ಯಕ್ರಮದ ಫೋಟೊ ಸೇರಿಸಿ – ಹಂಚಿಕೊಳ್ಳಲು ನಿಮ್ಮದೇ ಪೋಸ್ಟರ್ ಸಿದ್ಧ.",
+  posterTitle: "ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು",
+  posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಸೇರಿಸಿ, ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಬಗ್ಗೆ ನಿಮ್ಮ ಹೆಮ್ಮೆ ಅಥವಾ ಕನಸನ್ನು ಬರೆಯಿರಿ. ವಾಟ್ಸ್‌ಆ್ಯಪ್ ಸ್ಟೇಟಸ್‌ಗೆ ಹೊಂದುವ ಪೋಸ್ಟರ್ ಸಿದ್ಧ.",
+  posterStart: "ಪೋಸ್ಟರ್ ಮಾಡಿ",
   posterPrivacy: "ನಿಮ್ಮ ಫೋಟೊವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ, ಸಂಗ್ರಹಿಸುವುದೂ ಇಲ್ಲ. ಪೋಸ್ಟರ್ ನಿಮ್ಮ ಸಾಧನದಲ್ಲೇ ತಯಾರಾಗುತ್ತದೆ.",
-  posterStepType: "ಪೋಸ್ಟರ್ ಆಯ್ಕೆಮಾಡಿ",
-  posterStepPhoto: "ಫೋಟೊ ಸೇರಿಸಿ",
-  posterTakePhoto: "ಫೋಟೊ ತೆಗೆಯಿರಿ",
-  posterChoosePhoto: "ಫೋಟೊ ಆಯ್ಕೆಮಾಡಿ",
+  posterPhoto: "ಫೋಟೊ",
+  posterTakePhoto: "ಕ್ಯಾಮೆರಾ",
+  posterChoosePhoto: "ಗ್ಯಾಲರಿ",
   posterZoom: "ಫೋಟೊ ಗಾತ್ರ",
-  posterHint: "ಫೋಟೊವನ್ನು ಎಳೆದು ಅಥವಾ ಬಾಣದ ಕೀಲಿಗಳಿಂದ ಸರಿಹೊಂದಿಸಿ.",
+  posterPrompt: "ಯಾವುದರ ಬಗ್ಗೆ?",
+  posterLine: "ನಿಮ್ಮ ಮಾತು",
+  posterCount: "{n}/{max}",
+  posterSuggestions: "ಸಲಹೆಗಳು",
+  posterName: "ಹೆಸರು, ಊರು (ಐಚ್ಛಿಕ)",
+  posterNamePlaceholder: "ಉದಾ: ಸುಮಾ, ಮಂಡ್ಯ",
+  posterStory: "ಜೊತೆಗೊಂದು ಕತೆ (ಐಚ್ಛಿಕ)",
+  posterStoryHint: "ಪೋಸ್ಟರ್ ಹಂಚಿಕೊಳ್ಳುವಾಗ ಇದು ಜೊತೆಗೆ ಸಂದೇಶವಾಗಿ ಹೋಗುತ್ತದೆ.",
+  posterHint: "ಫೋಟೊವನ್ನು ಎಳೆದು ಸರಿಹೊಂದಿಸಿ.",
   posterDownload: "ಡೌನ್‌ಲೋಡ್",
   posterShare: "ಹಂಚಿಕೊಳ್ಳಿ",
-  posterReady: "ಪೋಸ್ಟರ್ ಸಿದ್ಧ. ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ ಅಥವಾ ಹಂಚಿಕೊಳ್ಳಿ.",
+  posterReady: "ಪೋಸ್ಟರ್ ಸಿದ್ಧ. ಹಂಚಿಕೊಳ್ಳಿ ಅಥವಾ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.",
   posterLoadError: "ಈ ಫೋಟೊ ತೆರೆಯಲಾಗಲಿಲ್ಲ. ಬೇರೆ ಫೋಟೊ ಪ್ರಯತ್ನಿಸಿ.",
-  posterCameraError: "ಕ್ಯಾಮೆರಾ ತೆರೆಯಲಾಗಲಿಲ್ಲ. 'ಫೋಟೊ ಆಯ್ಕೆಮಾಡಿ' ಬಳಸಿ.",
-  posterPreviewLabel: "ಪೋಸ್ಟರ್ ಮುನ್ನೋಟ: {quote}",
+  posterCameraError: "ಕ್ಯಾಮೆರಾ ತೆರೆಯಲಾಗಲಿಲ್ಲ. 'ಗ್ಯಾಲರಿ' ಬಳಸಿ.",
+  posterPreviewLabel: "ಪೋಸ್ಟರ್ ಮುನ್ನೋಟ: {heading}, {line}",
+  posterClose: "ಪೋಸ್ಟರ್ ತಯಾರಿಕೆ ಮುಚ್ಚಿ",
   posterCta: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್ ಮಾಡಿ",
   cameraTitle: "ಫೋಟೊ ತೆಗೆಯಿರಿ",
   cameraShutter: "ಕ್ಲಿಕ್ಕಿಸಿ",
@@ -414,38 +423,47 @@ const GALLERY = [
 ];
 
 /*
- * Poster maker. Readers pick a poster type, add a photo, and download or share it.
- * personal → their own photo in a round frame; program → a public-event photo in a wide frame.
- * camera: which phone camera "ಫೋಟೊ ತೆಗೆಯಿರಿ" opens ("user" = front, "environment" = back).
+ * Poster maker. Readers add a photo and write, in a line, what makes them proud of
+ * Kannada and Karnataka, or what they dream for its future. The poster is tall (9:16)
+ * so it fits a WhatsApp status; an optional longer story goes with it as the message
+ * when shared.
+ * prompts  → the two choices; example is shown faintly until the reader writes,
+ *            suggestions are tap-to-use starting points.
+ * samples  → the example posters on the page, with photos from IMAGES.
+ *            PLACEHOLDER: the lines and names are made up for illustration.
+ * camera   → which phone camera "ಕ್ಯಾಮೆರಾ" opens ("user" = front, "environment" = back).
+ * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
  */
 const POSTER = {
-  types: {
-    personal: {
-      label: "ನಾನು ಹೆಮ್ಮೆಯ ಕನ್ನಡಿಗ",
-      hint: "ನಿಮ್ಮ ಸ್ವಂತ ಫೋಟೊ",
-      quote: "ನಾನು ಹೆಮ್ಮೆಯ ಕನ್ನಡಿಗ",
-      placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
-      nameLabel: "ನಿಮ್ಮ ಹೆಸರು (ಐಚ್ಛಿಕ)",
-      nameLine: "– {name}",
-      tip: "ಸಲಹೆ: ಉತ್ತಮ ಬೆಳಕಿನಲ್ಲಿ, ನೇರವಾಗಿ ನೋಡುತ್ತಿರುವ ನಿಮ್ಮ ಸ್ಪಷ್ಟ ಫೋಟೊ ಬಳಸಿ.",
-      camera: "user",
+  prompts: {
+    pride: {
+      label: "ನನ್ನ ಹೆಮ್ಮೆ",
+      hint: "ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಯಾವುದು ನಿಮಗೆ ಹೆಮ್ಮೆ ತರುತ್ತದೆ?",
+      example: "ನಮ್ಮೂರ ಕಂಬಳದ ಕೆಸರಿನ ಓಟ",
+      suggestions: ["ನನ್ನೂರು", "ನಮ್ಮ ಕನ್ನಡ ಭಾಷೆ", "ನಮ್ಮ ಹಬ್ಬಗಳು", "ನಮ್ಮೂರ ಊಟ", "ನಮ್ಮ ಕಲೆ, ಸಂಗೀತ", "ನನ್ನ ಕುಟುಂಬ"],
     },
-    program: {
-      label: "ನಮ್ಮ ಏರಿಯಾದಲ್ಲಿ ರಾಜ್ಯೋತ್ಸವ",
-      hint: "ಸಾರ್ವಜನಿಕ ಕಾರ್ಯಕ್ರಮದ ಫೋಟೊ",
-      quote: "ನಮ್ಮ ಏರಿಯಾದಲ್ಲಿ ರಾಜ್ಯೋತ್ಸವ",
-      placeholder: "ಕಾರ್ಯಕ್ರಮದ ಫೋಟೊ",
-      nameLabel: "ಏರಿಯಾ ಅಥವಾ ಊರಿನ ಹೆಸರು (ಐಚ್ಛಿಕ)",
-      nameLine: "ಸ್ಥಳ: {name}",
-      tip: "ಸಲಹೆ: ಧ್ವಜಾರೋಹಣ, ವೇದಿಕೆ ಅಥವಾ ಜನಸಮೂಹ ಕಾಣುವಂತೆ ಅಡ್ಡವಾಗಿ ತೆಗೆದ ಫೋಟೊ ಉತ್ತಮ.",
-      camera: "environment",
+    dream: {
+      label: "ನನ್ನ ಕನಸು",
+      hint: "ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಭವಿಷ್ಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಆಶಯ ಏನು?",
+      example: "ಪ್ರತಿ ಮಗುವೂ ಕನ್ನಡದಲ್ಲಿ ಓದಿ ಬೆಳೆಯಲಿ",
+      suggestions: ["ಕನ್ನಡ ಶಾಲೆಗಳು ಬೆಳಗಲಿ", "ಹಸಿರು ಬೆಂಗಳೂರು ಮರಳಲಿ", "ಊರಲ್ಲೇ ಉದ್ಯೋಗ ಸಿಗಲಿ", "ಕೆರೆಗಳು ತುಂಬಿ ತುಳುಕಲಿ", "ತಂತ್ರಜ್ಞಾನದಲ್ಲೂ ಕನ್ನಡ ಮೆರೆಯಲಿ"],
     },
   },
-  footerTitle: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ",
-  footerDate: "ನವೆಂಬರ್ 1, 2026",
-  site: "prajavani.net",
+  samples: [
+    { prompt: "dream", image: "kudremukh", line: "ಪಶ್ಚಿಮ ಘಟ್ಟಗಳು ಎಂದೆಂದೂ ಹಸಿರಾಗಿರಲಿ", name: "ಅನಿತಾ, ಚಿಕ್ಕಮಗಳೂರು" },
+    { prompt: "pride", image: "dollu-kunitha", line: "ಡೊಳ್ಳಿನ ಸದ್ದಿಗೆ ಕುಣಿಯುವ ನಮ್ಮೂರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ" },
+    { prompt: "pride", image: "dasara-lights", line: "ದಸರೆಯ ಬೆಳಕಲ್ಲಿ ಮಿನುಗುವ ಮೈಸೂರು", name: "ಸುಮಾ, ಮೈಸೂರು" },
+  ],
+  lineMax: 60,
+  storyMax: 300,
+  camera: "user",
+  placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
+  eventLine: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
+  madeAt: "ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
+  address: "prajavani.net/rajyotsava",
   fileName: "prajavani-rajyotsava-poster.jpg",
-  shareText: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವದ ಶುಭಾಶಯಗಳು! ನಿಮ್ಮದೇ ಪೋಸ್ಟರ್ ಮಾಡಿ: prajavani.net",
+  // Sent with the poster when shared: the reader's story (if any), then the link.
+  shareText: "{story}ನಿಮ್ಮದೂ ಮಾಡಿ: https://{address}",
 };
 
 /*

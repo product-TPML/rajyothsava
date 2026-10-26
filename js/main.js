@@ -126,7 +126,7 @@
             "blockquote",
             { class: "quote__words" },
             el("p", { class: "quote__text" }, quote.text),
-            el("footer", { class: "quote__by" }, `— ${quote.by}`)
+            el("footer", { class: "quote__by" }, quote.by)
           )
         )
       )

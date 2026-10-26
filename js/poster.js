@@ -1,30 +1,39 @@
 /*
- * Rajyotsava poster maker. The reader picks a poster type, adds a photo (camera or
- * file), adjusts it, and downloads or shares the result. Everything is drawn on a
+ * Rajyotsava poster maker. The page shows a one-screen teaser with example posters;
+ * its button opens the maker full screen. The reader adds a photo, picks "my pride"
+ * or "my dream", writes a line (and optionally their name, town and a longer story),
+ * then shares or downloads a tall poster that fits a WhatsApp status. The story and
+ * the site's link go with the poster as the share message. Everything is drawn on a
  * canvas in the browser; the photo never leaves the reader's device.
  */
 (() => {
   "use strict";
 
   const WIDTH = 1080;
-  const HEIGHT = 1350;
+  const HEIGHT = 1920;
+  const MARGIN = 80;
+  // WhatsApp covers the top of a status with the sender's name and the very bottom
+  // with its reply bar, so the words stay between these lines; the photo runs edge to edge.
+  const SAFE_TOP = 230;
+  const SAFE_BOTTOM = 1790;
+  const MAX_LINES = 3;
   const MOVE_STEP = 24; // canvas pixels per arrow-key press
   const ZOOM_STEP = 0.1;
 
-  /* Where the photo sits for each poster type (canvas pixels). */
-  const PHOTO_AREAS = {
-    personal: { shape: "circle", x: 210, y: 250, w: 660, h: 660 },
-    program: { shape: "rect", x: 70, y: 220, w: 940, h: 700, radius: 28 },
-  };
-
   const root = document.getElementById("poster");
+  const samples = document.getElementById("poster-samples");
+  const studio = document.getElementById("poster-studio");
   const canvas = document.getElementById("poster-canvas");
-  const ctx = canvas.getContext("2d");
-  const typeGroup = document.getElementById("poster-types");
+  const promptGroup = document.getElementById("poster-prompts");
+  const lineInput = document.getElementById("poster-line");
+  const lineHint = document.getElementById("poster-line-hint");
+  const lineCount = document.getElementById("poster-line-count");
+  const suggestions = document.getElementById("poster-suggestions");
   const nameInput = document.getElementById("poster-name");
-  const nameLabel = document.getElementById("poster-name-label");
+  const storyInput = document.getElementById("poster-story");
+  const storyCount = document.getElementById("poster-story-count");
   const zoomInput = document.getElementById("poster-zoom");
-  const tip = document.getElementById("poster-tip");
+  const photoOnly = [document.getElementById("poster-zoom-field"), document.getElementById("poster-hint")];
   const status = document.getElementById("poster-status");
   const downloadButton = document.getElementById("poster-download");
   const shareButton = document.getElementById("poster-share");
@@ -34,10 +43,18 @@
   const camera = document.getElementById("camera");
   const cameraVideo = document.getElementById("camera-video");
 
-  const state = { type: "personal", image: null, zoom: 1, offsetX: 0, offsetY: 0 };
+  // The reader's poster. The drawing functions take a poster like this, so the examples use them too.
+  const state = { prompt: "pride", image: null, zoom: 1, offsetX: 0, offsetY: 0, line: "", name: "" };
   const format = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => values[key]);
   const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
   const clamp = (value, limit) => Math.min(limit, Math.max(-limit, value));
+
+  /* A colour token (#rrggbb) at the given opacity, for gradients. */
+  function shade(name, alpha) {
+    const hex = token(name).replace("#", "");
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
 
   function loadImage(src) {
     const image = new Image();
@@ -56,146 +73,179 @@
 
   /* ---------- Drawing ---------- */
 
-  function tracePhotoArea(area) {
-    ctx.beginPath();
-    if (area.shape === "circle") ctx.arc(area.x + area.w / 2, area.y + area.h / 2, area.w / 2, 0, Math.PI * 2);
-    else ctx.roundRect(area.x, area.y, area.w, area.h, area.radius);
-  }
-
-  function drawHeader({ logo, art }) {
-    const flagBand = 7;
-    ctx.fillStyle = token("yellow");
-    ctx.fillRect(0, 0, WIDTH, flagBand);
-    ctx.fillStyle = token("red");
-    ctx.fillRect(0, flagBand, WIDTH, flagBand);
-
-    const logoHeight = 64;
-    ctx.drawImage(logo, 70, 76, (logo.width / logo.height) * logoHeight, logoHeight);
-    ctx.fillStyle = token("line-strong");
-    ctx.fillRect(352, 62, 2, 92);
-    const artHeight = 104;
-    ctx.drawImage(art, 376, 56, (art.width / art.height) * artHeight, artHeight);
-    ctx.fillStyle = token("red");
-    ctx.font = '600 54px "PvHeadline"';
-    ctx.textBaseline = "alphabetic";
-    ctx.textAlign = "left";
-    ctx.fillText(UI.eventTitle, 496, 128);
-  }
-
-  function drawFrame(area) {
-    if (area.shape === "circle") {
-      // Kannada-flag ring: yellow top half, red bottom half.
-      const cx = area.x + area.w / 2;
-      const cy = area.y + area.h / 2;
-      const radius = area.w / 2 + 14;
-      ctx.lineWidth = 18;
-      ctx.strokeStyle = token("yellow");
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius, Math.PI, Math.PI * 2);
-      ctx.stroke();
-      ctx.strokeStyle = token("red");
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius, 0, Math.PI);
-      ctx.stroke();
-    } else {
-      // Red block offset behind the photo, then a yellow edge.
-      ctx.fillStyle = token("red-dark");
-      ctx.beginPath();
-      ctx.roundRect(area.x + 18, area.y + 18, area.w, area.h, area.radius);
-      ctx.fill();
-    }
-  }
-
-  function drawPhoto(area) {
-    ctx.save();
-    tracePhotoArea(area);
-    ctx.clip();
-    if (state.image) {
-      const { image } = state;
-      const scale = Math.max(area.w / image.width, area.h / image.height) * state.zoom;
-      const w = image.width * scale;
-      const h = image.height * scale;
-      // Keep the photo covering the frame however it is dragged.
-      state.offsetX = clamp(state.offsetX, (w - area.w) / 2);
-      state.offsetY = clamp(state.offsetY, (h - area.h) / 2);
-      ctx.drawImage(image, area.x + (area.w - w) / 2 + state.offsetX, area.y + (area.h - h) / 2 + state.offsetY, w, h);
-    } else {
-      ctx.fillStyle = token("paper");
-      ctx.fill();
-      ctx.fillStyle = token("ink-muted");
-      ctx.font = '600 44px "PvText"';
+  /* The photo covers the whole poster; without one, a deep red placeholder. */
+  function drawPhoto(ctx, poster) {
+    if (!poster.image) {
+      const fill = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+      fill.addColorStop(0, token("red-dark"));
+      fill.addColorStop(1, token("red-deep"));
+      ctx.fillStyle = fill;
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.font = '600 48px "PvText"';
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(POSTER.types[state.type].placeholder, area.x + area.w / 2, area.y + area.h / 2);
+      ctx.fillText(POSTER.placeholder, WIDTH / 2, HEIGHT * 0.42);
+      return;
     }
-    ctx.restore();
-
-    if (area.shape === "rect") {
-      ctx.lineWidth = 10;
-      ctx.strokeStyle = token("yellow");
-      tracePhotoArea(area);
-      ctx.stroke();
-    }
+    const { image } = poster;
+    const scale = Math.max(WIDTH / image.width, HEIGHT / image.height) * poster.zoom;
+    const w = image.width * scale;
+    const h = image.height * scale;
+    // Keep the photo covering the poster however it is dragged.
+    poster.offsetX = clamp(poster.offsetX, (w - WIDTH) / 2);
+    poster.offsetY = clamp(poster.offsetY, (h - HEIGHT) / 2);
+    ctx.drawImage(image, (WIDTH - w) / 2 + poster.offsetX, (HEIGHT - h) / 2 + poster.offsetY, w, h);
   }
 
-  /* Draws text centred, shrinking the font ("SIZE" in the font string) until it fits maxWidth. */
-  function fitText(text, font, size, y, maxWidth) {
-    let fontSize = size;
-    do {
-      ctx.font = font.replace("SIZE", fontSize);
-      fontSize -= 2;
-    } while (ctx.measureText(text).width > maxWidth && fontSize > 24);
-    ctx.fillText(text, WIDTH / 2, y);
+  /* Darkens the top and bottom of the photo so white words read on any picture. */
+  function drawShade(ctx) {
+    const top = ctx.createLinearGradient(0, 0, 0, 600);
+    top.addColorStop(0, shade("night", 0.7));
+    top.addColorStop(1, shade("night", 0));
+    ctx.fillStyle = top;
+    ctx.fillRect(0, 0, WIDTH, 600);
+
+    const bottom = ctx.createLinearGradient(0, 820, 0, HEIGHT);
+    bottom.addColorStop(0, shade("night", 0));
+    bottom.addColorStop(0.45, shade("night", 0.72));
+    bottom.addColorStop(1, shade("night", 0.92));
+    ctx.fillStyle = bottom;
+    ctx.fillRect(0, 820, WIDTH, HEIGHT - 820);
   }
 
-  function drawText() {
-    const type = POSTER.types[state.type];
-    ctx.textAlign = "center";
-    ctx.textBaseline = "alphabetic";
-    ctx.fillStyle = token("red-dark");
-    fitText(type.quote, '600 SIZEpx "PvHeadline"', 100, 1045, 940);
-
-    // Kannada conjuncts hang well below the baseline, so the name sits a full line lower.
-    const name = nameInput.value.trim();
-    if (name) {
-      ctx.fillStyle = token("ink-muted");
-      fitText(format(type.nameLine, { name }), '600 SIZEpx "PvText"', 42, 1150, 900);
-    }
-  }
-
-  function drawFooter() {
-    const top = 1190;
-    ctx.fillStyle = token("yellow");
-    ctx.fillRect(0, top, WIDTH, 8);
-    ctx.fillStyle = token("red");
-    ctx.fillRect(0, top + 8, WIDTH, HEIGHT - top - 8);
-
-    ctx.textBaseline = "alphabetic";
+  /* The Karunadotsava mark, large, at the top: the artwork on a cream tile, then the title. */
+  function drawEvent(ctx, art) {
+    const tile = 180;
+    ctx.fillStyle = token("cream");
+    ctx.beginPath();
+    ctx.roundRect(MARGIN, SAFE_TOP, tile, tile, 32);
+    ctx.fill();
+    const artHeight = 150;
+    const artWidth = (art.width / art.height) * artHeight;
+    ctx.drawImage(art, MARGIN + (tile - artWidth) / 2, SAFE_TOP + (tile - artHeight) / 2, artWidth, artHeight);
+    const x = MARGIN + tile + 30;
     ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
     ctx.fillStyle = token("white");
-    ctx.font = '600 46px "PvHeadline"';
-    ctx.fillText(POSTER.footerTitle, 70, 1272);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-    ctx.font = '400 32px "PvText"';
-    ctx.fillText(POSTER.footerDate, 70, 1318);
-
-    ctx.textAlign = "right";
+    ctx.font = '600 78px "PvHeadline"';
+    ctx.fillText(UI.eventTitle, x, SAFE_TOP + 98);
     ctx.fillStyle = token("yellow");
     ctx.font = '600 34px "PvText"';
-    ctx.fillText(POSTER.site, WIDTH - 70, 1294);
+    ctx.fillText(POSTER.eventLine, x, SAFE_TOP + 152);
   }
 
-  async function render() {
-    const brand = await assets;
-    const area = PHOTO_AREAS[state.type];
-    ctx.fillStyle = token("cream");
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
-    drawHeader(brand);
-    drawFrame(area);
-    drawPhoto(area);
-    drawText();
-    drawFooter();
-    canvas.setAttribute("aria-label", format(UI.posterPreviewLabel, { quote: POSTER.types[state.type].quote }));
+  /* Splits text into lines no wider than maxWidth, at spaces. */
+  function wrap(ctx, text, maxWidth) {
+    const lines = [];
+    let current = "";
+    for (const word of text.split(/\s+/)) {
+      const next = current ? `${current} ${word}` : word;
+      if (current && ctx.measureText(next).width > maxWidth) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = next;
+      }
+    }
+    lines.push(current);
+    return lines;
+  }
+
+  /* The largest headline size at which the line fits in MAX_LINES lines. */
+  function fitLine(ctx, text) {
+    const maxWidth = WIDTH - MARGIN * 2;
+    let size = 104;
+    let lines;
+    do {
+      ctx.font = `600 ${size}px "PvHeadline"`;
+      lines = wrap(ctx, text, maxWidth);
+      size -= 4;
+    } while ((lines.length > MAX_LINES || lines.some((line) => ctx.measureText(line).width > maxWidth)) && size > 52);
+    return { size: size + 4, lines: lines.slice(0, MAX_LINES) };
+  }
+
+  /*
+   * From the bottom up: the "made at" credit, the name, the reader's line and the
+   * prompt's heading above it. Until the reader writes, the example line shows faintly.
+   */
+  function drawWords(ctx, poster, logo) {
+    const prompt = POSTER.prompts[poster.prompt];
+
+    // Credit: a white pill, since the Prajavani logo must sit on white.
+    const pillHeight = 84;
+    const pillTop = SAFE_BOTTOM - pillHeight;
+    const logoHeight = 44;
+    const logoWidth = (logo.width / logo.height) * logoHeight;
+    const credit = `${POSTER.address} ${POSTER.madeAt}`;
+    ctx.font = '400 32px "PvText"';
+    const pillWidth = 28 + logoWidth + 22 + ctx.measureText(credit).width + 30;
+    ctx.fillStyle = token("white");
+    ctx.beginPath();
+    ctx.roundRect(MARGIN, pillTop, pillWidth, pillHeight, pillHeight / 2);
+    ctx.fill();
+    ctx.drawImage(logo, MARGIN + 28, pillTop + (pillHeight - logoHeight) / 2, logoWidth, logoHeight);
+    ctx.fillStyle = token("ink");
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(credit, MARGIN + 28 + logoWidth + 22, pillTop + pillHeight / 2 + 2);
+
+    ctx.textBaseline = "alphabetic";
+    let baseline = pillTop - 56;
+    if (poster.name) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.font = '600 40px "PvText"';
+      ctx.fillText(poster.name, MARGIN, baseline);
+      baseline -= 92;
+    }
+
+    const { size, lines } = fitLine(ctx, poster.line || prompt.example);
+    const lineHeight = size * 1.4;
+    ctx.fillStyle = poster.line ? token("white") : "rgba(255, 255, 255, 0.5)";
+    lines
+      .slice()
+      .reverse()
+      .forEach((line, i) => ctx.fillText(line, MARGIN, baseline - i * lineHeight));
+
+    const headingBaseline = baseline - (lines.length - 1) * lineHeight - size * 1.1 - 12;
+    ctx.fillStyle = token("yellow");
+    ctx.font = '600 44px "PvText"';
+    ctx.fillText(prompt.label, MARGIN, headingBaseline);
+  }
+
+  /* The Kannada flag's colours along the bottom edge. */
+  function drawFlagBand(ctx) {
+    ctx.fillStyle = token("yellow");
+    ctx.fillRect(0, HEIGHT - 28, WIDTH, 14);
+    ctx.fillStyle = token("red");
+    ctx.fillRect(0, HEIGHT - 14, WIDTH, 14);
+  }
+
+  /* Draws a poster onto a canvas of any size with the poster's shape. */
+  async function drawPoster(target, poster) {
+    const { logo, art } = await assets;
+    const ctx = target.getContext("2d");
+    const scale = target.width / WIDTH;
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    drawPhoto(ctx, poster);
+    drawShade(ctx);
+    drawEvent(ctx, art);
+    drawWords(ctx, poster, logo);
+    drawFlagBand(ctx);
+  }
+
+  function render() {
+    drawPoster(canvas, state);
+    const prompt = POSTER.prompts[state.prompt];
+    canvas.setAttribute("aria-label", format(UI.posterPreviewLabel, { heading: prompt.label, line: state.line || prompt.example }));
+  }
+
+  /* The example posters on the page, at half size, drawn once they are about to scroll into view. */
+  function drawSamples() {
+    POSTER.samples.forEach(async (sample, i) => {
+      const image = await loadImage(`assets/images/${sample.image}-1280.webp`);
+      drawPoster(samples.children[i], { ...sample, image, zoom: 1, offsetX: 0, offsetY: 0 });
+    });
   }
 
   /* ---------- Photo input ---------- */
@@ -211,7 +261,9 @@
     state.offsetX = 0;
     state.offsetY = 0;
     zoomInput.value = "1";
-    zoomInput.disabled = false;
+    photoOnly.forEach((node) => {
+      node.hidden = false; // the size slider and drag hint only make sense once there is a photo
+    });
     downloadButton.disabled = false;
     shareButton.disabled = false;
     canvas.classList.add("has-photo");
@@ -227,7 +279,7 @@
 
   /* Phones open their own camera app; desktops get an in-page camera view. */
   async function takePhoto() {
-    const facing = POSTER.types[state.type].camera;
+    const facing = POSTER.camera;
     if (window.matchMedia("(pointer: coarse)").matches || !navigator.mediaDevices?.getUserMedia) {
       captureInput.setAttribute("capture", facing);
       captureInput.click();
@@ -314,6 +366,36 @@
     event.preventDefault();
   });
 
+  /* ---------- The words ---------- */
+
+  const make = (tag, className, text) => Object.assign(document.createElement(tag), { className, textContent: text });
+
+  function selectPrompt(key) {
+    const prompt = POSTER.prompts[key];
+    state.prompt = key;
+    promptGroup.querySelector(`input[value="${key}"]`).checked = true;
+    lineHint.textContent = prompt.hint;
+    lineInput.placeholder = prompt.example;
+    suggestions.replaceChildren(
+      ...prompt.suggestions.map((text) => {
+        const chip = make("button", "chip", text);
+        chip.type = "button";
+        return chip;
+      })
+    );
+    render();
+  }
+
+  function setLine(text) {
+    state.line = text.trim();
+    lineCount.textContent = format(UI.posterCount, { n: text.length, max: POSTER.lineMax });
+    render();
+  }
+
+  function updateStoryCount() {
+    storyCount.textContent = format(UI.posterCount, { n: storyInput.value.length, max: POSTER.storyMax });
+  }
+
   /* ---------- Output ---------- */
 
   function posterFile() {
@@ -331,45 +413,51 @@
 
   async function share() {
     const file = await posterFile();
+    const story = storyInput.value.trim();
+    const text = format(POSTER.shareText, { story: story ? `${story}\n\n` : "", address: POSTER.address });
     // Closing the share sheet without sharing rejects; that is not an error.
-    navigator.share({ files: [file], text: POSTER.shareText }).catch(() => {});
+    navigator.share({ files: [file], text }).catch(() => {});
   }
 
   /* ---------- Setup ---------- */
 
-  function selectType(type) {
-    const config = POSTER.types[type];
-    state.type = type;
-    state.offsetX = 0;
-    state.offsetY = 0;
-    nameLabel.textContent = config.nameLabel;
-    tip.textContent = config.tip;
-    render();
-  }
-
-  typeGroup.append(
-    ...Object.entries(POSTER.types).map(([type, config]) => {
-      const label = document.createElement("label");
-      label.className = "choice";
-      const input = Object.assign(document.createElement("input"), {
-        type: "radio",
-        name: "poster-type",
-        value: type,
-        checked: type === state.type,
-      });
-      const title = Object.assign(document.createElement("span"), { className: "choice__title", textContent: config.label });
-      const hint = Object.assign(document.createElement("span"), { className: "choice__hint", textContent: config.hint });
-      label.append(input, title, hint);
-      return label;
+  promptGroup.append(
+    ...Object.entries(POSTER.prompts).map(([key, prompt]) => {
+      const option = make("label", "segmented__option");
+      const input = Object.assign(document.createElement("input"), { type: "radio", name: "poster-prompt", value: key, className: "visually-hidden" });
+      option.append(input, make("span", "", prompt.label));
+      return option;
     })
   );
+  samples.append(
+    ...POSTER.samples.map(() => Object.assign(document.createElement("canvas"), { className: "poster__sample", width: WIDTH / 2, height: HEIGHT / 2 }))
+  );
+  lineInput.maxLength = POSTER.lineMax;
+  storyInput.maxLength = POSTER.storyMax;
 
-  // Sharing files is only offered where the browser supports it (mostly phones).
+  // Sharing files is offered where the browser supports it (mostly phones); elsewhere downloading is the main action.
   const canShareFiles = navigator.canShare?.({ files: [new File([""], "test.jpg", { type: "image/jpeg" })] });
-  if (!canShareFiles) shareButton.remove();
+  if (!canShareFiles) {
+    shareButton.remove();
+    downloadButton.classList.replace("button--outline", "button--primary");
+  }
 
-  typeGroup.addEventListener("change", (event) => selectType(event.target.value));
-  nameInput.addEventListener("input", render);
+  document.getElementById("poster-start").addEventListener("click", () => studio.showModal());
+  studio.querySelector(".studio__close").addEventListener("click", () => studio.close());
+  document.getElementById("poster-form").addEventListener("submit", (event) => event.preventDefault());
+  promptGroup.addEventListener("change", (event) => selectPrompt(event.target.value));
+  lineInput.addEventListener("input", () => setLine(lineInput.value));
+  suggestions.addEventListener("click", (event) => {
+    const chip = event.target.closest(".chip");
+    if (!chip) return;
+    lineInput.value = chip.textContent;
+    setLine(chip.textContent);
+  });
+  nameInput.addEventListener("input", () => {
+    state.name = nameInput.value.trim();
+    render();
+  });
+  storyInput.addEventListener("input", updateStoryCount);
   zoomInput.addEventListener("input", () => setZoom(Number(zoomInput.value)));
   fileInput.addEventListener("change", onFileChosen);
   captureInput.addEventListener("change", onFileChosen);
@@ -380,11 +468,24 @@
   downloadButton.addEventListener("click", download);
   shareButton.addEventListener("click", share);
 
-  // The floating "make your poster" button hides while the poster maker is on screen.
+  // The floating "make your poster" button hides while the teaser is on screen.
   const cta = document.querySelector(".poster-cta");
   new IntersectionObserver(([entry]) => {
     cta.hidden = entry.isIntersecting;
   }).observe(root);
 
-  selectType(state.type);
+  // The examples are drawn shortly before they scroll into view, so their photos aren't loaded up front.
+  const sampleWatcher = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) return;
+      sampleWatcher.disconnect();
+      drawSamples();
+    },
+    { rootMargin: "400px" }
+  );
+  sampleWatcher.observe(samples);
+
+  setLine("");
+  updateStoryCount();
+  selectPrompt(state.prompt);
 })();

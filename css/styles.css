@@ -1030,16 +1030,19 @@ button {
 
 /* ---------- Poster maker ---------- */
 
+/*
+ * The teaser fits one screen. Phones: intro, example posters, start button.
+ * Tablet and up: the examples on the right.
+ */
 .poster {
-  padding-block: var(--space-7);
+  padding-block: var(--space-6);
   background: var(--cream);
 }
 
-/* Phones: intro, steps, preview, buttons in one column. Desktop: preview on the right. */
 .poster__inner {
   display: grid;
-  grid-template-areas: "intro" "steps" "preview" "actions";
-  gap: var(--space-6);
+  grid-template-areas: "intro" "samples" "start";
+  gap: var(--space-5);
 }
 
 .poster__intro {
@@ -1047,11 +1050,11 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .poster__title {
-  font-size: 2rem;
+  font-size: 1.75rem;
   color: var(--red-dark);
 }
 
@@ -1059,137 +1062,228 @@ button {
   color: var(--ink-muted);
 }
 
+/* Three example posters fanned out on the same deep red "stage" as the maker. */
+.poster__samples {
+  --sample-width: 112px;
+  --sample-spread: 76px;
+  grid-area: samples;
+  display: grid;
+  place-items: center;
+  padding-block: var(--space-5);
+  border-radius: calc(var(--radius) * 2);
+  background: radial-gradient(circle at 50% 40%, var(--red-dark), var(--red-deep));
+}
+
+.poster__sample {
+  grid-area: 1 / 1;
+  width: var(--sample-width);
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 40%);
+}
+
+.poster__sample:nth-child(1) {
+  translate: calc(var(--sample-spread) * -1) 6%;
+  rotate: -8deg;
+  scale: 0.9;
+}
+
+.poster__sample:nth-child(2) {
+  z-index: 1;
+}
+
+.poster__sample:nth-child(3) {
+  translate: var(--sample-spread) 6%;
+  rotate: 8deg;
+  scale: 0.9;
+}
+
+.poster__start {
+  grid-area: start;
+  display: grid;
+  gap: var(--space-3);
+}
+
 .poster__privacy {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--white);
-  font-size: 0.875rem;
+  gap: var(--space-2);
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
 }
 
 .poster__privacy .icon {
   flex: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   margin-top: 2px;
   color: var(--red);
 }
 
-/* Numbered steps with yellow counters. */
-.poster__steps {
-  grid-area: steps;
+/*
+ * The maker, full screen: a title bar, then the poster on a deep red stage with the
+ * choices in a white panel (below it on phones, beside it on desktop), and the
+ * save buttons always in reach at the bottom.
+ */
+.studio {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.studio[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.studio::backdrop {
+  background: var(--red-deep);
+}
+
+.studio__bar,
+.studio__foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--gutter);
+  background: var(--white);
+}
+
+.studio__bar {
+  min-height: 56px;
+  border-bottom: 1px solid var(--line);
+}
+
+.studio__title {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.125rem;
+  color: var(--red-dark);
+}
+
+.studio__close:hover {
+  background: var(--paper);
+}
+
+.studio__main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.studio__stage {
   display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-4) var(--gutter) var(--space-3);
+  background: radial-gradient(circle at 50% 35%, var(--red-dark), var(--red-deep));
+}
+
+/* Kept short on phones so the first choices show below it. */
+.studio__canvas {
+  width: auto;
+  max-width: 100%;
+  height: min(54dvh, 560px);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgb(0 0 0 / 45%);
+}
+
+/* Dragging the photo must not scroll the page, but only once there is a photo to drag. */
+.studio__canvas.has-photo {
+  cursor: grab;
+  touch-action: none;
+}
+
+.studio__canvas.is-dragging {
+  cursor: grabbing;
+}
+
+.studio__hint {
+  font-size: 0.8125rem;
+  color: rgb(255 255 255 / 80%);
+}
+
+.studio__panel {
+  display: grid;
+  align-content: start;
   gap: var(--space-5);
-  counter-reset: step;
+  padding: var(--space-5) var(--gutter) var(--space-6);
 }
 
-.poster__step {
-  position: relative;
-  padding-left: 44px;
-  counter-increment: step;
+.studio__foot {
+  flex-wrap: wrap;
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--line);
 }
 
-.poster__step::before {
-  content: counter(step);
-  position: absolute;
-  top: 0;
-  left: 0;
+.studio__foot .button {
+  flex: 1;
+}
+
+.studio__status {
+  flex-basis: 100%;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+.studio__status:empty {
+  display: none;
+}
+
+/* Form fields in the panel. */
+.field {
   display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--yellow);
-  font-weight: 600;
-  font-size: 0.875rem;
-}
-
-.poster__fieldset {
+  gap: var(--space-2);
   min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-.poster__step-title {
-  display: block;
-  margin-bottom: var(--space-2);
+.field__label {
   padding: 0;
   font-weight: 600;
 }
 
-.choice-group {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.choice {
-  position: relative;
+.field__head {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: var(--space-3) var(--space-4) var(--space-3) 48px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--white);
-  cursor: pointer;
-  transition: border-color var(--duration), background-color var(--duration);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
 
-.choice input {
-  position: absolute;
-  top: 18px;
-  left: 16px;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: var(--red);
+.field__count {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
 }
 
-.choice:has(input:checked) {
-  border-color: var(--red);
-  background: var(--yellow-soft);
-  box-shadow: inset 0 0 0 1px var(--red);
-}
-
-.choice:has(input:focus-visible) {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-.choice__title {
-  font-family: var(--font-headline);
-  font-weight: 600;
-  font-size: 1.0625rem;
-}
-
-.choice__hint {
+.field__note {
   font-size: 0.8125rem;
   color: var(--ink-muted);
 }
 
-.poster__buttons {
+.field__row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-.poster__tip {
-  margin-top: var(--space-2);
-  font-size: 0.875rem;
-  color: var(--ink-muted);
+.field__row .button {
+  flex: 1;
 }
 
-.poster__input,
-.poster__range {
+.field__input {
   width: 100%;
-  max-width: 360px;
-}
-
-.poster__input {
   min-height: 44px;
   padding: 0 var(--space-3);
   border: 1px solid var(--line-strong);
@@ -1199,87 +1293,142 @@ button {
   color: var(--ink);
 }
 
-.poster__range {
-  min-height: 44px;
+.field__input--story {
+  padding-block: var(--space-2);
+  resize: vertical;
+}
+
+.field__range {
+  width: 100%;
+  min-height: 32px;
   accent-color: var(--red);
 }
 
-.poster__preview {
-  grid-area: preview;
+/* Two options in a pill-shaped track; the chosen one fills red. */
+.segmented {
   display: grid;
-  justify-items: center;
-  gap: var(--space-2);
-  margin: 0;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
 }
 
-.poster__canvas {
-  width: 100%;
-  max-width: 480px;
-  height: auto;
-  border-radius: var(--radius);
-  background: var(--white);
-  box-shadow: var(--shadow-raised);
-}
-
-/* Dragging the photo must not scroll the page, but only once there is a photo to drag. */
-.poster__canvas.has-photo {
-  cursor: grab;
-  touch-action: none;
-}
-
-.poster__canvas.is-dragging {
-  cursor: grabbing;
-}
-
-.poster__hint {
-  font-size: 0.8125rem;
+.segmented__option {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  border-radius: 999px;
+  font-weight: 600;
   color: var(--ink-muted);
-  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--duration), color var(--duration);
 }
 
-.poster__actions {
-  grid-area: actions;
+.segmented__option:has(input:checked) {
+  background: var(--red);
+  color: var(--white);
+}
+
+.segmented__option:has(input:focus-visible) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Tap-to-use suggestions. */
+.chips {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-.poster__status {
-  flex-basis: 100%;
+.chip {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: 22px;
+  background: var(--white);
+  font: inherit;
   font-size: 0.875rem;
-  color: var(--ink-muted);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--duration), border-color var(--duration);
+}
+
+.chip:hover {
+  border-color: var(--red);
+  background: var(--yellow-soft);
 }
 
 @media (min-width: 768px) {
-  .choice-group {
+  .poster__inner {
     grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      ". samples"
+      "intro samples"
+      "start samples"
+      ". samples";
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: var(--space-7);
+  }
+
+  .poster__samples {
+    --sample-width: 150px;
+    --sample-spread: 104px;
+  }
+
+  .poster__start-button {
+    justify-self: start;
+  }
+
+  .studio__foot {
+    justify-content: flex-end;
+  }
+
+  .studio__foot .button {
+    flex: none;
+  }
+
+  .studio__status {
+    flex: 1;
   }
 }
 
 @media (min-width: 1024px) {
   .poster {
-    padding-block: var(--space-8);
-  }
-
-  .poster__inner {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "intro preview"
-      "steps preview"
-      "actions preview";
-    grid-template-rows: auto auto 1fr;
-    column-gap: var(--space-8);
+    padding-block: var(--space-7);
   }
 
   .poster__title {
-    font-size: 3rem;
+    font-size: 2.75rem;
   }
 
-  .poster__preview {
-    position: sticky;
-    top: calc(var(--nav-height) + var(--space-5));
-    align-self: start;
+  .poster__samples {
+    --sample-width: 180px;
+    --sample-spread: 132px;
+    padding-block: var(--space-6);
+  }
+
+  /* Stage on the left filling the height, panel on the right scrolling on its own. */
+  .studio__main {
+    display: grid;
+    grid-template-columns: 1fr minmax(380px, 440px);
+    overflow: hidden;
+  }
+
+  .studio__stage {
+    align-content: center;
+    padding-block: var(--space-5);
+  }
+
+  .studio__canvas {
+    height: calc(100dvh - 56px - 77px - 2 * var(--space-5) - 32px);
+  }
+
+  .studio__panel {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-left: 1px solid var(--line);
   }
 }
 

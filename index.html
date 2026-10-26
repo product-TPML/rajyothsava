@@ -170,68 +170,103 @@
       </div>
     </section>
 
+    <!-- A one-screen teaser; the poster maker itself opens full screen. -->
     <section class="poster" id="poster" aria-labelledby="poster-title">
       <div class="container poster__inner">
         <div class="poster__intro">
           <p class="tag" data-text="posterEyebrow"></p>
           <h2 class="poster__title" id="poster-title" data-text="posterTitle"></h2>
           <p class="poster__lead" data-text="posterLead"></p>
+        </div>
+        <div class="poster__samples" id="poster-samples" aria-hidden="true"></div>
+        <div class="poster__start">
+          <button class="button button--primary poster__start-button" id="poster-start" type="button">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            <span data-text="posterStart"></span>
+          </button>
           <p class="poster__privacy">
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
             <span data-text="posterPrivacy"></span>
           </p>
         </div>
+      </div>
 
-        <ol class="poster__steps">
-          <li class="poster__step">
-            <fieldset class="poster__fieldset">
-              <legend class="poster__step-title" data-text="posterStepType"></legend>
-              <div class="choice-group" id="poster-types"></div>
-            </fieldset>
-          </li>
-          <li class="poster__step">
-            <p class="poster__step-title" data-text="posterStepPhoto"></p>
-            <div class="poster__buttons">
-              <button class="button button--primary" id="poster-camera" type="button">
-                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-                <span data-text="posterTakePhoto"></span>
-              </button>
-              <label class="button button--outline">
-                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l5-5 4 4 3-3 4 4"/></svg>
-                <span data-text="posterChoosePhoto"></span>
-                <input class="visually-hidden" id="poster-file" type="file" accept="image/*">
-              </label>
-              <input class="visually-hidden" id="poster-capture" type="file" accept="image/*" tabindex="-1" aria-hidden="true">
+      <!-- The maker: the poster on a dark "stage", the choices in a light panel beside or below it. -->
+      <dialog class="studio" id="poster-studio" aria-labelledby="studio-title">
+        <div class="studio__bar">
+          <h2 class="studio__title" id="studio-title" data-text="posterEyebrow"></h2>
+          <button class="icon-button studio__close" type="button" data-label="posterClose">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+        <div class="studio__main">
+          <figure class="studio__stage">
+            <canvas class="studio__canvas" id="poster-canvas" width="1080" height="1920" tabindex="0" role="img"></canvas>
+            <figcaption class="studio__hint" id="poster-hint" data-text="posterHint" hidden></figcaption>
+          </figure>
+          <form class="studio__panel" id="poster-form">
+            <div class="field">
+              <p class="field__label" data-text="posterPhoto"></p>
+              <div class="field__row">
+                <button class="button button--primary" id="poster-camera" type="button">
+                  <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+                  <span data-text="posterTakePhoto"></span>
+                </button>
+                <label class="button button--outline">
+                  <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l5-5 4 4 3-3 4 4"/></svg>
+                  <span data-text="posterChoosePhoto"></span>
+                  <input class="visually-hidden" id="poster-file" type="file" accept="image/*">
+                </label>
+                <input class="visually-hidden" id="poster-capture" type="file" accept="image/*" tabindex="-1" aria-hidden="true">
+              </div>
+              <div class="field" id="poster-zoom-field" hidden>
+                <label class="field__note" for="poster-zoom" data-text="posterZoom"></label>
+                <input class="field__range" id="poster-zoom" type="range" min="1" max="3" step="0.01" value="1">
+              </div>
             </div>
-            <p class="poster__tip" id="poster-tip"></p>
-          </li>
-          <li class="poster__step">
-            <label class="poster__step-title" for="poster-name" id="poster-name-label"></label>
-            <input class="poster__input" id="poster-name" type="text" maxlength="40" autocomplete="off">
-          </li>
-          <li class="poster__step">
-            <label class="poster__step-title" for="poster-zoom" data-text="posterZoom"></label>
-            <input class="poster__range" id="poster-zoom" type="range" min="1" max="3" step="0.01" value="1" disabled>
-          </li>
-        </ol>
 
-        <figure class="poster__preview">
-          <canvas class="poster__canvas" id="poster-canvas" width="1080" height="1350" tabindex="0" role="img"></canvas>
-          <figcaption class="poster__hint" data-text="posterHint"></figcaption>
-        </figure>
+            <fieldset class="field">
+              <legend class="field__label" data-text="posterPrompt"></legend>
+              <div class="segmented" id="poster-prompts"></div>
+            </fieldset>
 
-        <div class="poster__actions">
-          <button class="button button--primary" id="poster-download" type="button" disabled>
+            <div class="field">
+              <div class="field__head">
+                <label class="field__label" for="poster-line" data-text="posterLine"></label>
+                <span class="field__count" id="poster-line-count"></span>
+              </div>
+              <p class="field__note" id="poster-line-hint"></p>
+              <input class="field__input" id="poster-line" type="text" autocomplete="off" aria-describedby="poster-line-hint">
+              <div class="chips" id="poster-suggestions" role="group" data-label="posterSuggestions"></div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="poster-name" data-text="posterName"></label>
+              <input class="field__input" id="poster-name" type="text" maxlength="40" autocomplete="off" data-placeholder="posterNamePlaceholder">
+            </div>
+
+            <div class="field">
+              <div class="field__head">
+                <label class="field__label" for="poster-story" data-text="posterStory"></label>
+                <span class="field__count" id="poster-story-count"></span>
+              </div>
+              <p class="field__note" id="poster-story-hint" data-text="posterStoryHint"></p>
+              <textarea class="field__input field__input--story" id="poster-story" rows="3" aria-describedby="poster-story-hint"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="studio__foot">
+          <p class="studio__status" id="poster-status" aria-live="polite"></p>
+          <button class="button button--outline" id="poster-download" type="button" disabled>
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
             <span data-text="posterDownload"></span>
           </button>
-          <button class="button button--outline" id="poster-share" type="button" disabled>
+          <button class="button button--primary" id="poster-share" type="button" disabled>
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></svg>
             <span data-text="posterShare"></span>
           </button>
-          <p class="poster__status" id="poster-status" aria-live="polite"></p>
         </div>
-      </div>
+      </dialog>
     </section>
 
     <section class="highlights" aria-labelledby="highlights-title">

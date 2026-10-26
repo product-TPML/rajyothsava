@@ -98,10 +98,19 @@ Define them as CSS custom properties in one place.
 
 - `js/poster.js` (section `#poster`, after the intro banner), modelled on the
   greeting-card maker on prajavani.net/pages/dasara-special.
-- Two types, set in `POSTER` in `js/data.js`:
-  - "ನಾನು ಹೆಮ್ಮೆಯ ಕನ್ನಡಿಗ" for a personal photo in a round frame.
-  - "ನಮ್ಮ ಏರಿಯಾದಲ್ಲಿ ರಾಜ್ಯೋತ್ಸವ" for a public-programme photo in a wide frame.
-- Drawn on a 1080×1350 canvas entirely in the browser. **The photo is never
+- On the page it is a teaser that fits one phone screen (owner's choice): heading,
+  three example posters on a deep red panel, one start button and the privacy note.
+  The button opens the maker full screen: the poster on a deep red "stage", the
+  choices in a white panel, the save buttons fixed at the bottom.
+- The reader adds any photo (selfie, group or scene) and writes one short line under
+  "ನನ್ನ ಹೆಮ್ಮೆ" (my pride) or "ನನ್ನ ಕನಸು" (my dream for Kannada and Karnataka), with
+  tap-to-use suggestions, an optional name and town, and an optional longer story that
+  goes with the poster as the share message, not on the image. Set in `POSTER` in `js/data.js`.
+- The poster is 1080×1920 (9:16) for WhatsApp status and Instagram stories. The words
+  keep clear of the top and bottom strips WhatsApp covers. The Karunadotsava mark is
+  large; the Prajavani logo is small, in a white "made at prajavani.net/rajyotsava" pill
+  (owner's choice: readers write their own words, so the brand is a credit).
+- Drawn on a canvas entirely in the browser. **The photo is never
   uploaded.** Keep it that way, and keep the privacy note accurate.
 - Colours on the canvas are read from the CSS tokens. Don't hard-code them in JS.
 

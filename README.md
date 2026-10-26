@@ -23,6 +23,13 @@ Readers can tap anywhere, press **Skip** or the button, or press Esc to jump str
 
 The red banner shows one quote at a time, beside the speaker's silhouette, and moves on every 6 seconds (not with reduced motion, and not while the mouse is over it); readers can also swipe. Edit them in `QUOTES` in `js/data.js`; each names its silhouette with `art`.
 
+## Poster maker
+
+Readers add a photo and write one line about their pride in Kannada and Karnataka ("ನನ್ನ ಹೆಮ್ಮೆ") or their dream for its future ("ನನ್ನ ಕನಸು"). The poster is tall (1080×1920), so it fits a WhatsApp status or Instagram story, and can also be sent in a chat. Sharing opens the phone's share menu (WhatsApp → "My status" or a chat); the reader's optional story and the site link go with it as the message. On computers it downloads instead. The photo never leaves the reader's device.
+
+- **Prompts, suggestions, example posters and the address:** `POSTER` in `js/data.js`.
+- **Layout of the poster:** `js/poster.js`.
+
 ## Silhouettes
 
 The opening and the quotes share one set of silhouettes. The source images are in `assets/silhouettes`. Each is black on white, with one feature in pure blue (#0000FF), as a square PNG; the facing direction doesn't matter. To add or change one:
@@ -37,6 +44,9 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Opening replays on every refresh:** this is for review only. Set `REPLAY_ON_REFRESH` to `false` in the small script in the `<head>` of `index.html`, so readers see it once per visit.
 - [ ] **Opening personalities:** Basavanna, Kempegowda, Onake Obavva, Kittur Rani Chennamma, Sir M. Visvesvaraya, Kuvempu and Dr Rajkumar. The list and the AI-made silhouettes need editorial approval.
 - [ ] **Quotes:** Kuvempu, Basavanna, Sir M. Visvesvaraya ("Industrialise or perish", in Kannada) and Dr Rajkumar. Check the wording and attribution of each.
+- [ ] **Poster address:** `prajavani.net/rajyotsava` is printed on every poster and sent with it. The web team needs to set it up to point to this site, or tell us the real address (`POSTER.address` in `js/data.js`).
+- [ ] **Poster wording:** the headings, prompts, suggestions and the example posters' lines and names (made up for illustration) need editorial approval.
+- [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
 - [ ] **Closing message:** confirm "71ನೇ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ" is the right count for 2026, and approve the wording.
 - [ ] **Karnataka map outline:** needs approval from Prajavani before publishing.
 - [ ] **Prajavani logo:** `assets/logo/pv-logo.png` is low resolution. Get a high-res SVG/PNG from the design team.
