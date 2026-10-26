@@ -2047,3 +2047,494 @@ button {
     grid-column: 1 / -1;
   }
 }
+
+/* ---------- Opening animation ---------- */
+
+/*
+ * Shown only when the <head> script adds .has-opening. A 3D scene seen through
+ * one perspective: specks stream past and the camera flies at a steady speed
+ * through the figures, each growing until it fills the screen; its colour
+ * (a "flood") stays behind as the backdrop for the next one.
+ * Meanwhile the map approaches; in the finale it tilts back into a platform, a
+ * flagpole rises from it, the flag is hoisted and the closing message appears.
+ * js/opening.js sets the timing variables from OPENING in js/data.js and draws
+ * the waving flag.
+ */
+.opening {
+  display: none;
+}
+
+.has-opening body {
+  overflow: hidden;
+}
+
+.has-opening .opening {
+  --size: min(84vw, 44vh, 520px);
+  --tilt: 58deg;
+  --speck-ms: 2400ms;
+  --finale-start: calc((var(--figures) + 1) * var(--figure-ms));
+
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--cream);
+}
+
+/* White band so the black wordmark always sits on white, whatever colour floods the stage. */
+.opening__header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 64px;
+  padding-inline: var(--gutter);
+  border-bottom: 1px solid var(--line);
+  background: var(--white);
+}
+
+.opening__logo {
+  width: auto;
+  height: 32px;
+  mix-blend-mode: multiply;
+}
+
+.opening__skip {
+  position: absolute;
+  right: var(--gutter);
+  padding-inline: var(--space-4);
+  font-size: 0.875rem;
+}
+
+.opening__stage {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 45%, var(--white), var(--cream) 75%);
+}
+
+.opening__floods {
+  position: absolute;
+  inset: 0;
+  display: grid;
+}
+
+.opening__flood {
+  grid-area: 1 / 1;
+  opacity: 0;
+}
+
+.opening__flood--red {
+  background: var(--red);
+}
+
+.opening__flood--yellow {
+  background: var(--yellow);
+}
+
+/* Every child sits in the centre; their depth comes from translateZ. */
+.opening__scene {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+.opening__scene > * {
+  grid-area: 1 / 1;
+}
+
+.opening__speck {
+  width: max(6px, calc(var(--size) * 0.014));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--yellow);
+  opacity: 0;
+}
+
+.opening__speck--red {
+  background: var(--red);
+}
+
+.opening__figure {
+  width: calc(var(--size) * 0.8);
+  aspect-ratio: 1;
+  fill: currentColor;
+  fill-rule: evenodd;
+  opacity: 0;
+}
+
+.opening__figure--red {
+  color: var(--red);
+}
+
+.opening__figure--yellow {
+  color: var(--yellow);
+}
+
+.opening__monument,
+.opening__landing,
+.opening__platform {
+  transform-style: preserve-3d;
+}
+
+/* No opacity on these 3D groups: it would flatten them. The map fades in on its own. */
+.opening__monument {
+  transform: translateZ(-1800px);
+}
+
+/* Holds the map back until the finale, then brings it forward and lower to leave room for the flag. */
+.opening__landing {
+  transform: translateZ(-1200px);
+}
+
+.opening__platform {
+  position: relative;
+  width: calc(var(--size) * 0.62);
+}
+
+/* The drop shadow lies in the map's plane, so once tilted it reads as the slab's front edge. */
+.opening__map {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  fill: var(--red);
+  stroke: var(--yellow);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 10px 0 var(--red-deep));
+  opacity: 0;
+}
+
+/* Stands on the map near its centre; counter-rotated so it stays upright when the map tilts. */
+.opening__pole {
+  position: absolute;
+  bottom: 45%;
+  left: 50%;
+  width: max(4px, calc(var(--size) * 0.014));
+  height: calc(var(--size) * 0.85);
+  translate: -50% 0;
+  transform-origin: bottom center;
+  transform: rotateX(calc(var(--tilt) * -1)) scaleY(0);
+  transform-style: preserve-3d;
+  background: linear-gradient(90deg, var(--ink-muted), var(--paper) 45%, var(--ink-muted));
+}
+
+/* Gold finial on top of the pole. */
+.opening__pole::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 250%;
+  aspect-ratio: 1;
+  translate: -50% 30%;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+/* The cloth's shape and shading are redrawn every frame by js/opening.js. */
+.opening__flag {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: calc(var(--size) * 0.46);
+  aspect-ratio: 300 / 240;
+  overflow: visible;
+  opacity: 0;
+  transform-origin: left center;
+}
+
+.opening__cloth--yellow {
+  fill: var(--yellow);
+}
+
+.opening__cloth--red {
+  fill: var(--red);
+}
+
+.opening__shine--light stop {
+  stop-color: var(--white);
+}
+
+.opening__shine--dark stop {
+  stop-color: var(--ink);
+}
+
+/* Names and the closing message share one cell at the bottom of the stage. */
+.opening__caption {
+  position: relative;
+  display: grid;
+  padding: 0 var(--gutter) var(--space-5);
+  text-align: center;
+}
+
+.opening__caption > * {
+  grid-area: 1 / 1;
+  align-self: end;
+}
+
+.opening__name {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  opacity: 0;
+  pointer-events: none; /* faded-out names lie over the closing button */
+}
+
+/* A yellow figure is named while the red flood of the one before is behind it. */
+.opening__name--yellow {
+  color: var(--white);
+}
+
+/* Hidden (not just transparent) until it appears, so its button can't be reached early. */
+.opening__finale {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.opening__eyebrow {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--red-dark);
+}
+
+.opening__title {
+  max-width: 14em;
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 1.625rem;
+  line-height: 1.3;
+  color: var(--red);
+}
+
+.opening__text {
+  max-width: 24em;
+  color: var(--ink-muted);
+}
+
+.opening__enter {
+  margin-top: var(--space-2);
+}
+
+/* ----- Timeline ----- */
+
+.opening--playing .opening__speck {
+  animation:
+    opening-speck var(--speck-ms) linear calc(var(--i) / var(--specks) * var(--speck-ms) * -1) infinite,
+    opening-vanish var(--figure-ms) ease-out var(--finale-start) forwards;
+}
+
+.opening--playing .opening__figure {
+  animation: opening-fly calc(var(--figure-ms) * 2) linear calc(var(--i) * var(--figure-ms)) both;
+}
+
+/* Switched on just before the figure vanishes past the camera, while it still fills the screen. */
+.opening--playing .opening__flood {
+  animation: opening-flood 60ms linear calc((var(--i) + 1.9) * var(--figure-ms)) forwards;
+}
+
+.opening--playing .opening__floods {
+  animation: opening-vanish 700ms ease-out var(--finale-start) forwards;
+}
+
+.opening--playing .opening__name {
+  animation: opening-name calc(var(--figure-ms) * 2) var(--ease) calc(var(--i) * var(--figure-ms)) both;
+}
+
+.opening--playing .opening__monument {
+  animation: opening-approach var(--finale-start) linear forwards;
+}
+
+.opening--playing .opening__map {
+  animation: opening-appear var(--finale-start) linear forwards;
+}
+
+.opening--playing .opening__landing {
+  animation: opening-land calc(var(--finale-ms) * 0.3) var(--ease) var(--finale-start) forwards;
+}
+
+.opening--playing .opening__platform {
+  animation: opening-tilt calc(var(--finale-ms) * 0.3) var(--ease) var(--finale-start) forwards;
+}
+
+.opening--playing .opening__pole {
+  animation: opening-pole calc(var(--finale-ms) * 0.2) var(--ease) calc(var(--finale-start) + var(--finale-ms) * 0.22) forwards;
+}
+
+.opening--playing .opening__flag {
+  animation: opening-hoist calc(var(--finale-ms) * 0.35) var(--ease) calc(var(--finale-start) + var(--finale-ms) * 0.38) forwards;
+}
+
+.opening--playing .opening__finale {
+  animation: opening-reveal calc(var(--finale-ms) * 0.25) var(--ease) calc(var(--finale-start) + var(--finale-ms) * 0.6) forwards;
+}
+
+.opening--leaving {
+  animation: opening-lift var(--exit-ms) cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+
+@keyframes opening-speck {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--x), var(--y), -1600px);
+  }
+
+  30% {
+    opacity: 0.8;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(var(--x), var(--y), 600px);
+  }
+}
+
+@keyframes opening-vanish {
+  to {
+    opacity: 0;
+  }
+}
+
+/*
+ * The camera's flight past one figure, at one steady speed: a straight run in
+ * depth from far away to just short of the camera (perspective is 900px, so
+ * z 860px is over 20x size and fills the screen). Every figure covers the same
+ * distance in the same time, so the whole journey flows without pauses.
+ * The camera heads for the centre of each figure.
+ */
+@keyframes opening-fly {
+  0% {
+    opacity: 0;
+    transform: translateZ(-1600px);
+  }
+
+  12%,
+  96% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateZ(860px);
+  }
+}
+
+@keyframes opening-flood {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Shown while the figure is nearest to life size, after the previous figure's colour has flooded the stage. */
+@keyframes opening-name {
+  0%,
+  48% {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+
+  56%,
+  74% {
+    opacity: 1;
+    transform: none;
+  }
+
+  84%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes opening-approach {
+  to {
+    transform: none;
+  }
+}
+
+@keyframes opening-appear {
+  40%,
+  to {
+    opacity: 1;
+  }
+}
+
+/* Left by half the flag's width so pole and flag together sit centred. */
+@keyframes opening-land {
+  to {
+    transform: translate(calc(var(--size) * -0.2), calc(var(--size) * 0.32));
+  }
+}
+
+@keyframes opening-tilt {
+  to {
+    transform: rotateX(var(--tilt));
+  }
+}
+
+@keyframes opening-pole {
+  to {
+    transform: rotateX(calc(var(--tilt) * -1));
+  }
+}
+
+@keyframes opening-hoist {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--size) * 0.55));
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: rotateY(-12deg);
+  }
+}
+
+@keyframes opening-reveal {
+  from {
+    visibility: visible;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes opening-lift {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .opening__header {
+    min-height: 76px;
+  }
+
+  .opening__logo {
+    height: 40px;
+  }
+
+  .opening__name {
+    font-size: 2rem;
+  }
+
+  .opening__title {
+    font-size: 2.25rem;
+  }
+}

@@ -1,6 +1,6 @@
 /*
  * All site content lives here. Edit this file to change text, menu sections,
- * carousel slides, highlight cards or photos. No other file needs to change.
+ * carousel slides, highlight cards, photos or the opening animation. No other file needs to change.
  */
 
 /* Interface text. Elements in index.html with data-text="key" receive these. */
@@ -453,4 +453,34 @@ const POSTER = {
   site: "prajavani.net",
   fileName: "prajavani-rajyotsava-poster.jpg",
   shareText: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವದ ಶುಭಾಶಯಗಳು! ನಿಮ್ಮದೇ ಪೋಸ್ಟರ್ ಮಾಡಿ: prajavani.net",
+};
+
+/*
+ * Opening animation, played once per visit before the site appears.
+ * figures → flown through in this order, alternating red and yellow. art names a
+ *           silhouette in js/opening-art.js (stand-in shapes for now, see README).
+ * finale  → the closing screen with the map and flag.
+ * timing  → milliseconds. Length = (figures + 1) × figureMs + finaleMs (map and flag)
+ *           + holdMs (closing screen held), then exitMs while the opening lifts away.
+ */
+const OPENING = {
+  label: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ – ಆರಂಭಿಕ ಪರಿಚಯ",
+  skip: "ಸ್ಕಿಪ್",
+  skipLabel: "ಪರಿಚಯ ಬಿಟ್ಟು ತಾಣಕ್ಕೆ ತೆರಳಿ",
+  finale: {
+    eyebrow: "71ನೇ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
+    title: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವದ ಶುಭಾಶಯಗಳು",
+    text: "ನಾಡು, ನುಡಿ ಮತ್ತು ಸಂಸ್ಕೃತಿಯ ಸಂಭ್ರಮವನ್ನು ಪ್ರಜಾವಾಣಿಯೊಂದಿಗೆ ಆಚರಿಸಿ",
+    enter: "ವಿಶೇಷ ಸಂಚಿಕೆ ಓದಿ",
+  },
+  figures: [
+    { name: "ಬಸವಣ್ಣ", art: "basavanna" },
+    { name: "ಕಿತ್ತೂರು ರಾಣಿ ಚೆನ್ನಮ್ಮ", art: "chennamma" },
+    { name: "ಕೆಂಪೇಗೌಡ", art: "kempegowda" },
+    { name: "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ", art: "visvesvaraya" },
+    { name: "ಕುವೆಂಪು", art: "kuvempu" },
+    { name: "ಗಂಗೂಬಾಯಿ ಹಾನಗಲ್", art: "gangubai" },
+    { name: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
+  ],
+  timing: { figureMs: 600, finaleMs: 2600, holdMs: 3000, exitMs: 700 },
 };
