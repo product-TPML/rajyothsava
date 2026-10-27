@@ -256,6 +256,35 @@ const SLIDES = [
 ];
 
 /* "Latest highlights" cards. The first card is shown larger as the lead story. */
+/*
+ * The exhibition announced right after the carousel, with an "Add to Google Calendar"
+ * button that opens Google Calendar with the details filled in.
+ * date     → YYYY-MM-DD; also used for the calendar entry.
+ * time     → null for an all-day calendar entry; or { label, start: "HH:MM", end: "HH:MM" }
+ *            (India time) to show the hours and put them in the calendar.
+ *            PLACEHOLDER: the timings haven't been announced yet.
+ * location → the address Google Calendar shows and links to Maps.
+ *            PLACEHOLDER: confirm the venue name with the events team.
+ */
+const EVENT = {
+  eyebrow: "Exhibition",
+  title: "Karnataka on the front page",
+  text:
+    "Pages from Prajavani and Deccan Herald over the decades, telling the story of Karnataka " +
+    "and Kannada, brought together in a physical exhibition. Come and see history as it was first printed.",
+  day: "19",
+  month: "Nov",
+  whenLabel: "When",
+  whereLabel: "Where",
+  dateLabel: "Thursday, 19 November 2026",
+  venue: "Rangoli Metro Art Center, MG Road, Bengaluru",
+  calendarButton: "Add to Google Calendar",
+  calendarTitle: "Karnataka on the front page: Prajavani and Deccan Herald exhibition",
+  date: "2026-11-19",
+  time: null,
+  location: "Rangoli Metro Art Center, MG Road, Bengaluru",
+};
+
 const HIGHLIGHTS = [
   {
     image: "badami",

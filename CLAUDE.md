@@ -97,6 +97,14 @@ Define them as CSS custom properties in one place.
 - Cards: one column on phone, two on tablet, three or four on desktop.
 - Test at 360px, 390px, 768px, 1024px and 1440px widths.
 
+## Exhibition
+
+- `EVENT` in each data file, shown right after the carousel on both pages: the
+  physical exhibition of Prajavani and DH pages on Karnataka and Kannada (19 November,
+  Rangoli Metro Art Center, MG Road). Owner's request.
+- "Add to Google Calendar" is a plain Google Calendar link built in `js/main.js`
+  (`calendarUrl`) from `EVENT`; no accounts, scripts or tracking.
+
 ## Poster maker
 
 - `js/poster.js` (section `#poster`, after the intro banner), modelled on the

@@ -155,6 +155,33 @@
       </div>
     </section>
 
+    <section class="event" aria-labelledby="event-title">
+      <div class="container">
+        <!-- Text and the calendar link come from EVENT in the data file. -->
+        <article class="event__card">
+          <p class="event__date" aria-hidden="true">
+            <span class="event__day" data-event="day"></span>
+            <span class="event__month" data-event="month"></span>
+          </p>
+          <div class="event__head">
+            <p class="tag" data-event="eyebrow"></p>
+            <h2 class="event__title" id="event-title" data-event="title"></h2>
+          </div>
+          <div class="event__body">
+            <p class="event__text" data-event="text"></p>
+            <dl class="event__facts">
+              <div class="event__fact"><dt data-event="whenLabel"></dt><dd id="event-when"></dd></div>
+              <div class="event__fact"><dt data-event="whereLabel"></dt><dd data-event="venue"></dd></div>
+            </dl>
+            <a class="button button--primary" id="event-calendar" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+              <span data-event="calendarButton"></span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="intro">
       <div class="container intro__inner">
         <div class="quotes" role="region" aria-roledescription="carousel" data-label="quotesLabel">

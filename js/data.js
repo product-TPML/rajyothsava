@@ -302,6 +302,35 @@ const SLIDES = [
 ];
 
 /* "Latest highlights" cards. The first card is shown larger as the lead story. */
+/*
+ * The exhibition announced right after the carousel, with an "Add to Google Calendar"
+ * button that opens Google Calendar with the details filled in.
+ * date     → YYYY-MM-DD; also used for the calendar entry.
+ * time     → null for an all-day calendar entry; or { label, start: "HH:MM", end: "HH:MM" }
+ *            (India time) to show the hours and put them in the calendar.
+ *            PLACEHOLDER: the timings haven't been announced yet.
+ * location → the address Google Calendar shows and links to Maps.
+ *            PLACEHOLDER: confirm the venue name with the events team.
+ */
+const EVENT = {
+  eyebrow: "ಪ್ರದರ್ಶನ",
+  title: "ಮುಖಪುಟದಲ್ಲಿ ಕರುನಾಡು",
+  text:
+    "ಕರ್ನಾಟಕ ಮತ್ತು ಕನ್ನಡದ ಕುರಿತು ದಶಕಗಳಿಂದ ಪ್ರಜಾವಾಣಿ ಮತ್ತು ಡೆಕ್ಕನ್ ಹೆರಾಲ್ಡ್‌ನಲ್ಲಿ ಪ್ರಕಟವಾದ " +
+    "ಆಯ್ದ ಪುಟಗಳ ಪ್ರದರ್ಶನ. ಇತಿಹಾಸವನ್ನು ಅದು ಮೊದಲು ಮುದ್ರಣವಾದಂತೆಯೇ ನೋಡಲು ಬನ್ನಿ.",
+  day: "19",
+  month: "ನವೆಂಬರ್",
+  whenLabel: "ದಿನಾಂಕ",
+  whereLabel: "ಸ್ಥಳ",
+  dateLabel: "ಗುರುವಾರ, ನವೆಂಬರ್ 19, 2026",
+  venue: "ರಂಗೋಲಿ ಮೆಟ್ರೋ ಆರ್ಟ್ ಸೆಂಟರ್, ಎಂ.ಜಿ. ರಸ್ತೆ, ಬೆಂಗಳೂರು",
+  calendarButton: "Google ಕ್ಯಾಲೆಂಡರ್‌ಗೆ ಸೇರಿಸಿ",
+  calendarTitle: "ಮುಖಪುಟದಲ್ಲಿ ಕರುನಾಡು: ಪ್ರಜಾವಾಣಿ ಮತ್ತು ಡೆಕ್ಕನ್ ಹೆರಾಲ್ಡ್ ಪುಟಗಳ ಪ್ರದರ್ಶನ",
+  date: "2026-11-19",
+  time: null,
+  location: "Rangoli Metro Art Center, MG Road, Bengaluru",
+};
+
 const HIGHLIGHTS = [
   {
     image: "badami",

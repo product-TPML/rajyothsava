@@ -911,6 +911,127 @@ button {
   }
 }
 
+/* ---------- Exhibition ---------- */
+
+/*
+ * An invitation card: a red date tile beside the heading, then the details and the
+ * calendar button. Tablet and up: the date tile runs down the left side.
+ */
+.event {
+  padding-block: var(--space-6);
+  background: var(--paper);
+}
+
+.event__card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "date head" "body body";
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-top: 4px solid var(--red);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.event__date {
+  grid-area: date;
+  display: grid;
+  justify-items: center;
+  min-width: 76px;
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius);
+  background: var(--red);
+  color: var(--white);
+}
+
+.event__day {
+  font-family: var(--font-headline);
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.event__month {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--yellow);
+}
+
+.event__head {
+  grid-area: head;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.event__title {
+  font-size: 1.5rem;
+  color: var(--red-dark);
+}
+
+.event__body {
+  grid-area: body;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+}
+
+.event__text {
+  color: var(--ink-muted);
+}
+
+.event__facts {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.event__fact dt {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+.event__fact dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .event {
+    padding-block: var(--space-7);
+  }
+
+  .event__card {
+    grid-template-areas: "date head" "date body";
+    align-items: start;
+    column-gap: var(--space-6);
+    padding: var(--space-6);
+  }
+
+  .event__date {
+    align-self: stretch;
+    align-content: center;
+    min-width: 140px;
+  }
+
+  .event__day {
+    font-size: 4rem;
+  }
+
+  .event__month {
+    font-size: 1rem;
+  }
+
+  .event__title {
+    font-size: 2rem;
+  }
+
+  .event__facts {
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-6);
+  }
+}
+
 /* ---------- Introductory banner ---------- */
 
 .intro {

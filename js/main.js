@@ -1,6 +1,6 @@
 /*
  * Builds the page from its data file (js/data.js, or js/data-en.js for the English
- * DH edition) and wires up search, menu, carousel, quotes, videos, gallery and archive.
+ * DH edition) and wires up search, menu, carousel, exhibition, quotes, videos, gallery and archive.
  */
 (() => {
   "use strict";
@@ -136,6 +136,39 @@
         )
       )
     );
+  }
+
+  /* A Google Calendar "add event" link: all day, or with times in India time. */
+  function calendarUrl(event) {
+    const day = event.date.replaceAll("-", "");
+    let dates;
+    if (event.time) {
+      const at = (hhmm) => `${day}T${hhmm.replace(":", "")}00`;
+      dates = `${at(event.time.start)}/${at(event.time.end)}`;
+    } else {
+      const next = new Date(`${event.date}T00:00:00Z`);
+      next.setUTCDate(next.getUTCDate() + 1); // all-day entries end on the following day
+      dates = `${day}/${next.toISOString().slice(0, 10).replaceAll("-", "")}`;
+    }
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: event.calendarTitle,
+      dates,
+      details: event.text,
+      location: event.location,
+    });
+    if (event.time) params.set("ctz", "Asia/Kolkata");
+    return `https://calendar.google.com/calendar/render?${params}`;
+  }
+
+  /* data-event="key" fills an element's text from EVENT, like data-text does from UI. */
+  function renderEvent() {
+    document.querySelectorAll("[data-event]").forEach((node) => {
+      node.textContent = EVENT[node.dataset.event];
+    });
+    document.getElementById("event-when").textContent =
+      [EVENT.dateLabel, EVENT.time && EVENT.time.label].filter(Boolean).join(", ");
+    document.getElementById("event-calendar").href = calendarUrl(EVENT);
   }
 
   function renderHighlights() {
@@ -548,6 +581,7 @@
   applyText();
   renderNavigation();
   renderCarousel();
+  renderEvent();
   renderHighlights();
   if (has("quotes-list")) renderQuotes();
   if (has("archive-list")) renderArchive();
