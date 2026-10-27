@@ -205,7 +205,7 @@
     ];
     document.getElementById("credits-list").append(
       ...items.map(({ label, credit }) =>
-        el("li", {}, el("a", { href: credit.source }, label), ` – ${credit.author}, ${credit.license}`)
+        el("li", {}, el("a", { href: credit.source }, label), `: ${credit.author}, ${credit.license}`)
       )
     );
   }

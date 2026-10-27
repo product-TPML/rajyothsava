@@ -1,5 +1,5 @@
 /*
- * Rajyotsava special – styles for both editions: Prajavani (Kannada, index.html)
+ * Rajyotsava special: styles for both editions: Prajavani (Kannada, index.html)
  * and Deccan Herald (English, index-en.html, <html data-brand="dh">).
  * Mobile first: base rules target phones; min-width queries add tablet (768px)
  * and desktop (1024px) layouts. All colours, fonts and spacing are tokens below.
@@ -338,22 +338,14 @@ button {
   color: var(--white);
 }
 
-/* Category label with a short yellow rule before it. */
+/* Category label. */
 .tag {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.4;
   color: var(--red);
-}
-
-.tag::before {
-  content: "";
-  width: 14px;
-  height: 3px;
-  background: var(--yellow);
 }
 
 /* Section heading: Kannada-flag marker, title, then a hairline to the edge. */

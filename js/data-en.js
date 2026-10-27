@@ -64,11 +64,11 @@ const UI = {
   archiveComingSoon: "Archive page coming soon",
 
   footerAbout:
-    "Deccan Herald – Karnataka's trusted English daily. This Rajyotsava special brings readers " +
+    "Deccan Herald is Karnataka's trusted English daily. This Rajyotsava special brings readers " +
     "stories of the state's pride, people and heritage.",
   footerCreditsTitle: "Photo credits (Wikimedia Commons)",
   footerCopyright: "© 2026 Deccan Herald",
-  footerDraftNote: "This is a draft – it needs review before publishing.",
+  footerDraftNote: "This is a draft. It needs review before publishing.",
 };
 
 /*
@@ -276,7 +276,7 @@ const HIGHLIGHTS = [
     author: "K N Suma",
     section: "specials",
     title: "Mysore pak: from the palace kitchen to every home",
-    summary: "Gram flour, ghee and sugar – the story of a sweet with just three ingredients.",
+    summary: "Gram flour, ghee and sugar: the story of a sweet with just three ingredients.",
   },
   {
     image: "bandipur",
@@ -416,7 +416,7 @@ const POSTER = {
  * timing  → milliseconds; see OPENING in js/data.js.
  */
 const OPENING = {
-  label: "Karnataka Rajyotsava – opening",
+  label: "Karnataka Rajyotsava opening",
   skip: "Skip",
   skipLabel: "Skip the opening and go to the site",
   finale: {
