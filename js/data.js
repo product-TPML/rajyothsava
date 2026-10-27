@@ -83,29 +83,30 @@ const UI = {
 
 /*
  * The 18 menu sections, in menu order.
+ * name           → the label shown; en → the English name under it in the directory.
  * primary: true  → shown in the desktop menu bar; the rest sit under "ಇನ್ನಷ್ಟು".
  * href           → where the link goes. Until real section pages exist, each
  *                  points to its tile in the "ಎಲ್ಲ ವಿಭಾಗಗಳು" directory.
  */
 const SECTIONS = [
-  { id: "home", kn: "ಮುಖಪುಟ", en: "Home", primary: true, href: "#top" },
-  { id: "news", kn: "ಸುದ್ದಿ", en: "News", primary: true },
-  { id: "business", kn: "ವಾಣಿಜ್ಯ", en: "Business", primary: true },
-  { id: "technology", kn: "ತಂತ್ರಜ್ಞಾನ", en: "Technology", primary: true },
-  { id: "education", kn: "ಶಿಕ್ಷಣ", en: "Education", primary: true },
-  { id: "health", kn: "ಆರೋಗ್ಯ", en: "Health", primary: true },
-  { id: "lifestyle", kn: "ಜೀವನಶೈಲಿ", en: "Lifestyle" },
-  { id: "entertainment", kn: "ಮನರಂಜನೆ", en: "Entertainment", primary: true },
-  { id: "sports", kn: "ಕ್ರೀಡೆ", en: "Sports", primary: true },
-  { id: "travel", kn: "ಪ್ರವಾಸ", en: "Travel" },
-  { id: "food", kn: "ಆಹಾರ", en: "Food" },
-  { id: "culture", kn: "ಸಂಸ್ಕೃತಿ", en: "Culture" },
-  { id: "environment", kn: "ಪರಿಸರ", en: "Environment" },
-  { id: "opinion", kn: "ಅಭಿಪ್ರಾಯ", en: "Opinion" },
-  { id: "interviews", kn: "ಸಂದರ್ಶನ", en: "Interviews" },
-  { id: "special-reports", kn: "ವಿಶೇಷ ವರದಿ", en: "Special Reports" },
-  { id: "photo-stories", kn: "ಫೋಟೊ ಕಥನ", en: "Photo Stories" },
-  { id: "about", kn: "ನಮ್ಮ ಬಗ್ಗೆ", en: "About Us" },
+  { id: "home", name: "ಮುಖಪುಟ", en: "Home", primary: true, href: "#top" },
+  { id: "news", name: "ಸುದ್ದಿ", en: "News", primary: true },
+  { id: "business", name: "ವಾಣಿಜ್ಯ", en: "Business", primary: true },
+  { id: "technology", name: "ತಂತ್ರಜ್ಞಾನ", en: "Technology", primary: true },
+  { id: "education", name: "ಶಿಕ್ಷಣ", en: "Education", primary: true },
+  { id: "health", name: "ಆರೋಗ್ಯ", en: "Health", primary: true },
+  { id: "lifestyle", name: "ಜೀವನಶೈಲಿ", en: "Lifestyle" },
+  { id: "entertainment", name: "ಮನರಂಜನೆ", en: "Entertainment", primary: true },
+  { id: "sports", name: "ಕ್ರೀಡೆ", en: "Sports", primary: true },
+  { id: "travel", name: "ಪ್ರವಾಸ", en: "Travel" },
+  { id: "food", name: "ಆಹಾರ", en: "Food" },
+  { id: "culture", name: "ಸಂಸ್ಕೃತಿ", en: "Culture" },
+  { id: "environment", name: "ಪರಿಸರ", en: "Environment" },
+  { id: "opinion", name: "ಅಭಿಪ್ರಾಯ", en: "Opinion" },
+  { id: "interviews", name: "ಸಂದರ್ಶನ", en: "Interviews" },
+  { id: "special-reports", name: "ವಿಶೇಷ ವರದಿ", en: "Special Reports" },
+  { id: "photo-stories", name: "ಫೋಟೊ ಕಥನ", en: "Photo Stories" },
+  { id: "about", name: "ನಮ್ಮ ಬಗ್ಗೆ", en: "About Us" },
 ];
 
 /*
@@ -432,6 +433,7 @@ const GALLERY = [
  * samples  → the example posters on the page, with photos from IMAGES.
  *            PLACEHOLDER: the lines and names are made up for illustration.
  * camera   → which phone camera "ಕ್ಯಾಮೆರಾ" opens ("user" = front, "environment" = back).
+ * logo     → the brand logo in the poster's "made at" credit.
  * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
  */
 const POSTER = {
@@ -459,7 +461,8 @@ const POSTER = {
   camera: "user",
   placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
   eventLine: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
-  madeAt: "ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
+  logo: "https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg",
+  credit: "{address} ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
   address: "prajavani.net/rajyotsava",
   fileName: "prajavani-rajyotsava-poster.jpg",
   // Sent with the poster when shared: the reader's story (if any), then the link.

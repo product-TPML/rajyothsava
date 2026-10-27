@@ -5,6 +5,16 @@ Open `index.html` in a browser. There's no build step.
 - **Change text or content:** `js/data.js`. This covers menus, stories, photos, quotes, the poster maker and the opening animation.
 - **Styles:** `css/styles.css`. It's written mobile first, with every colour defined once at the top.
 
+## English edition (Deccan Herald)
+
+`index-en.html` is the same special in English, under the Deccan Herald name. It shares the styles and scripts with the Kannada page; only its content file differs.
+
+- **Change text or content:** `js/data-en.js` (menu, stories, archive, poster maker, opening).
+- **Left out** compared with the Kannada page: the quotes banner, the videos, the photo gallery and the section list at the end of the page (the "All sections" tiles and the footer links).
+- **Added:** "From the archives", moments in Karnataka's story as DH reported them (`ARCHIVE` in `js/data-en.js`).
+- **Menu:** links go to the matching sections on deccanherald.com.
+- **Look:** DH's typefaces (Playfair Display for headlines, Roboto Slab for text, as on deccanherald.com) with the same Rajyotsava red and yellow. The page sets `data-brand="dh"` on `<html>`, which switches the fonts in `css/styles.css`.
+
 ## Opening animation
 
 A short flight into the screen (about 11 seconds) plays once per visit before the site appears:
@@ -49,4 +59,8 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
 - [ ] **Closing message:** confirm "71ನೇ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ" is the right count for 2026, and approve the wording.
 - [ ] **Karnataka map outline:** needs approval from Prajavani before publishing.
-- [ ] **Prajavani logo:** `assets/logo/pv-logo.png` is low resolution. Get a high-res SVG/PNG from the design team.
+- [ ] **DH logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg`. The page needs an internet connection to show it; if that link is ever removed, the logo disappears.
+- [ ] **DH archive stories:** the six headlines and notes in `ARCHIVE` (`js/data-en.js`) were written for the layout. Replace them with the real archive pages and have the DH library check every date. Each card says "Archive page coming soon" until there is a page to link to.
+- [ ] **DH stories and bylines:** the English carousel and highlight stories are translations of the Kannada placeholders, with made-up bylines.
+- [ ] **DH poster address:** `deccanherald.com/rajyotsava` is printed on English posters (`POSTER.address` in `js/data-en.js`); the web team needs to set it up.
+- [ ] **Prajavani logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg`. Same caveat: needs the internet, and depends on that link staying up.

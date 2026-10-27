@@ -1,10 +1,13 @@
 /*
- * Prajavani Rajyotsava – styles.
+ * Rajyotsava special – styles for both editions: Prajavani (Kannada, index.html)
+ * and Deccan Herald (English, index-en.html, <html data-brand="dh">).
  * Mobile first: base rules target phones; min-width queries add tablet (768px)
  * and desktop (1024px) layouts. All colours, fonts and spacing are tokens below.
  */
 
-/* ---------- Fonts (Prajavani's own typefaces) ---------- */
+/* ---------- Fonts ---------- */
+
+/* Prajavani's own typefaces. */
 
 @font-face {
   font-family: "PvHeadline";
@@ -24,6 +27,21 @@
   font-family: "PvText";
   src: url("../assets/fonts/PrajavaniTextSemibold.woff2") format("woff2");
   font-weight: 600;
+  font-display: swap;
+}
+
+/* Deccan Herald's typefaces, as on deccanherald.com (Latin only, variable weight; SIL Open Font Licence). */
+@font-face {
+  font-family: "Playfair Display";
+  src: url("../assets/fonts/PlayfairDisplay-latin.woff2") format("woff2");
+  font-weight: 600 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto Slab";
+  src: url("../assets/fonts/RobotoSlab-latin.woff2") format("woff2");
+  font-weight: 400 600;
   font-display: swap;
 }
 
@@ -70,6 +88,14 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --focus-ring: var(--red);
+  --logo-scale: 1; /* masthead logo height, relative to the Prajavani wordmark */
+}
+
+/* The English edition swaps in Deccan Herald's typefaces; everything else is shared. */
+:root[data-brand="dh"] {
+  --font-headline: "Playfair Display", Georgia, serif;
+  --font-text: "Roboto Slab", Georgia, serif;
+  --logo-scale: 1.5; /* the stacked DH logo needs more height to stay legible */
 }
 
 @media (min-width: 768px) {
@@ -405,7 +431,13 @@ button {
 
 .brand__logo {
   width: auto;
-  height: 24px;
+  height: calc(24px * var(--logo-scale));
+}
+
+/* Both brand logos are the white versions; on the white header they show in black. */
+.brand__logo,
+.opening__logo {
+  filter: brightness(0);
 }
 
 .brand__divider {
@@ -455,7 +487,7 @@ button {
   }
 
   .brand__logo {
-    height: 40px;
+    height: calc(40px * var(--logo-scale));
   }
 
   .brand__event-art {
@@ -469,7 +501,7 @@ button {
 
 @media (min-width: 1024px) {
   .brand__logo {
-    height: 52px;
+    height: calc(52px * var(--logo-scale));
   }
 
   .brand__event-art {
@@ -2039,6 +2071,98 @@ button {
   }
 }
 
+/* ---------- From the archives (English edition) ---------- */
+
+/*
+ * Each moment is a newspaper clipping: a double rule across the top, a large year,
+ * the date as a dateline, then the headline and a short note. Phones: one column.
+ */
+.archive {
+  padding-block: var(--space-7);
+  background: var(--paper);
+}
+
+.archive__lead {
+  max-width: 60ch;
+  margin-bottom: var(--space-5);
+  color: var(--ink-muted);
+}
+
+.archive__list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.archive__item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-top: 4px double var(--ink);
+  border-radius: var(--radius);
+}
+
+.archive__year {
+  font-family: var(--font-headline);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--red);
+  font-variant-numeric: lining-nums;
+}
+
+.archive__dateline {
+  margin-top: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.archive__title {
+  margin-top: var(--space-3);
+  font-size: 1.25rem;
+}
+
+.archive__summary {
+  margin-top: var(--space-2);
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+.archive__status {
+  margin-top: auto;
+  padding-top: var(--space-4);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+@media (min-width: 768px) {
+  .archive__list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .archive {
+    padding-block: var(--space-8);
+  }
+
+  .archive__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .archive__year {
+    font-size: 3.5rem;
+  }
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer {
@@ -2066,17 +2190,9 @@ button {
   padding-block: var(--space-7);
 }
 
-/* The logo is black on white, so it sits on its own white plate. */
 .site-footer__logo {
-  display: inline-block;
-  padding: var(--space-3) var(--space-4);
-  background: var(--white);
-  border-radius: var(--radius);
-}
-
-.site-footer__logo img {
   width: auto;
-  height: 36px;
+  height: calc(36px * var(--logo-scale));
 }
 
 .site-footer__brand p {
@@ -2201,8 +2317,7 @@ button {
 
 .opening__logo {
   width: auto;
-  height: 32px;
-  mix-blend-mode: multiply;
+  height: calc(32px * var(--logo-scale));
 }
 
 .opening__skip {
@@ -2523,7 +2638,7 @@ button {
   }
 
   .opening__logo {
-    height: 40px;
+    height: calc(40px * var(--logo-scale));
   }
 
   .opening__title {

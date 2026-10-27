@@ -29,11 +29,13 @@ file adds the owner's decisions on top of it. If the two disagree, this file win
 
 ## Brand assets (taken from prajavani.net)
 
-Stored locally in `assets/`. Use these local copies and don't link to the live site.
+Stored locally in `assets/`, except the two brand logos, which the owner asked to load
+from their published links (the same ones the Dasara site uses).
 
 | Asset | File | Notes |
 |---|---|---|
-| Logo (wordmark) | `assets/logo/pv-logo.png` | Black ಪ್ರಜಾವಾಣಿ wordmark with Nandi on white, trimmed to 248×63 px. **Low resolution.** Ask the owner for a high-res SVG/PNG from the Prajavani design team before launch. |
+| Prajavani logo | `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg` | White ಪ್ರಜಾವಾಣಿ wordmark with Nandi and tagline (SVG, 1327×319). Linked, not downloaded (owner's choice). |
+| Deccan Herald logo | `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg` | White DH letters, Nandi and "DECCAN HERALD", stacked (SVG, 78×68). Used by the English edition. |
 | Karunadotsava artwork | `assets/hero/karunadotsava-art-160.webp` | The central red "ಕ" artwork cut from Prajavani's campaign poster (`assets/hero/karunadotsava-poster.jpeg`, supplied by the owner). Only the artwork is used, not the poster text. Shown small in the masthead, after the Prajavani logo, with the title "ಕರುನಾಡೋತ್ಸವ". There is no separate hero section; the carousel follows the nav bar. |
 | Photos and videos | `assets/images/`, `assets/videos/` | Freely licensed Wikimedia Commons media, credited in `js/data.js` and the footer. Videos are compressed MP4 (H.264, ≤854px wide, ≤1 min) with a WebP poster. Keep new videos small; they load only when played. |
 | Headline font | `assets/fonts/PvHeadlineSemibold3.woff2` | Prajavani headline face, weight 600. Use for headlines, section titles and the carousel. |
@@ -51,9 +53,9 @@ Font setup (prajavani.net uses the same pattern):
 ```
 
 - Preload the headline font, because it appears above the fold.
-- The logo is black on white, so place it on a white or off-white header. Never
-  recolour, stretch or crop the wordmark. If a dark/red background is needed, ask
-  for a white version of the logo rather than inverting it.
+- The linked logos are the white versions. On dark or red backgrounds (footer, poster
+  credit) show them as they are; on the white header, CSS shows them in black
+  (`filter: brightness(0)`). Never stretch or crop them.
 - These are Prajavani's own assets, used for Prajavani's own site. Don't use
   them for anything else.
 
@@ -108,11 +110,22 @@ Define them as CSS custom properties in one place.
   goes with the poster as the share message, not on the image. Set in `POSTER` in `js/data.js`.
 - The poster is 1080×1920 (9:16) for WhatsApp status and Instagram stories. The words
   keep clear of the top and bottom strips WhatsApp covers. The Karunadotsava mark is
-  large; the Prajavani logo is small, in a white "made at prajavani.net/rajyotsava" pill
+  large; the Prajavani logo is small, in a dark red "made at prajavani.net/rajyotsava" pill
   (owner's choice: readers write their own words, so the brand is a credit).
 - Drawn on a canvas entirely in the browser. **The photo is never
   uploaded.** Keep it that way, and keep the privacy note accurate.
 - Colours on the canvas are read from the CSS tokens. Don't hard-code them in JS.
+
+## English edition (Deccan Herald)
+
+- `index-en.html` + `js/data-en.js`: the same site in English for Deccan Herald (DH),
+  requested by the owner. It uses the DH logo (linked, see Brand assets) in place of
+  Prajavani's, and DH's typefaces through `data-brand="dh"` on `<html>`.
+- Owner's choices: no quotes banner, no videos, no photo gallery, no section list at
+  the end of the page; adds "From the archives" (`ARCHIVE`).
+- It shares `css/styles.css` and every script with the Kannada page. `js/main.js` runs
+  each block only if the page has it. Never fork a script or stylesheet per edition;
+  put the differences in the data file or a brand token.
 
 ## Tech and structure
 

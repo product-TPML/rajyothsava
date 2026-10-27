@@ -48,6 +48,10 @@
   const format = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => values[key]);
   const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
   const clamp = (value, limit) => Math.min(limit, Math.max(-limit, value));
+  // The page's typefaces, from the CSS tokens, so each edition's poster uses its own fonts.
+  const HEADLINE = token("font-headline");
+  const TEXT = token("font-text");
+  const font = (weight, size, family) => `${weight} ${size}px ${family}`;
 
   /* A colour token (#rrggbb) at the given opacity, for gradients. */
   function shade(name, alpha) {
@@ -58,17 +62,19 @@
 
   function loadImage(src) {
     const image = new Image();
+    // Images from another site (the brand logo) need CORS, or the canvas can't be saved.
+    if (new URL(src, location.href).origin !== location.origin) image.crossOrigin = "anonymous";
     image.src = src;
     return image.decode().then(() => image);
   }
 
   // Fonts and brand images must be ready before the first draw.
   const assets = Promise.all([
-    loadImage("assets/logo/pv-logo.png"),
+    loadImage(POSTER.logo),
     loadImage("assets/hero/karunadotsava-art-160.webp"),
-    document.fonts.load('600 48px "PvHeadline"'),
-    document.fonts.load('400 32px "PvText"'),
-    document.fonts.load('600 32px "PvText"'),
+    document.fonts.load(font(600, 48, HEADLINE)),
+    document.fonts.load(font(400, 32, TEXT)),
+    document.fonts.load(font(600, 32, TEXT)),
   ]).then(([logo, art]) => ({ logo, art }));
 
   /* ---------- Drawing ---------- */
@@ -82,7 +88,7 @@
       ctx.fillStyle = fill;
       ctx.fillRect(0, 0, WIDTH, HEIGHT);
       ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-      ctx.font = '600 48px "PvText"';
+      ctx.font = font(600, 48, TEXT);
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(POSTER.placeholder, WIDTH / 2, HEIGHT * 0.42);
@@ -128,10 +134,10 @@
     ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
     ctx.fillStyle = token("white");
-    ctx.font = '600 78px "PvHeadline"';
+    ctx.font = font(600, 78, HEADLINE);
     ctx.fillText(UI.eventTitle, x, SAFE_TOP + 98);
     ctx.fillStyle = token("yellow");
-    ctx.font = '600 34px "PvText"';
+    ctx.font = font(600, 34, TEXT);
     ctx.fillText(POSTER.eventLine, x, SAFE_TOP + 152);
   }
 
@@ -158,7 +164,7 @@
     let size = 104;
     let lines;
     do {
-      ctx.font = `600 ${size}px "PvHeadline"`;
+      ctx.font = font(600, size, HEADLINE);
       lines = wrap(ctx, text, maxWidth);
       size -= 4;
     } while ((lines.length > MAX_LINES || lines.some((line) => ctx.measureText(line).width > maxWidth)) && size > 52);
@@ -172,20 +178,20 @@
   function drawWords(ctx, poster, logo) {
     const prompt = POSTER.prompts[poster.prompt];
 
-    // Credit: a white pill, since the Prajavani logo must sit on white.
+    // Credit: the white brand logo and "made at" line on a dark red pill.
     const pillHeight = 84;
     const pillTop = SAFE_BOTTOM - pillHeight;
     const logoHeight = 44;
     const logoWidth = (logo.width / logo.height) * logoHeight;
-    const credit = `${POSTER.address} ${POSTER.madeAt}`;
-    ctx.font = '400 32px "PvText"';
+    const credit = format(POSTER.credit, { address: POSTER.address });
+    ctx.font = font(400, 32, TEXT);
     const pillWidth = 28 + logoWidth + 22 + ctx.measureText(credit).width + 30;
-    ctx.fillStyle = token("white");
+    ctx.fillStyle = token("red-dark");
     ctx.beginPath();
     ctx.roundRect(MARGIN, pillTop, pillWidth, pillHeight, pillHeight / 2);
     ctx.fill();
     ctx.drawImage(logo, MARGIN + 28, pillTop + (pillHeight - logoHeight) / 2, logoWidth, logoHeight);
-    ctx.fillStyle = token("ink");
+    ctx.fillStyle = token("white");
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ctx.fillText(credit, MARGIN + 28 + logoWidth + 22, pillTop + pillHeight / 2 + 2);
@@ -194,7 +200,7 @@
     let baseline = pillTop - 56;
     if (poster.name) {
       ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-      ctx.font = '600 40px "PvText"';
+      ctx.font = font(600, 40, TEXT);
       ctx.fillText(poster.name, MARGIN, baseline);
       baseline -= 92;
     }
@@ -209,7 +215,7 @@
 
     const headingBaseline = baseline - (lines.length - 1) * lineHeight - size * 1.1 - 12;
     ctx.fillStyle = token("yellow");
-    ctx.font = '600 44px "PvText"';
+    ctx.font = font(600, 44, TEXT);
     ctx.fillText(prompt.label, MARGIN, headingBaseline);
   }
 

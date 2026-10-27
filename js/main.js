@@ -1,4 +1,7 @@
-/* Builds the page from js/data.js and wires up search, menu, carousel, quotes, videos and gallery. */
+/*
+ * Builds the page from its data file (js/data.js, or js/data-en.js for the English
+ * DH edition) and wires up search, menu, carousel, quotes, videos, gallery and archive.
+ */
 (() => {
   "use strict";
 
@@ -65,18 +68,20 @@
               href: sectionHref(section),
               "aria-current": section.id === "home" ? "page" : false,
             },
-            section.kn
+            section.name
           )
         )
       )
     );
 
     document.getElementById("menu-panel-list").append(
-      ...SECTIONS.map((section) => el("li", {}, el("a", { class: "menu-panel__link", href: sectionHref(section) }, section.kn)))
+      ...SECTIONS.map((section) => el("li", {}, el("a", { class: "menu-panel__link", href: sectionHref(section) }, section.name)))
     );
+  }
 
+  function renderFooterLinks() {
     document.getElementById("footer-links").append(
-      ...SECTIONS.map((section) => el("li", {}, el("a", { href: sectionHref(section) }, section.kn)))
+      ...SECTIONS.map((section) => el("li", {}, el("a", { href: sectionHref(section) }, section.name)))
     );
   }
 
@@ -105,7 +110,7 @@
             el(
               "span",
               { class: "slide__body" },
-              el("span", { class: "tag" }, section.kn),
+              el("span", { class: "tag" }, section.name),
               el("span", { class: "slide__title" }, slide.title),
               byline("span", slide.author)
             )
@@ -151,7 +156,7 @@
           el(
             "div",
             { class: "card__body" },
-            el("span", { class: "tag" }, section.kn),
+            el("span", { class: "tag" }, section.name),
             el("h3", { class: "card__title" }, el("a", { class: "card__link", href: sectionHref(section) }, story.title)),
             el("p", { class: "card__summary" }, story.summary),
             byline("p", story.author)
@@ -168,7 +173,7 @@
           "li",
           { class: "directory__tile", id: `section-${section.id}` },
           el("span", { class: "directory__num", "aria-hidden": "true" }, pad(i + 1)),
-          el("span", { class: "directory__name" }, section.kn),
+          el("span", { class: "directory__name" }, section.name),
           el("span", { class: "directory__en", lang: "en" }, section.en),
           el("span", { class: "directory__status" }, UI.comingSoon)
         )
@@ -176,10 +181,27 @@
     );
   }
 
-  function renderCredits() {
+  /* "From the archives": one clipping per moment, newest last. */
+  function renderArchive() {
+    document.getElementById("archive-list").append(
+      ...ARCHIVE.map((story) =>
+        el(
+          "li",
+          { class: "archive__item" },
+          el("span", { class: "archive__year", "aria-hidden": "true" }, story.year),
+          el("p", { class: "archive__dateline" }, story.date),
+          el("h3", { class: "archive__title" }, story.title),
+          el("p", { class: "archive__summary" }, story.summary),
+          el("p", { class: "archive__status" }, UI.archiveComingSoon)
+        )
+      )
+    );
+  }
+
+  function renderCredits(withVideos) {
     const items = [
       ...Object.values(IMAGES).map(({ alt, credit }) => ({ label: alt, credit })),
-      ...VIDEOS.map(({ title, credit }) => ({ label: title, credit })),
+      ...(withVideos ? VIDEOS : []).map(({ title, credit }) => ({ label: title, credit })),
     ];
     document.getElementById("credits-list").append(
       ...items.map(({ label, credit }) =>
@@ -221,7 +243,7 @@
       const video = VIDEOS[index];
       player.src = `assets/videos/${video.file}.mp4`;
       player.poster = `assets/videos/${video.file}-poster.webp`;
-      document.getElementById("video-tag").textContent = sectionsById[video.section].kn;
+      document.getElementById("video-tag").textContent = sectionsById[video.section].name;
       document.getElementById("video-title").textContent = video.title;
       document.getElementById("video-summary").textContent = video.summary;
       document.getElementById("video-credit").textContent = format(UI.videoCredit, { author: video.credit.author });
@@ -312,9 +334,9 @@
       const section = sectionsById[article.section];
       return {
         ...article,
-        sectionName: section.kn,
+        sectionName: section.name,
         href: sectionHref(section),
-        text: [article.title, article.summary, article.author, section.kn, section.en].join(" ").toLowerCase(),
+        text: [article.title, article.summary, article.author, section.name, section.en].filter(Boolean).join(" ").toLowerCase(),
       };
     });
 
@@ -517,17 +539,25 @@
     autoplay(root, list, () => show(current + 1));
   }
 
+  /*
+   * Each block runs only on pages that have it: the English (DH) edition leaves out
+   * the quotes, videos, photo gallery and section directory, and adds the archive.
+   */
+  const has = (id) => document.getElementById(id) !== null;
+
   applyText();
   renderNavigation();
   renderCarousel();
-  renderQuotes();
   renderHighlights();
-  renderDirectory();
-  renderCredits();
+  if (has("quotes-list")) renderQuotes();
+  if (has("archive-list")) renderArchive();
+  if (has("directory-list")) renderDirectory();
+  if (has("footer-links")) renderFooterLinks();
+  renderCredits(has("video-list"));
   setupSearch();
   setupMenu();
   setupCarousel();
-  setupQuotes();
-  setupVideos();
-  setupGallery();
+  if (has("quotes-list")) setupQuotes();
+  if (has("video-list")) setupVideos();
+  if (has("gallery-list")) setupGallery();
 })();

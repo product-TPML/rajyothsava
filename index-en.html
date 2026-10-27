@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" data-brand="dh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Karnataka Rajyotsava Special | Deccan Herald</title>
+  <meta name="description" content="Deccan Herald's Karnataka Rajyotsava special – stories of the state's land, language, art and heritage, and moments from the DH archives.">
+  <meta name="theme-color" content="#A80F22">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/PlayfairDisplay-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/RobotoSlab-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    /* Opening animation: once per visit, never for readers who prefer reduced motion. Runs before first paint so the site doesn't flash. */
+    const REPLAY_ON_REFRESH = true; // TEMPORARY for review: replays on every refresh. Set to false before launch.
+    try {
+      if ((REPLAY_ON_REFRESH || !sessionStorage.getItem("dh-opening")) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        sessionStorage.setItem("dh-opening", "seen");
+        document.documentElement.classList.add("has-opening");
+      }
+    } catch {}
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body id="top">
+  <div class="opening" id="opening" role="dialog" aria-modal="true">
+    <div class="opening__header">
+      <img class="opening__logo" src="https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg" alt="Deccan Herald" width="78" height="68">
+      <button class="button button--outline opening__skip" id="opening-skip" type="button"></button>
+    </div>
+    <div class="opening__stage">
+      <div class="opening__scene" id="opening-scene" aria-hidden="true">
+        <!-- Karnataka outline: Bhuvan (ISRO/NRSC) state boundary, simplified. The flag waves inside it. -->
+        <svg class="opening__map" viewBox="-4 -4 261 408">
+          <defs>
+            <path id="opening-map-shape" d="M182.8 1.1 184.6 0.4 184.6 3.2 186.9 3.9 184.2 8.5 188.4 8.6 190.0 11.3 192.5 8.6 197.8 10.3 195.6 14.8 197.5 21.5 194.5 23.3 200.6 28.2 192.6 38.0 195.5 41.1 189.2 44.4 188.6 50.8 192.1 53.1 193.5 51.2 197.0 51.8 197.2 53.6 202.6 55.6 202.4 57.1 200.6 55.3 198.2 58.7 192.6 59.7 193.6 62.9 189.3 63.0 189.4 68.5 185.3 71.8 184.1 75.2 189.9 78.5 192.0 84.1 189.4 89.8 190.4 97.4 188.5 97.2 187.7 101.1 190.1 101.3 190.0 103.2 187.3 104.1 190.3 105.1 190.0 108.7 185.9 109.8 187.3 112.6 184.5 114.5 177.1 115.5 183.2 120.6 191.7 120.8 197.2 123.0 197.2 125.8 191.3 128.1 192.6 129.7 191.1 133.4 192.6 147.3 174.1 145.6 168.2 147.9 165.1 152.5 167.5 153.0 166.5 158.7 170.9 162.5 170.4 164.5 168.5 162.9 165.5 164.0 165.4 171.8 162.2 172.3 165.4 175.5 167.4 182.1 170.1 181.8 173.2 185.7 170.7 188.0 173.1 191.4 168.4 200.8 166.2 200.5 166.6 199.1 157.0 199.2 152.5 195.6 151.2 196.7 150.6 202.6 156.3 202.9 156.3 204.5 155.4 212.2 151.6 213.7 152.6 216.3 150.5 224.3 156.6 231.7 162.5 231.1 160.7 235.7 157.4 236.3 157.2 238.8 161.2 241.9 159.7 243.1 160.8 245.2 169.9 246.5 172.5 239.3 177.0 240.8 179.8 239.7 179.7 242.9 184.2 243.3 185.6 247.8 187.4 246.6 185.7 240.0 192.1 243.8 192.2 250.1 187.1 249.0 183.6 251.7 183.4 253.3 186.3 252.9 182.4 257.6 185.6 258.5 185.2 260.7 188.3 260.7 186.4 265.9 183.6 264.9 183.9 259.9 181.7 257.5 172.3 259.4 170.8 256.5 165.3 255.8 165.1 248.9 160.7 247.9 157.9 249.7 157.4 251.3 159.9 251.6 162.6 255.2 160.1 257.6 166.0 263.3 162.2 269.7 163.6 273.9 165.5 272.2 167.4 274.1 173.4 273.2 173.2 269.4 171.0 267.7 173.2 267.2 174.0 263.7 174.1 267.1 177.2 265.0 178.1 268.3 187.9 268.5 187.0 270.6 189.8 270.7 189.1 276.6 190.9 277.6 191.5 275.9 193.4 277.0 193.3 273.8 195.4 275.4 199.0 274.7 198.4 273.1 200.6 271.9 204.0 274.4 204.2 271.0 210.7 267.0 210.1 262.6 214.0 262.9 215.4 264.8 219.2 261.9 217.2 269.3 219.5 266.9 222.5 267.4 222.7 265.4 226.8 268.1 225.2 274.3 226.3 277.2 223.7 278.2 224.9 280.0 229.2 279.2 231.3 281.1 230.7 284.6 233.2 282.8 242.4 283.3 240.4 296.3 242.8 297.6 241.1 298.3 247.0 299.0 249.8 302.0 251.7 299.5 252.9 301.7 250.9 306.0 252.5 307.8 249.1 310.0 248.9 313.8 245.9 315.1 246.2 319.0 244.3 318.7 243.0 320.8 246.1 323.1 246.0 325.4 245.0 322.7 241.8 323.0 239.9 321.1 237.5 325.8 234.0 325.8 232.9 331.3 227.3 330.3 223.1 326.1 221.3 325.9 220.5 328.9 217.4 325.7 215.4 327.5 216.2 324.1 210.6 325.2 208.3 326.7 209.2 329.4 205.3 336.5 197.4 336.9 196.3 342.7 198.3 346.1 196.6 347.9 199.4 347.4 199.1 351.4 194.8 358.7 190.7 359.9 190.4 363.4 205.1 365.4 207.5 369.0 201.7 378.7 191.5 379.1 187.9 389.7 177.8 386.7 170.0 389.0 170.4 391.9 164.5 386.7 161.9 388.9 158.6 387.8 154.6 396.0 155.1 400.0 149.9 397.9 139.4 398.0 136.3 392.9 133.3 395.4 131.0 394.8 130.8 389.6 126.7 391.0 123.1 386.7 120.1 387.0 118.2 383.2 113.9 384.0 113.9 377.0 107.7 379.8 100.2 378.5 96.5 371.2 91.8 371.8 90.9 369.5 88.7 370.1 87.2 367.1 81.4 364.0 78.6 358.7 75.0 358.7 75.1 354.1 71.9 351.7 72.0 349.1 75.1 348.6 74.7 346.5 70.3 348.8 66.7 344.0 69.8 341.8 67.7 340.7 63.9 342.7 62.6 339.1 59.3 338.6 59.8 336.1 56.1 334.8 54.0 337.0 54.1 333.9 50.4 333.0 50.8 329.5 43.6 331.6 40.4 323.6 39.5 311.6 38.1 312.2 34.1 296.7 33.7 291.1 36.8 295.0 34.7 292.3 37.2 290.8 33.8 290.6 32.4 280.8 33.3 282.2 33.6 280.4 34.9 281.7 34.6 280.4 37.8 280.4 34.5 279.5 33.2 278.1 35.1 277.0 32.6 276.0 32.5 280.3 30.3 267.5 24.0 259.9 19.4 244.1 24.7 245.4 21.4 242.3 19.0 241.6 19.0 243.0 15.1 230.3 16.2 229.1 16.8 233.1 19.6 231.9 15.7 226.8 14.2 229.3 12.4 229.0 11.6 224.9 16.6 224.9 19.2 223.0 11.1 223.9 8.9 216.3 6.3 217.4 5.0 214.7 3.9 215.9 0.4 212.9 9.1 208.6 5.1 208.1 1.9 210.5 0.0 207.2 4.5 206.3 4.4 203.8 6.6 205.6 9.9 202.9 11.7 198.7 11.0 192.7 12.8 190.3 9.2 186.0 13.9 183.9 9.1 172.5 10.8 170.4 9.0 168.1 9.0 162.9 0.1 162.0 7.4 155.3 8.7 157.9 15.2 156.0 16.6 151.9 14.1 151.4 15.7 149.1 17.9 151.4 16.7 148.6 21.2 140.5 15.4 139.7 19.1 136.4 22.2 137.7 23.6 131.9 23.0 129.4 18.4 126.5 14.6 125.9 13.5 127.2 13.0 120.8 15.0 121.6 15.4 119.7 13.9 119.5 13.7 116.5 11.3 116.1 11.5 113.6 9.8 115.1 8.9 114.1 10.7 113.6 10.2 111.2 12.3 113.6 13.2 110.6 16.6 112.1 17.4 109.2 21.3 107.7 21.6 104.4 22.7 106.4 25.7 106.0 27.0 110.7 30.9 107.5 33.6 107.7 31.9 105.7 34.0 101.2 46.8 98.0 46.1 93.0 49.2 90.2 47.6 88.1 56.1 87.7 59.0 92.0 63.2 93.9 67.0 92.0 67.3 87.3 77.4 85.5 78.8 88.0 83.2 86.8 83.5 84.2 87.4 87.5 89.1 87.0 89.0 82.6 87.4 82.5 89.3 79.2 86.5 74.8 88.3 69.5 85.2 67.0 83.7 62.4 85.8 61.9 86.9 56.9 90.0 60.7 92.6 60.1 96.3 63.1 97.6 60.1 99.7 62.2 101.1 60.4 101.5 64.1 103.6 65.8 110.5 64.0 111.9 65.4 114.3 63.3 117.4 67.4 117.2 64.4 121.2 62.8 123.0 65.4 126.8 64.3 127.3 66.6 129.0 66.5 130.5 63.2 127.9 62.8 128.5 59.4 126.3 59.5 126.1 57.4 128.6 55.9 126.8 55.9 128.1 54.3 126.1 50.0 130.9 49.5 131.6 47.2 135.0 46.2 137.0 40.5 139.8 40.4 139.8 43.8 142.1 40.0 146.4 45.1 148.5 41.8 147.8 39.2 151.9 36.6 149.0 34.8 149.2 32.4 152.7 34.1 159.1 31.4 159.2 24.5 161.2 24.2 162.0 20.8 159.4 19.7 161.2 15.7 169.9 17.6 169.2 15.1 172.3 13.9 173.4 10.1 175.4 10.3 177.3 2.7 181.7 0.1Z"/>
+            <clipPath id="opening-map-clip"><use href="#opening-map-shape"/></clipPath>
+            <linearGradient class="opening__shine opening__shine--light" id="opening-flag-light" gradientUnits="userSpaceOnUse" x1="-4" x2="257"/>
+            <linearGradient class="opening__shine opening__shine--dark" id="opening-flag-dark" gradientUnits="userSpaceOnUse" x1="-4" x2="257"/>
+          </defs>
+          <g clip-path="url(#opening-map-clip)">
+            <g id="opening-flag">
+              <rect class="opening__cloth--yellow" x="-4" y="-4" width="261" height="408"/>
+              <path class="opening__cloth--red"/>
+              <rect x="-4" y="-4" width="261" height="408" fill="url(#opening-flag-light)"/>
+              <rect x="-4" y="-4" width="261" height="408" fill="url(#opening-flag-dark)"/>
+            </g>
+          </g>
+          <use class="opening__map-outline" href="#opening-map-shape"/>
+        </svg>
+      </div>
+      <div class="opening__caption">
+        <div class="opening__finale">
+          <p class="opening__eyebrow" id="opening-eyebrow"></p>
+          <p class="opening__title" id="opening-title"></p>
+          <p class="opening__text" id="opening-text"></p>
+          <button class="button button--primary opening__enter" id="opening-enter" type="button"></button>
+        </div>
+      </div>
+    </div>
+    <div class="flag-bar opening__bar"></div>
+  </div>
+
+  <a class="skip-link" href="#main" data-text="skipLink"></a>
+
+  <header class="masthead">
+    <div class="container masthead__inner">
+      <h1 class="brand">
+        <a class="brand__link" href="#top">
+          <img class="brand__logo" src="https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg" alt="Deccan Herald" width="78" height="68">
+          <span class="brand__divider" aria-hidden="true"></span>
+          <img class="brand__event-art" src="assets/hero/karunadotsava-art-160.webp" alt="" width="160" height="150">
+          <span class="brand__event-title" data-text="eventTitle"></span>
+        </a>
+      </h1>
+      <a class="button button--outline masthead__action" data-text="headerAction" data-href="headerActionUrl"></a>
+      <button class="icon-button masthead__menu" type="button" aria-haspopup="dialog" aria-controls="menu-panel" data-label="menuTitle">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="site-nav" data-label="navLabel">
+    <div class="container site-nav__inner">
+      <ul class="site-nav__list" id="nav-list"></ul>
+      <button class="site-nav__more" type="button" aria-haspopup="dialog" aria-controls="menu-panel">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <span data-text="menuButton"></span>
+      </button>
+    </div>
+  </nav>
+
+  <dialog class="menu-panel" id="menu-panel" aria-labelledby="menu-panel-title">
+    <div class="menu-panel__inner">
+      <div class="menu-panel__header">
+        <h2 class="menu-panel__title" id="menu-panel-title" data-text="menuTitle"></h2>
+        <button class="icon-button menu-panel__close" type="button" data-label="menuClose">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <!-- Phones keep the search here; js/main.js moves it into the masthead on wider screens. -->
+      <div class="search">
+        <form class="search__form" id="search-form" role="search">
+          <label class="visually-hidden" for="search-input" data-text="searchLabel"></label>
+          <div class="search__field">
+            <svg class="icon search__icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+            <input class="search__input" id="search-input" type="search" autocomplete="off" data-placeholder="searchPlaceholder">
+          </div>
+          <div class="search__results" id="search-results" hidden>
+            <p class="search__status" id="search-status" aria-live="polite"></p>
+            <ul class="search__list" id="search-list"></ul>
+          </div>
+        </form>
+      </div>
+      <ul class="menu-panel__list" id="menu-panel-list"></ul>
+    </div>
+  </dialog>
+
+  <main id="main">
+    <section class="featured" aria-labelledby="featured-title">
+      <div class="container">
+        <h2 class="section-title" id="featured-title" data-text="featuredTitle"></h2>
+        <div class="carousel" aria-roledescription="carousel" aria-labelledby="featured-title">
+          <div class="carousel__stage">
+            <ul class="carousel__track" id="carousel-track"></ul>
+            <button class="round-button carousel__arrow carousel__arrow--prev" type="button" data-step="-1" data-label="carouselPrev">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <button class="round-button carousel__arrow carousel__arrow--next" type="button" data-step="1" data-label="carouselNext">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="carousel__caption" id="carousel-caption"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- A one-screen teaser; the poster maker itself opens full screen. -->
+    <section class="poster" id="poster" aria-labelledby="poster-title">
+      <div class="container poster__inner">
+        <div class="poster__intro">
+          <p class="tag" data-text="posterEyebrow"></p>
+          <h2 class="poster__title" id="poster-title" data-text="posterTitle"></h2>
+          <p class="poster__lead" data-text="posterLead"></p>
+        </div>
+        <div class="poster__samples" id="poster-samples" aria-hidden="true"></div>
+        <div class="poster__start">
+          <button class="button button--primary poster__start-button" id="poster-start" type="button">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            <span data-text="posterStart"></span>
+          </button>
+          <p class="poster__privacy">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            <span data-text="posterPrivacy"></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- The maker: the poster on a dark "stage", the choices in a light panel beside or below it. -->
+      <dialog class="studio" id="poster-studio" aria-labelledby="studio-title">
+        <div class="studio__bar">
+          <h2 class="studio__title" id="studio-title" data-text="posterEyebrow"></h2>
+          <button class="icon-button studio__close" type="button" data-label="posterClose">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+        <div class="studio__main">
+          <figure class="studio__stage">
+            <canvas class="studio__canvas" id="poster-canvas" width="1080" height="1920" tabindex="0" role="img"></canvas>
+            <figcaption class="studio__hint" id="poster-hint" data-text="posterHint" hidden></figcaption>
+          </figure>
+          <form class="studio__panel" id="poster-form">
+            <div class="field">
+              <p class="field__label" data-text="posterPhoto"></p>
+              <div class="field__row">
+                <button class="button button--primary" id="poster-camera" type="button">
+                  <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+                  <span data-text="posterTakePhoto"></span>
+                </button>
+                <label class="button button--outline">
+                  <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l5-5 4 4 3-3 4 4"/></svg>
+                  <span data-text="posterChoosePhoto"></span>
+                  <input class="visually-hidden" id="poster-file" type="file" accept="image/*">
+                </label>
+                <input class="visually-hidden" id="poster-capture" type="file" accept="image/*" tabindex="-1" aria-hidden="true">
+              </div>
+              <div class="field" id="poster-zoom-field" hidden>
+                <label class="field__note" for="poster-zoom" data-text="posterZoom"></label>
+                <input class="field__range" id="poster-zoom" type="range" min="1" max="3" step="0.01" value="1">
+              </div>
+            </div>
+
+            <fieldset class="field">
+              <legend class="field__label" data-text="posterPrompt"></legend>
+              <div class="segmented" id="poster-prompts"></div>
+            </fieldset>
+
+            <div class="field">
+              <div class="field__head">
+                <label class="field__label" for="poster-line" data-text="posterLine"></label>
+                <span class="field__count" id="poster-line-count"></span>
+              </div>
+              <p class="field__note" id="poster-line-hint"></p>
+              <input class="field__input" id="poster-line" type="text" autocomplete="off" aria-describedby="poster-line-hint">
+              <div class="chips" id="poster-suggestions" role="group" data-label="posterSuggestions"></div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="poster-name" data-text="posterName"></label>
+              <input class="field__input" id="poster-name" type="text" maxlength="40" autocomplete="off" data-placeholder="posterNamePlaceholder">
+            </div>
+
+            <div class="field">
+              <div class="field__head">
+                <label class="field__label" for="poster-story" data-text="posterStory"></label>
+                <span class="field__count" id="poster-story-count"></span>
+              </div>
+              <p class="field__note" id="poster-story-hint" data-text="posterStoryHint"></p>
+              <textarea class="field__input field__input--story" id="poster-story" rows="3" aria-describedby="poster-story-hint"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="studio__foot">
+          <p class="studio__status" id="poster-status" aria-live="polite"></p>
+          <button class="button button--outline" id="poster-download" type="button" disabled>
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+            <span data-text="posterDownload"></span>
+          </button>
+          <button class="button button--primary" id="poster-share" type="button" disabled>
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></svg>
+            <span data-text="posterShare"></span>
+          </button>
+        </div>
+      </dialog>
+    </section>
+
+    <section class="highlights" aria-labelledby="highlights-title">
+      <div class="container">
+        <h2 class="section-title" id="highlights-title" data-text="highlightsTitle"></h2>
+        <ul class="card-grid" id="highlights-list"></ul>
+      </div>
+    </section>
+
+    <section class="archive" id="archive" aria-labelledby="archive-title">
+      <div class="container">
+        <h2 class="section-title" id="archive-title" data-text="archiveTitle"></h2>
+        <p class="archive__lead" data-text="archiveLead"></p>
+        <ol class="archive__list" id="archive-list"></ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="flag-bar" aria-hidden="true"></div>
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <img class="site-footer__logo" src="https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg" alt="Deccan Herald" width="78" height="68" loading="lazy">
+        <p data-text="footerAbout"></p>
+      </div>
+      <details class="site-footer__credits">
+        <summary data-text="footerCreditsTitle"></summary>
+        <ul id="credits-list"></ul>
+      </details>
+    </div>
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <span data-text="footerCopyright"></span>
+        <span data-text="footerDraftNote"></span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="poster-cta" href="#poster" hidden>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+    <span data-text="posterCta"></span>
+  </a>
+
+  <dialog class="camera" id="camera" aria-labelledby="camera-title">
+    <div class="camera__inner">
+      <h2 class="visually-hidden" id="camera-title" data-text="cameraTitle"></h2>
+      <video class="camera__video" id="camera-video" playsinline muted></video>
+      <div class="camera__controls">
+        <button class="round-button camera__close" type="button" data-label="cameraClose">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <button class="camera__shutter" type="button" data-label="cameraShutter"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="js/data-en.js"></script>
+  <script src="js/silhouette-art.js"></script>
+  <script src="js/silhouette.js"></script>
+  <script src="js/opening.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/poster.js"></script>
+</body>
+</html>
