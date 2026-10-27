@@ -6,7 +6,6 @@
 /* Interface text. Elements in index.html with data-text="key" receive these. */
 const UI = {
   skipLink: "ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ತೆರಳಿ",
-  eventTitle: "ಕರುನಾಡೋತ್ಸವ",
   headerAction: "ಪ್ರಜಾವಾಣಿ ಮುಖಪುಟ",
   searchLabel: "ಕಥನಗಳನ್ನು ಹುಡುಕಿ",
   searchPlaceholder: "ಕಥನ, ವಿಭಾಗ ಅಥವಾ ಲೇಖಕರ ಹೆಸರು",
@@ -433,6 +432,7 @@ const GALLERY = [
  * samples  → the example posters on the page, with photos from IMAGES.
  *            PLACEHOLDER: the lines and names are made up for illustration.
  * camera   → which phone camera "ಕ್ಯಾಮೆರಾ" opens ("user" = front, "environment" = back).
+ * mark     → the Karunadotsava mark (newspaper logo + event title) at the top of the poster.
  * logo     → the brand logo in the poster's "made at" credit.
  * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
  */
@@ -461,6 +461,7 @@ const POSTER = {
   camera: "user",
   placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
   eventLine: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
+  mark: "assets/hero/karunadotsava-pv-720.webp",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg",
   credit: "{address} ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
   address: "prajavani.net/rajyotsava",

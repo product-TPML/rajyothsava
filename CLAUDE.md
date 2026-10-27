@@ -36,7 +36,7 @@ from their published links (the same ones the Dasara site uses).
 |---|---|---|
 | Prajavani logo | `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg` | White ಪ್ರಜಾವಾಣಿ wordmark with Nandi and tagline (SVG, 1327×319). Linked, not downloaded (owner's choice). |
 | Deccan Herald logo | `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg` | White DH letters, Nandi and "DECCAN HERALD", stacked (SVG, 78×68). Used by the English edition. |
-| Karunadotsava artwork | `assets/hero/karunadotsava-art-160.webp` | The central red "ಕ" artwork cut from Prajavani's campaign poster (`assets/hero/karunadotsava-poster.jpeg`, supplied by the owner). Only the artwork is used, not the poster text. Shown small in the masthead, after the Prajavani logo, with the title "ಕರುನಾಡೋತ್ಸವ". There is no separate hero section; the carousel follows the nav bar. |
+| Karunadotsava mark | `assets/hero/karunadotsava-pv-720.webp`, `assets/hero/karunadotsava-dh-720.webp` | The final event logo from `assets/Karunadothsava Fin logo PV-DH.ai` (supplied by the owner; page 1 DH, page 2 PV): Gandaberunda, newspaper logo and title in gold/white, exported from the .ai without its gold border and gradient plaque, on a transparent background (owner's choice), 720px wide. The header sits it on the site's own red (`--red`); the poster gives it a red box. Used in the masthead (as the whole home link), the opening's top bar and the top of the poster. Re-export from the .ai if the artwork changes; never redraw it. There is no separate hero section; the carousel follows the nav bar. |
 | Photos and videos | `assets/images/`, `assets/videos/` | Freely licensed Wikimedia Commons media, credited in `js/data.js` and the footer. Videos are compressed MP4 (H.264, ≤854px wide, ≤1 min) with a WebP poster. Keep new videos small; they load only when played. |
 | Headline font | `assets/fonts/PvHeadlineSemibold3.woff2` | Prajavani headline face, weight 600. Use for headlines, section titles and the carousel. |
 | Body font | `assets/fonts/PrajavaniTextRegular.woff2` | Weight 400. Use for body text, descriptions and menus. |
@@ -53,9 +53,10 @@ Font setup (prajavani.net uses the same pattern):
 ```
 
 - Preload the headline font, because it appears above the fold.
-- The linked logos are the white versions. On dark or red backgrounds (footer, poster
-  credit) show them as they are; on the white header, CSS shows them in black
-  (`filter: brightness(0)`). Never stretch or crop them.
+- The linked logos are the white versions, so use them only on dark or red backgrounds
+  (footer, poster credit). Never stretch or crop any logo.
+- The header and the opening's top bar are site red (`--red`, owner's choice) with the
+  Karunadotsava mark placed directly on them; the nav bar below is `--red-dark`.
 - These are Prajavani's own assets, used for Prajavani's own site. Don't use
   them for anything else.
 
@@ -119,8 +120,8 @@ Define them as CSS custom properties in one place.
 ## English edition (Deccan Herald)
 
 - `index-en.html` + `js/data-en.js`: the same site in English for Deccan Herald (DH),
-  requested by the owner. It uses the DH logo (linked, see Brand assets) in place of
-  Prajavani's, and DH's typefaces through `data-brand="dh"` on `<html>`.
+  requested by the owner. It uses the DH Karunadotsava mark and DH logo (see Brand assets)
+  in place of Prajavani's, spells the title "Karunadothsava" to match the mark, and DH's typefaces through `data-brand="dh"` on `<html>`.
 - Owner's choices: no quotes banner, no videos, no photo gallery, no section list at
   the end of the page; adds "From the archives" (`ARCHIVE`).
 - It shares `css/styles.css` and every script with the Kannada page. `js/main.js` runs

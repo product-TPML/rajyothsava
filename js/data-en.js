@@ -8,7 +8,6 @@
 /* Interface text. Elements in index-en.html with data-text="key" receive these. */
 const UI = {
   skipLink: "Skip to main content",
-  eventTitle: "Karunadotsava",
   headerAction: "DH home",
   searchLabel: "Search stories",
   searchPlaceholder: "Story, section or writer",
@@ -371,6 +370,7 @@ const ARCHIVE = [
  * samples  → the example posters on the page, with photos from IMAGES.
  *            PLACEHOLDER: the lines and names are made up for illustration.
  * camera   → which phone camera "Camera" opens ("user" = front, "environment" = back).
+ * mark     → the Karunadotsava mark (newspaper logo + event title) at the top of the poster.
  * logo     → the brand logo in the poster's "made at" credit.
  * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
  */
@@ -399,6 +399,7 @@ const POSTER = {
   camera: "user",
   placeholder: "Your photo",
   eventLine: "Rajyotsava · 1 November 2026",
+  mark: "assets/hero/karunadotsava-dh-720.webp",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg",
   credit: "Made at {address}",
   address: "deccanherald.com/rajyotsava",
@@ -420,7 +421,7 @@ const OPENING = {
   skipLabel: "Skip the opening and go to the site",
   finale: {
     eyebrow: "71st Karnataka Rajyotsava · 1 November 2026",
-    title: "Karunadotsava",
+    title: "Karunadothsava",
     text: "Happy Rajyotsava. Celebrate the land, language and culture of Karnataka with Deccan Herald",
     enter: "Read the special edition",
   },

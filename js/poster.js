@@ -71,11 +71,11 @@
   // Fonts and brand images must be ready before the first draw.
   const assets = Promise.all([
     loadImage(POSTER.logo),
-    loadImage("assets/hero/karunadotsava-art-160.webp"),
+    loadImage(POSTER.mark),
     document.fonts.load(font(600, 48, HEADLINE)),
     document.fonts.load(font(400, 32, TEXT)),
     document.fonts.load(font(600, 32, TEXT)),
-  ]).then(([logo, art]) => ({ logo, art }));
+  ]).then(([logo, mark]) => ({ logo, mark }));
 
   /* ---------- Drawing ---------- */
 
@@ -120,25 +120,22 @@
     ctx.fillRect(0, 820, WIDTH, HEIGHT - 820);
   }
 
-  /* The Karunadotsava mark, large, at the top: the artwork on a cream tile, then the title. */
-  function drawEvent(ctx, art) {
-    const tile = 180;
-    ctx.fillStyle = token("cream");
+  /* The Karunadotsava mark, large, at the top on the site's red, with the date line under it. */
+  function drawEvent(ctx, mark) {
+    const pad = 24;
+    const markHeight = 170;
+    const markWidth = (mark.width / mark.height) * markHeight;
+    const boxHeight = markHeight + pad * 2;
+    ctx.fillStyle = token("red");
     ctx.beginPath();
-    ctx.roundRect(MARGIN, SAFE_TOP, tile, tile, 32);
+    ctx.roundRect(MARGIN, SAFE_TOP, markWidth + pad * 2, boxHeight, 16);
     ctx.fill();
-    const artHeight = 150;
-    const artWidth = (art.width / art.height) * artHeight;
-    ctx.drawImage(art, MARGIN + (tile - artWidth) / 2, SAFE_TOP + (tile - artHeight) / 2, artWidth, artHeight);
-    const x = MARGIN + tile + 30;
+    ctx.drawImage(mark, MARGIN + pad, SAFE_TOP + pad, markWidth, markHeight);
     ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
-    ctx.fillStyle = token("white");
-    ctx.font = font(600, 78, HEADLINE);
-    ctx.fillText(UI.eventTitle, x, SAFE_TOP + 98);
     ctx.fillStyle = token("yellow");
     ctx.font = font(600, 34, TEXT);
-    ctx.fillText(POSTER.eventLine, x, SAFE_TOP + 152);
+    ctx.fillText(POSTER.eventLine, MARGIN, SAFE_TOP + boxHeight + 52);
   }
 
   /* Splits text into lines no wider than maxWidth, at spaces. */
@@ -229,13 +226,13 @@
 
   /* Draws a poster onto a canvas of any size with the poster's shape. */
   async function drawPoster(target, poster) {
-    const { logo, art } = await assets;
+    const { logo, mark } = await assets;
     const ctx = target.getContext("2d");
     const scale = target.width / WIDTH;
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
     drawPhoto(ctx, poster);
     drawShade(ctx);
-    drawEvent(ctx, art);
+    drawEvent(ctx, mark);
     drawWords(ctx, poster, logo);
     drawFlagBand(ctx);
   }

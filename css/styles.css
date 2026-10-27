@@ -88,7 +88,7 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --focus-ring: var(--red);
-  --logo-scale: 1; /* masthead logo height, relative to the Prajavani wordmark */
+  --logo-scale: 1; /* footer logo height, relative to the Prajavani wordmark */
 }
 
 /* The English edition swaps in Deccan Herald's typefaces; everything else is shared. */
@@ -403,11 +403,14 @@ button {
 
 /* ---------- Masthead ---------- */
 
-/* Sits above the sticky nav so the search results can drop over it. */
+/* Site red, so the gold Karunadotsava mark sits on it directly. Sits above the
+   sticky nav so the search results can drop over it. */
 .masthead {
+  --focus-ring: var(--yellow);
   position: relative;
   z-index: 30;
-  background: var(--white);
+  background: var(--red);
+  color: var(--white);
 }
 
 .masthead__inner {
@@ -418,45 +421,22 @@ button {
   padding-block: var(--space-1);
 }
 
-/* Prajavani logo | Karunadotsava artwork + title, as one home link. */
+/* The Karunadotsava mark (newspaper logo + event title), as the home link. */
 .brand {
   min-width: 0;
 }
 
 .brand__link {
   display: flex;
-  align-items: center;
-  gap: var(--space-2);
 }
 
-.brand__logo {
+.brand__mark,
+.opening__mark {
   width: auto;
-  height: calc(24px * var(--logo-scale));
 }
 
-/* Both brand logos are the white versions; on the white header they show in black. */
-.brand__logo,
-.opening__logo {
-  filter: brightness(0);
-}
-
-.brand__divider {
-  align-self: stretch;
-  width: 1px;
-  margin-inline: var(--space-1);
-  background: var(--line-strong);
-}
-
-.brand__event-art {
-  width: auto;
-  height: 32px;
-}
-
-.brand__event-title {
-  font-size: 0.9375rem;
-  line-height: 1.3;
-  color: var(--red);
-  white-space: nowrap;
+.brand__mark {
+  height: 52px;
 }
 
 .masthead__action {
@@ -466,11 +446,11 @@ button {
 /* Phones open the menu panel from here; wider screens from the nav bar. */
 .masthead__menu {
   flex: none;
-  color: var(--red);
+  color: var(--white);
 }
 
 .masthead__menu:hover {
-  background: var(--paper);
+  background: var(--red-dark);
 }
 
 @media (min-width: 768px) {
@@ -482,34 +462,14 @@ button {
     padding-block: var(--space-4);
   }
 
-  .brand__link {
-    gap: var(--space-3);
-  }
-
-  .brand__logo {
-    height: calc(40px * var(--logo-scale));
-  }
-
-  .brand__event-art {
-    height: 52px;
-  }
-
-  .brand__event-title {
-    font-size: 1.25rem;
+  .brand__mark {
+    height: 64px;
   }
 }
 
 @media (min-width: 1024px) {
-  .brand__logo {
-    height: calc(52px * var(--logo-scale));
-  }
-
-  .brand__event-art {
-    height: 68px;
-  }
-
-  .brand__event-title {
-    font-size: 1.625rem;
+  .brand__mark {
+    height: 80px;
   }
 
   .masthead__action {
@@ -628,7 +588,7 @@ button {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--red);
+  background: var(--red-dark);
   color: var(--white);
   box-shadow: 0 2px 8px rgb(36 36 36 / 18%);
 }
@@ -665,7 +625,7 @@ button {
 }
 
 .site-nav__link:hover {
-  background: var(--red-dark);
+  background: var(--red-deep);
 }
 
 .site-nav__link:focus-visible {
@@ -683,14 +643,14 @@ button {
   gap: var(--space-2);
   padding-inline: var(--space-4);
   border: 0;
-  background: var(--red-dark);
+  background: var(--red-deep);
   font-weight: 600;
   font-size: 0.9375rem;
   transition: background-color var(--duration);
 }
 
 .site-nav__more:hover {
-  background: var(--red-deep);
+  background: var(--red);
 }
 
 @media (min-width: 768px) {
@@ -2303,21 +2263,19 @@ button {
   background: var(--cream);
 }
 
-/* White band so the black wordmark sits on white, as the brand rules ask. */
 .opening__header {
+  --focus-ring: var(--yellow);
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 64px;
   padding-inline: var(--gutter);
-  border-bottom: 1px solid var(--line);
-  background: var(--white);
+  background: var(--red);
 }
 
-.opening__logo {
-  width: auto;
-  height: calc(32px * var(--logo-scale));
+.opening__mark {
+  height: 48px;
 }
 
 .opening__skip {
@@ -2637,8 +2595,8 @@ button {
     min-height: 76px;
   }
 
-  .opening__logo {
-    height: calc(40px * var(--logo-scale));
+  .opening__mark {
+    height: 60px;
   }
 
   .opening__title {

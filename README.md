@@ -63,4 +63,5 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **DH archive stories:** the six headlines and notes in `ARCHIVE` (`js/data-en.js`) were written for the layout. Replace them with the real archive pages and have the DH library check every date. Each card says "Archive page coming soon" until there is a page to link to.
 - [ ] **DH stories and bylines:** the English carousel and highlight stories are translations of the Kannada placeholders, with made-up bylines.
 - [ ] **DH poster address:** `deccanherald.com/rajyotsava` is printed on English posters (`POSTER.address` in `js/data-en.js`); the web team needs to set it up.
+- [ ] **Karunadotsava mark:** `assets/hero/karunadotsava-pv-720.webp` and `-dh-720.webp` are exported from `assets/Karunadothsava Fin logo PV-DH.ai` without the gold border and gradient plaque; the site's red goes behind them. If the design team updates the .ai, they need re-exporting.
 - [ ] **Prajavani logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg`. Same caveat: needs the internet, and depends on that link staying up.
