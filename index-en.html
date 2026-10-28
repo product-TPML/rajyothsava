@@ -10,11 +10,20 @@
   <link rel="preload" href="assets/fonts/PlayfairDisplay-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/RobotoSlab-latin.woff2" as="font" type="font/woff2" crossorigin>
   <script>
-    /* Opening animation: once a day (India time), never for readers who prefer reduced motion. Runs before first paint so the site doesn't flash. */
-    const REPLAY_ON_REFRESH = true; // TEMPORARY for review: replays on every refresh. Set to false before launch.
+    /*
+     * Opening animation: once a day (India time), never for readers who prefer reduced motion.
+     * "?intro" in the address (the footer's "watch again" link) plays it now. Runs before
+     * first paint so the site doesn't flash.
+     */
     try {
       const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
-      if ((REPLAY_ON_REFRESH || localStorage.getItem("dh-opening") !== today) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const address = new URL(location.href);
+      const replay = address.searchParams.has("intro");
+      if (replay) {
+        address.searchParams.delete("intro");
+        history.replaceState(null, "", address);
+      }
+      if ((replay || localStorage.getItem("dh-opening") !== today) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
         localStorage.setItem("dh-opening", today);
         document.documentElement.classList.add("has-opening");
       }
@@ -80,10 +89,6 @@
   <nav class="site-nav" data-label="navLabel">
     <div class="container site-nav__inner">
       <ul class="site-nav__list" id="nav-list"></ul>
-      <button class="site-nav__more" type="button" aria-haspopup="dialog" aria-controls="menu-panel">
-        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-        <span data-text="menuButton"></span>
-      </button>
     </div>
   </nav>
 
@@ -110,7 +115,7 @@
   </dialog>
 
   <main id="main">
-    <section class="featured" aria-labelledby="featured-title">
+    <section class="featured" id="featured" aria-labelledby="featured-title">
       <div class="container">
         <h2 class="section-title" id="featured-title" data-text="featuredTitle"></h2>
         <div class="carousel" aria-roledescription="carousel" aria-labelledby="featured-title">
@@ -128,7 +133,7 @@
       </div>
     </section>
 
-    <section class="event" aria-labelledby="event-title">
+    <section class="event" id="event" aria-labelledby="event-title">
       <div class="container">
         <!-- Text and the calendar link come from EVENT in the data file. -->
         <article class="event__card">
@@ -238,6 +243,8 @@
               <p class="field__note" id="poster-story-hint" data-text="posterStoryHint"></p>
               <textarea class="field__input field__input--story" id="poster-story" rows="3" aria-describedby="poster-story-hint"></textarea>
             </div>
+
+            <p class="field__note studio__disclaimer" data-text="posterDisclaimer"></p>
           </form>
         </div>
         <div class="studio__foot">
@@ -254,7 +261,7 @@
       </dialog>
     </section>
 
-    <section class="highlights" aria-labelledby="highlights-title">
+    <section class="highlights" id="highlights" aria-labelledby="highlights-title">
       <div class="container">
         <h2 class="section-title" id="highlights-title" data-text="highlightsTitle"></h2>
         <ul class="card-grid" id="highlights-list"></ul>
@@ -274,7 +281,9 @@
     <div class="flag-bar" aria-hidden="true"></div>
     <div class="container site-footer__inner">
       <div class="site-footer__brand">
-        <img class="site-footer__logo" src="https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg" alt="Deccan Herald" width="78" height="68" loading="lazy">
+        <a class="site-footer__home" data-href="headerActionUrl">
+          <img class="site-footer__logo" src="https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg" alt="Deccan Herald" width="78" height="68" loading="lazy">
+        </a>
         <p data-text="footerAbout"></p>
       </div>
       <details class="site-footer__credits">
@@ -285,6 +294,7 @@
     <div class="site-footer__bottom">
       <div class="container site-footer__bottom-inner">
         <span data-text="footerCopyright"></span>
+        <a href="?intro" data-text="openingReplay"></a>
         <span data-text="footerDraftNote"></span>
       </div>
     </div>

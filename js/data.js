@@ -12,9 +12,8 @@ const UI = {
   searchUrl: "https://www.prajavani.net/search",
   byline: "ಬರಹ: {author}",
   headerActionUrl: "https://www.prajavani.net/",
-  navLabel: "ಮುಖ್ಯ ವಿಭಾಗಗಳು",
-  menuButton: "ಇನ್ನಷ್ಟು",
-  menuTitle: "ಎಲ್ಲ ವಿಭಾಗಗಳು",
+  navLabel: "ಈ ಪುಟದಲ್ಲಿ",
+  menuTitle: "ಈ ಪುಟದಲ್ಲಿ",
   menuClose: "ಮುಚ್ಚಿ",
 
   featuredTitle: "ಮುಖ್ಯ ಕಥನಗಳು",
@@ -30,10 +29,10 @@ const UI = {
   introText:
     "ನಾಡು, ನುಡಿ, ಕಲೆ ಮತ್ತು ಪರಂಪರೆಯ ಸಂಭ್ರಮಕ್ಕೆ ಪ್ರಜಾವಾಣಿಯ ಈ ವಿಶೇಷ ಸಂಚಿಕೆ ಮೀಸಲು. " +
     "ಕರ್ನಾಟಕದ ಮೂಲೆಮೂಲೆಗಳ ಕಥನಗಳು, ಚಿತ್ರಗಳು ಮತ್ತು ಅಭಿಪ್ರಾಯಗಳನ್ನು ಒಂದೇ ಕಡೆ ಓದಿ.",
-  introAction: "ಎಲ್ಲ ವಿಭಾಗಗಳನ್ನು ನೋಡಿ",
+  introAction: "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳನ್ನು ಓದಿ",
 
   posterEyebrow: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್",
-  posterTitle: "ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು",
+  posterTitle: "ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು, ನಿಮ್ಮ ಸಮುದಾಯ",
   posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಸೇರಿಸಿ, ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಬಗ್ಗೆ ನಿಮ್ಮ ಹೆಮ್ಮೆ, ಕನಸು ಅಥವಾ ನಿಮ್ಮ ಸಮುದಾಯದ ಬಗ್ಗೆ ಬರೆಯಿರಿ. ವಾಟ್ಸ್‌ಆ್ಯಪ್ ಸ್ಟೇಟಸ್‌ಗೆ ಹೊಂದುವ ಪೋಸ್ಟರ್ ಸಿದ್ಧ.",
   posterStart: "ಪೋಸ್ಟರ್ ಮಾಡಿ",
   posterPrivacy: "ನಿಮ್ಮ ಫೋಟೊವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ, ಸಂಗ್ರಹಿಸುವುದೂ ಇಲ್ಲ. ಪೋಸ್ಟರ್ ನಿಮ್ಮ ಸಾಧನದಲ್ಲೇ ತಯಾರಾಗುತ್ತದೆ.",
@@ -49,6 +48,8 @@ const UI = {
   posterNamePlaceholder: "ಉದಾ: ಸುಮಾ, ಮಂಡ್ಯ",
   posterStory: "ಜೊತೆಗೊಂದು ಕತೆ (ಐಚ್ಛಿಕ)",
   posterStoryHint: "ಪೋಸ್ಟರ್ ಹಂಚಿಕೊಳ್ಳುವಾಗ ಇದು ಜೊತೆಗೆ ಸಂದೇಶವಾಗಿ ಹೋಗುತ್ತದೆ.",
+  posterDisclaimer:
+    "ಈ ಸೌಲಭ್ಯ ಪೋಸ್ಟರ್ ತಯಾರಿಸಲು ಮಾತ್ರ. ಪೋಸ್ಟರ್‌ನಲ್ಲಿ ಸೇರಿಸುವ ಫೋಟೊ, ಬರಹ ಹಾಗೂ ಪೋಸ್ಟರ್‌ನ ಬಳಕೆಗೆ ಬಳಕೆದಾರರೇ ಹೊಣೆ. ಅದಕ್ಕೆ ಪ್ರಜಾವಾಣಿ ಜವಾಬ್ದಾರವಲ್ಲ.",
   posterHint: "ಫೋಟೊವನ್ನು ಎಳೆದು ಸರಿಹೊಂದಿಸಿ.",
   posterDownload: "ಡೌನ್‌ಲೋಡ್",
   posterShare: "ಹಂಚಿಕೊಳ್ಳಿ",
@@ -81,43 +82,51 @@ const UI = {
   videoPlay: "ವಿಡಿಯೊ ನೋಡಿ: {title}",
   shortsTitle: "ಶಾರ್ಟ್ಸ್ ಮತ್ತು ರೀಲ್ಸ್",
   photoStoriesTitle: "ಫೋಟೊ ಕಥನಗಳು",
-  sectionsTitle: "ಎಲ್ಲ ವಿಭಾಗಗಳು",
-  comingSoon: "ಪುಟ ಶೀಘ್ರದಲ್ಲೇ",
 
   footerAbout:
     "ಪ್ರಜಾವಾಣಿ ಕನ್ನಡದ ವಿಶ್ವಾಸಾರ್ಹ ದಿನಪತ್ರಿಕೆ. ರಾಜ್ಯೋತ್ಸವದ ಈ ವಿಶೇಷ ತಾಣ ನಾಡಿನ ಹೆಮ್ಮೆಯ ಕಥನಗಳನ್ನು ಓದುಗರಿಗೆ ತಲುಪಿಸುತ್ತದೆ.",
-  footerSectionsTitle: "ವಿಭಾಗಗಳು",
   footerCreditsTitle: "ಚಿತ್ರ ಮತ್ತು ವಿಡಿಯೊ ಕೃಪೆ (ವಿಕಿಮೀಡಿಯಾ ಕಾಮನ್ಸ್)",
   footerCopyright: "© 2026 ಪ್ರಜಾವಾಣಿ",
+  openingReplay: "ಆರಂಭದ ದೃಶ್ಯ ಮತ್ತೆ ನೋಡಿ",
   footerDraftNote: "ಇದು ಮಾದರಿ ಕರಡು. ಪ್ರಕಟಣೆಗೆ ಮುನ್ನ ಪರಿಶೀಲನೆ ಅಗತ್ಯ.",
 };
 
 /*
- * The 18 menu sections, in menu order.
- * name           → the label shown; en → the English name under it in the directory.
- * primary: true  → shown in the desktop menu bar; the rest sit under "ಇನ್ನಷ್ಟು".
- * href           → where the link goes. Until real section pages exist, each
- *                  points to its tile in the "ಎಲ್ಲ ವಿಭಾಗಗಳು" directory.
+ * The top menu: the parts of this page, in page order. target → the section's id.
+ * A part that isn't on the page (photo stories when their collection can't be read)
+ * drops out of the menu too.
+ */
+const PAGE_NAV = [
+  { label: "ಮುಖ್ಯ ಕಥನಗಳು", target: "featured" },
+  { label: "ಪ್ರದರ್ಶನ", target: "event" },
+  { label: "ಪೋಸ್ಟರ್", target: "poster" },
+  { label: "ಮುಖ್ಯಾಂಶಗಳು", target: "highlights" },
+  { label: "ವಿಡಿಯೊ", target: "videos" },
+  { label: "ಫೋಟೊ ಕಥನಗಳು", target: "photo-stories" },
+];
+
+/*
+ * Newspaper sections, for the label on each story in this file (SLIDES, HIGHLIGHTS,
+ * VIDEOS: section = an id here). Those stories link to the newspaper's home page.
  */
 const SECTIONS = [
-  { id: "home", name: "ಮುಖಪುಟ", en: "Home", primary: true, href: "#top" },
-  { id: "news", name: "ಸುದ್ದಿ", en: "News", primary: true },
-  { id: "business", name: "ವಾಣಿಜ್ಯ", en: "Business", primary: true },
-  { id: "technology", name: "ತಂತ್ರಜ್ಞಾನ", en: "Technology", primary: true },
-  { id: "education", name: "ಶಿಕ್ಷಣ", en: "Education", primary: true },
-  { id: "health", name: "ಆರೋಗ್ಯ", en: "Health", primary: true },
-  { id: "lifestyle", name: "ಜೀವನಶೈಲಿ", en: "Lifestyle" },
-  { id: "entertainment", name: "ಮನರಂಜನೆ", en: "Entertainment", primary: true },
-  { id: "sports", name: "ಕ್ರೀಡೆ", en: "Sports", primary: true },
-  { id: "travel", name: "ಪ್ರವಾಸ", en: "Travel" },
-  { id: "food", name: "ಆಹಾರ", en: "Food" },
-  { id: "culture", name: "ಸಂಸ್ಕೃತಿ", en: "Culture" },
-  { id: "environment", name: "ಪರಿಸರ", en: "Environment" },
-  { id: "opinion", name: "ಅಭಿಪ್ರಾಯ", en: "Opinion" },
-  { id: "interviews", name: "ಸಂದರ್ಶನ", en: "Interviews" },
-  { id: "special-reports", name: "ವಿಶೇಷ ವರದಿ", en: "Special Reports" },
-  { id: "photo-stories", name: "ಫೋಟೊ ಕಥನ", en: "Photo Stories" },
-  { id: "about", name: "ನಮ್ಮ ಬಗ್ಗೆ", en: "About Us" },
+  { id: "news", name: "ಸುದ್ದಿ" },
+  { id: "business", name: "ವಾಣಿಜ್ಯ" },
+  { id: "technology", name: "ತಂತ್ರಜ್ಞಾನ" },
+  { id: "education", name: "ಶಿಕ್ಷಣ" },
+  { id: "health", name: "ಆರೋಗ್ಯ" },
+  { id: "lifestyle", name: "ಜೀವನಶೈಲಿ" },
+  { id: "entertainment", name: "ಮನರಂಜನೆ" },
+  { id: "sports", name: "ಕ್ರೀಡೆ" },
+  { id: "travel", name: "ಪ್ರವಾಸ" },
+  { id: "food", name: "ಆಹಾರ" },
+  { id: "culture", name: "ಸಂಸ್ಕೃತಿ" },
+  { id: "environment", name: "ಪರಿಸರ" },
+  { id: "opinion", name: "ಅಭಿಪ್ರಾಯ" },
+  { id: "interviews", name: "ಸಂದರ್ಶನ" },
+  { id: "special-reports", name: "ವಿಶೇಷ ವರದಿ" },
+  { id: "photo-stories", name: "ಫೋಟೊ ಕಥನ" },
+  { id: "about", name: "ನಮ್ಮ ಬಗ್ಗೆ" },
 ];
 
 /*

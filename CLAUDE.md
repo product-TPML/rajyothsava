@@ -85,9 +85,13 @@ Define them as CSS custom properties in one place.
   at least 44×44px.
 - Header on phone: the logo is centred or left-aligned with a menu button. Keep it
   compact (≤64px tall) and make it stick on scroll if that doesn't hide content.
-- The 18-section menu opens on phone as a full-screen or slide-in panel, with
-  sections in a tidy 2-column list. On desktop, show the key sections in the bar and
-  put the rest under "ಇನ್ನಷ್ಟು" (More).
+- **Top menu = the parts of this page** (owner's choice, overrides the brief's 18-section
+  menu): ಮುಖ್ಯ ಕಥನಗಳು, ಪ್ರದರ್ಶನ, ಪೋಸ್ಟರ್, ಮುಖ್ಯಾಂಶಗಳು, ವಿಡಿಯೊ, ಫೋಟೊ ಕಥನಗಳು, each jumping to
+  its section (`PAGE_NAV` in each data file). All fit in the bar on desktop; phones swipe the
+  bar, and the menu button opens a panel with search and the same links. A part that isn't
+  on the page drops out of the menu. There is no "All sections" list before the footer and
+  no section links in the footer (owner's request); `SECTIONS` now only labels the stories
+  in the data file.
 - Featured carousel stories come from the **"karunadotsava-top" collection** on
   prajavani.net (`COLLECTIONS.top` in `js/data.js`), read live each time the page opens: headline,
   subheadline, byline, section, hero image (via images.prajavani.net) and link to the story.
@@ -161,6 +165,13 @@ Define them as CSS custom properties in one place.
 - Videos → Prajavani's YouTube channel (prajavani.net has no video page). The addresses are
   `seeAll…` in `UI` in `js/data.js`.
 
+## Footer
+
+- The newspaper's logo links to its home page (prajavani.net / deccanherald.com).
+- "ಆರಂಭದ ದೃಶ್ಯ ಮತ್ತೆ ನೋಡಿ" (watch the opening again) in the bottom row reloads the page with
+  `?intro`, which plays the opening animation (owner's request). The `<head>` script then
+  takes `?intro` back out of the address.
+
 ## Exhibition
 
 - `EVENT` in each data file, shown right after the carousel on both pages: the
@@ -186,6 +197,12 @@ Define them as CSS custom properties in one place.
   keep clear of the top and bottom strips WhatsApp covers. The Karunadotsava mark is
   large; the Prajavani logo is small, in a dark red "made at prajavani.net/rajyotsava" pill
   (owner's choice: readers write their own words, so the brand is a credit).
+- The photo opens filling the poster; the size slider zooms in, or out until the whole photo
+  fits (a landscape photo at full width), on deep red, and it can be dragged (owner's request).
+- A disclaimer at the end of the maker's form (`posterDisclaimer`): the tool only makes the
+  poster; readers are responsible for the photo, words and how the poster is used, not the
+  newspaper (owner's request).
+- The section heading names all three tabs ("ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು, ನಿಮ್ಮ ಸಮುದಾಯ").
 - Drawn on a canvas entirely in the browser. **The photo is never
   uploaded.** Keep it that way, and keep the privacy note accurate.
 - Colours on the canvas are read from the CSS tokens. Don't hard-code them in JS.
@@ -205,8 +222,8 @@ Define them as CSS custom properties in one place.
 
 - **Opening animation (owner's choice):** once a day per reader (India time, remembered in the
   browser's localStorage, so a hard refresh doesn't replay it), and only on the home page: never
-  when the page opens on a "See all" list (`#all/…`). `REPLAY_ON_REFRESH` in the `<head>` script
-  replays it on every refresh for review; set it to `false` before launch.
+  when the page opens on a "See all" list (`#all/…`). To see it again, use the footer's "watch again"
+  link (`?intro`); there is no replay-on-refresh switch.
 - **Hosting (owner's setup):** a single `index.html` lives in the prajavani.net CMS; the JS and
   CSS files are hosted on Cloudflare. So: one page only (no extra HTML pages; new screens are
   views inside `index.html`), and keep it light: load heavy data only when the reader asks
@@ -217,7 +234,7 @@ Define them as CSS custom properties in one place.
   ```
   index.html
   css/styles.css
-  js/data.js      ← menu sections, carousel slides, cards (edit content here)
+  js/data.js      ← page menu, carousel slides, cards (edit content here)
   js/main.js      ← menu, carousel, rendering
   assets/logo, assets/fonts, assets/images
   README.md

@@ -11,14 +11,14 @@ Open `index.html` in a browser. There's no build step.
 `index-en.html` is the same special in English, under the Deccan Herald name. It shares the styles and scripts with the Kannada page; only its content file differs.
 
 - **Change text or content:** `js/data-en.js` (menu, stories, archive, poster maker, opening).
-- **Left out** compared with the Kannada page: the quotes banner, the videos, the photo stories and the section list at the end of the page (the "All sections" tiles and the footer links).
+- **Left out** compared with the Kannada page: the quotes banner, the videos and the photo stories.
 - **Added:** "From the archives", moments in Karnataka's story as DH reported them (`ARCHIVE` in `js/data-en.js`).
-- **Menu:** links go to the matching sections on deccanherald.com.
+- **Menu:** like the Kannada page, it jumps to the parts of the page (`PAGE_NAV`), with "Archives" in place of videos and photo stories.
 - **Look:** DH's typefaces (Playfair Display for headlines, Roboto Slab for text, as on deccanherald.com) with the same Rajyotsava red and yellow. The page sets `data-brand="dh"` on `<html>`, which switches the fonts in `css/styles.css`.
 
 ## Opening animation
 
-A short flight into the screen (about 11 seconds) plays once a day (India time) before the site appears, on the home page only: a shared "See all" link (`#all/…`) opens straight on its list:
+A short flight into the screen (about 11 seconds) plays once a day (India time) before the site appears, on the home page only: a shared "See all" link (`#all/…`) opens straight on its list. Readers can play it again from "ಆರಂಭದ ದೃಶ್ಯ ಮತ್ತೆ ನೋಡಿ" in the footer (it opens the page with `?intro`). What plays:
 
 1. The camera flies past silhouettes of Kannada personalities, in history order. They alternate red and black, each with one feature highlighted in yellow, and sweep away to the left and right, each facing the way it goes.
 2. The Karnataka map, filled with the waving Kannada flag, flies in at the same speed and settles in front.
@@ -55,7 +55,7 @@ One quote runs each day. Each quote in `QUOTES` in `js/data.js` has the `date` i
 
 ## Poster maker
 
-Readers add a photo and write one line about their pride in Kannada and Karnataka ("ನನ್ನ ಹೆಮ್ಮೆ") their dream for its future ("ನನ್ನ ಕನಸು"), or about their community ("ನನ್ನ ಸಮುದಾಯ"), each a tab in the maker. The poster is tall (1080×1920), so it fits a WhatsApp status or Instagram story, and can also be sent in a chat. Sharing opens the phone's share menu (WhatsApp → "My status" or a chat); the reader's optional story and the site link go with it as the message. On computers it downloads instead. The photo never leaves the reader's device.
+Readers add a photo and write one line about their pride in Kannada and Karnataka ("ನನ್ನ ಹೆಮ್ಮೆ"), their dream for its future ("ನನ್ನ ಕನಸು"), or about their community ("ನನ್ನ ಸಮುದಾಯ"), each a tab in the maker. The poster is tall (1080×1920), so it fits a WhatsApp status or Instagram story, and can also be sent in a chat. Sharing opens the phone's share menu (WhatsApp → "My status" or a chat); the reader's optional story and the site link go with it as the message. On computers it downloads instead. The photo never leaves the reader's device. The size slider zooms the photo in, or out until all of it fits (landscape photos at full width). A note at the end of the maker says the reader, not the newspaper, is responsible for the poster and how it is used (`posterDisclaimer`).
 
 - **Prompts, suggestions, example posters and the address:** `POSTER` in `js/data.js`.
 - **Layout of the poster:** `js/poster.js`.
@@ -71,7 +71,6 @@ The opening and the quotes share one set of silhouettes. The source images are i
 
 ## Temporary / to replace before launch
 
-- [ ] **Opening replays on every refresh:** this is for review only. Set `REPLAY_ON_REFRESH` to `false` in the small script in the `<head>` of `index.html`, so readers see it once a day.
 - [ ] **Opening personalities:** Basavanna, Kempegowda, Onake Obavva, Kittur Rani Chennamma, Sir M. Visvesvaraya, Kuvempu and Dr Rajkumar. The list and the AI-made silhouettes need editorial approval.
 - [ ] **Collections (carousel and photo stories):** work only when the site is served from www.prajavani.net. If it will live elsewhere, the web team must allow it (a CORS header on the collection address).
 - [ ] **Videos:** the YouTube videos, Shorts and the Instagram Reel in `js/data.js` were picked to try the layout. Replace them with the final links.
@@ -87,5 +86,5 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **DH poster address:** `deccanherald.com/rajyotsava` is printed on English posters (`POSTER.address` in `js/data-en.js`); the web team needs to set it up.
 - [ ] **Exhibition (19 November):** the timings aren't announced yet, so the "Add to Google Calendar" entry is all-day. When they are, set `time` in `EVENT` (`js/data.js` and `js/data-en.js`), e.g. `{ label: "10 am to 7 pm", start: "10:00", end: "19:00" }`; the page and the calendar entry both pick it up. Also confirm the venue name ("Rangoli Metro Art Center, MG Road") and the wording.
 - [ ] **Karunadotsava mark:** `assets/hero/karunadotsava-pv-720.webp` and `-dh-720.webp` are exported from `assets/Karunadothsava Fin logo PV-DH.ai` without the gold border and gradient plaque; the site's red goes behind them. If the design team updates the .ai, they need re-exporting.
-- [ ] **Exhibition road test (`exhibition-road.html`):** a stand-alone phone test of the "ಕರುನಾಡಿನ ಹಾದಿ" walk-through, not linked from the site yet. It uses the site's stylesheet (fonts, colours, masthead and Karunadotsava mark), but the five pages are drawn placeholders with sample write-ups, the one-line captions on the decade arches (`DECADES`, e.g. "ಕರ್ನಾಟಕ ಎಂಬ ಹೆಸರು") are samples for the editorial team to replace, and its content, scene styles and script sit inside the page rather than in `js/data.js`, `css/styles.css` and `js/main.js`. The ⚙ test option (swipe up or down to move ahead) is for review only. Once the choices are made, move it into the shared files properly and add the English edition.
+- [ ] **Exhibition road test (`exhibition-road.html`):** a stand-alone phone test of the "ಕರುನಾಡಿನ ಹಾದಿ" walk-through, not linked from the site yet. It uses the site's stylesheet (fonts, colours, masthead and Karunadotsava mark), but the pages are drawn placeholders: five have sample write-ups (`FEATURED`) and 45 are dummy filler (`DUMMY`, made-up topics and dates) to try the road with about 50 entries, all to be replaced with the real list. Its content, scene styles and script sit inside the page rather than in `js/data.js`, `css/styles.css` and `js/main.js`. The ⚙ test option (swipe up or down to move ahead) is for review only. Once the choices are made, move it into the shared files properly and add the English edition.
 - [ ] **Prajavani logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg`. Same caveat: needs the internet, and depends on that link staying up.

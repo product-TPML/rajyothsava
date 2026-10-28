@@ -18,9 +18,14 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const sectionsById = Object.fromEntries(SECTIONS.map((section) => [section.id, section]));
 
-  const pad = (n) => String(n).padStart(2, "0");
+  /*
+   * Each block runs only on pages that have it: the English (DH) edition leaves out
+   * the quotes, videos and photo stories, and adds the archive.
+   */
+  const has = (id) => document.getElementById(id) !== null;
   const format = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => values[key]);
-  const sectionHref = (section) => section.href || `#section-${section.id}`;
+  // Stories in the data file link to their section where it has a page, else the newspaper's home page.
+  const sectionHref = (section) => section.href || UI.headerActionUrl;
 
   /* Small element helper: el("a", { href: "#" }, "text", childNode) */
   function el(tag, attrs = {}, ...children) {
@@ -101,34 +106,18 @@
     }
   }
 
+  /* The top menu and the phone menu panel: links to the parts of this page that are on it. */
   function renderNavigation() {
-    document.getElementById("nav-list").append(
-      ...SECTIONS.map((section) =>
-        el(
-          "li",
-          { class: section.primary ? "site-nav__item" : "site-nav__item site-nav__item--secondary" },
-          el(
-            "a",
-            {
-              class: "site-nav__link",
-              href: sectionHref(section),
-              "aria-current": section.id === "home" ? "page" : false,
-            },
-            section.name
-          )
-        )
-      )
-    );
-
-    document.getElementById("menu-panel-list").append(
-      ...SECTIONS.map((section) => el("li", {}, el("a", { class: "menu-panel__link", href: sectionHref(section) }, section.name)))
-    );
+    const parts = PAGE_NAV.filter((part) => has(part.target));
+    const links = (className) => parts.map((part) => el("li", {}, el("a", { class: className, href: `#${part.target}` }, part.label)));
+    document.getElementById("nav-list").append(...links("site-nav__link"));
+    document.getElementById("menu-panel-list").append(...links("menu-panel__link"));
   }
 
-  function renderFooterLinks() {
-    document.getElementById("footer-links").append(
-      ...SECTIONS.map((section) => el("li", {}, el("a", { href: sectionHref(section) }, section.name)))
-    );
+  /* Takes a part off the page, and its links out of the menus. */
+  function removeSection(id) {
+    document.getElementById(id).remove();
+    document.querySelectorAll(`a[href="#${id}"]`).forEach((link) => link.closest("li").remove());
   }
 
   /* Stories from the data file (SLIDES, HIGHLIGHTS) in the same shape as collection stories. */
@@ -379,21 +368,6 @@
 
     window.addEventListener("hashchange", route);
     route();
-  }
-
-  function renderDirectory() {
-    document.getElementById("directory-list").append(
-      ...SECTIONS.map((section, i) =>
-        el(
-          "li",
-          { class: "directory__tile", id: `section-${section.id}` },
-          el("span", { class: "directory__num", "aria-hidden": "true" }, pad(i + 1)),
-          el("span", { class: "directory__name" }, section.name),
-          el("span", { class: "directory__en", lang: "en" }, section.en),
-          el("span", { class: "directory__status" }, UI.comingSoon)
-        )
-      )
-    );
   }
 
   /* "From the archives": one clipping per moment, newest last. */
@@ -728,12 +702,6 @@
     show(0);
   }
 
-  /*
-   * Each block runs only on pages that have it: the English (DH) edition leaves out
-   * the quotes, videos, photo stories and section directory, and adds the archive.
-   */
-  const has = (id) => document.getElementById(id) !== null;
-
   applyText();
   renderNavigation();
   renderEvent();
@@ -741,8 +709,6 @@
   if (quotes.length) renderQuotes(quotes);
   else document.querySelector(".quotes")?.remove();
   if (has("archive-list")) renderArchive();
-  if (has("directory-list")) renderDirectory();
-  if (has("footer-links")) renderFooterLinks();
   renderCredits();
   setupSearch();
   setupMenu();
@@ -762,6 +728,6 @@
     // Left out when its collection can't be read.
     collectionStories(COLLECTIONS.photo, PHOTO_STORIES_SHOWN)
       .catch(() => [])
-      .then((stories) => (stories.length ? renderPhotoStories(stories) : document.getElementById("photo-stories").remove()));
+      .then((stories) => (stories.length ? renderPhotoStories(stories) : removeSection("photo-stories")));
   }
 })();

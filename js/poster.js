@@ -79,14 +79,29 @@
 
   /* ---------- Drawing ---------- */
 
-  /* The photo covers the whole poster; without one, a deep red placeholder. */
+  /* Deep red, behind a photo zoomed out smaller than the poster, or in place of one. */
+  function drawBackdrop(ctx) {
+    const fill = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+    fill.addColorStop(0, token("red-dark"));
+    fill.addColorStop(1, token("red-deep"));
+    ctx.fillStyle = fill;
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  }
+
+  /* How far a photo can zoom out: until all of it fits (a landscape photo, its full width). */
+  function fitZoom(image) {
+    const across = WIDTH / image.width;
+    const down = HEIGHT / image.height;
+    return Math.min(across, down) / Math.max(across, down);
+  }
+
+  /*
+   * The photo: zoom 1 covers the whole poster; below 1 it shrinks towards fitting whole,
+   * on the deep red. Without a photo, the red with a placeholder.
+   */
   function drawPhoto(ctx, poster) {
+    drawBackdrop(ctx);
     if (!poster.image) {
-      const fill = ctx.createLinearGradient(0, 0, 0, HEIGHT);
-      fill.addColorStop(0, token("red-dark"));
-      fill.addColorStop(1, token("red-deep"));
-      ctx.fillStyle = fill;
-      ctx.fillRect(0, 0, WIDTH, HEIGHT);
       ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
       ctx.font = font(600, 48, TEXT);
       ctx.textAlign = "center";
@@ -98,9 +113,9 @@
     const scale = Math.max(WIDTH / image.width, HEIGHT / image.height) * poster.zoom;
     const w = image.width * scale;
     const h = image.height * scale;
-    // Keep the photo covering the poster however it is dragged.
-    poster.offsetX = clamp(poster.offsetX, (w - WIDTH) / 2);
-    poster.offsetY = clamp(poster.offsetY, (h - HEIGHT) / 2);
+    // Larger than the poster, it can't be dragged to show a gap; smaller, it stays inside.
+    poster.offsetX = clamp(poster.offsetX, Math.abs(w - WIDTH) / 2);
+    poster.offsetY = clamp(poster.offsetY, Math.abs(h - HEIGHT) / 2);
     ctx.drawImage(image, (WIDTH - w) / 2 + poster.offsetX, (HEIGHT - h) / 2 + poster.offsetY, w, h);
   }
 
@@ -263,6 +278,7 @@
     state.zoom = 1;
     state.offsetX = 0;
     state.offsetY = 0;
+    zoomInput.min = String(fitZoom(state.image));
     zoomInput.value = "1";
     photoOnly.forEach((node) => {
       node.hidden = false; // the size slider and drag hint only make sense once there is a photo

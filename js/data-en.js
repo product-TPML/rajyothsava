@@ -14,9 +14,8 @@ const UI = {
   searchUrl: "https://www.deccanherald.com/search",
   byline: "By {author}",
   headerActionUrl: "https://www.deccanherald.com/",
-  navLabel: "Main sections",
-  menuButton: "More",
-  menuTitle: "All sections",
+  navLabel: "On this page",
+  menuTitle: "On this page",
   menuClose: "Close",
 
   featuredTitle: "Top stories",
@@ -25,7 +24,7 @@ const UI = {
   slideOf: "{n} / {total}",
 
   posterEyebrow: "Your Rajyotsava poster",
-  posterTitle: "Your pride, your dream",
+  posterTitle: "Your pride, your dream, your community",
   posterLead: "Add your photo and write what makes you proud of Kannada and Karnataka, your dream for its future, or about your community. Your poster is ready for WhatsApp status.",
   posterStart: "Make a poster",
   posterPrivacy: "Your photo is never uploaded or stored. The poster is made on your device.",
@@ -41,6 +40,8 @@ const UI = {
   posterNamePlaceholder: "e.g. Suma, Mandya",
   posterStory: "Add a story (optional)",
   posterStoryHint: "This goes with the poster as a message when you share it.",
+  posterDisclaimer:
+    "This tool is only for creating a poster. You are responsible for the photo and words you add and for how the poster is used. Deccan Herald is not responsible for it.",
   posterHint: "Drag the photo to adjust it.",
   posterDownload: "Download",
   posterShare: "Share",
@@ -67,22 +68,33 @@ const UI = {
     "stories of the state's pride, people and heritage.",
   footerCreditsTitle: "Photo credits (Wikimedia Commons)",
   footerCopyright: "© 2026 Deccan Herald",
+  openingReplay: "Watch the opening again",
   footerDraftNote: "This is a draft. It needs review before publishing.",
 };
 
 /*
- * Menu sections, in menu order. Each links to its section on deccanherald.com.
- * primary: true → shown in the desktop menu bar; the rest sit under "More".
+ * The top menu: the parts of this page, in page order. target → the section's id.
+ */
+const PAGE_NAV = [
+  { label: "Top stories", target: "featured" },
+  { label: "Exhibition", target: "event" },
+  { label: "Poster", target: "poster" },
+  { label: "Highlights", target: "highlights" },
+  { label: "Archives", target: "archive" },
+];
+
+/*
+ * Newspaper sections, for the label on each story in this file (SLIDES, HIGHLIGHTS:
+ * section = an id here). Each story links to its section on deccanherald.com.
  */
 const SECTIONS = [
-  { id: "home", name: "Home", primary: true, href: "#top" },
-  { id: "karnataka", name: "Karnataka", primary: true, href: "https://www.deccanherald.com/india/karnataka" },
-  { id: "bengaluru", name: "Bengaluru", primary: true, href: "https://www.deccanherald.com/top-bengaluru-news" },
-  { id: "india", name: "India", primary: true, href: "https://www.deccanherald.com/india" },
-  { id: "world", name: "World", primary: true, href: "https://www.deccanherald.com/world" },
-  { id: "business", name: "Business", primary: true, href: "https://www.deccanherald.com/top-business-news" },
-  { id: "opinion", name: "Opinion", primary: true, href: "https://www.deccanherald.com/opinion" },
-  { id: "sports", name: "Sports", primary: true, href: "https://www.deccanherald.com/top-sports-news" },
+  { id: "karnataka", name: "Karnataka", href: "https://www.deccanherald.com/india/karnataka" },
+  { id: "bengaluru", name: "Bengaluru", href: "https://www.deccanherald.com/top-bengaluru-news" },
+  { id: "india", name: "India", href: "https://www.deccanherald.com/india" },
+  { id: "world", name: "World", href: "https://www.deccanherald.com/world" },
+  { id: "business", name: "Business", href: "https://www.deccanherald.com/top-business-news" },
+  { id: "opinion", name: "Opinion", href: "https://www.deccanherald.com/opinion" },
+  { id: "sports", name: "Sports", href: "https://www.deccanherald.com/top-sports-news" },
   { id: "entertainment", name: "Entertainment", href: "https://www.deccanherald.com/entertainment" },
   { id: "technology", name: "Technology", href: "https://www.deccanherald.com/technology" },
   { id: "education", name: "Education", href: "https://www.deccanherald.com/education" },

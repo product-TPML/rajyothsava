@@ -588,41 +588,10 @@ button {
   outline-offset: -3px;
 }
 
-.site-nav__link[aria-current="page"] {
-  border-bottom-color: var(--yellow);
-}
-
-.site-nav__more {
-  display: none;
-  flex: none;
-  align-items: center;
-  gap: var(--space-2);
-  padding-inline: var(--space-4);
-  border: 0;
-  background: var(--red-deep);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  transition: background-color var(--duration);
-}
-
-.site-nav__more:hover {
-  background: var(--red);
-}
-
-@media (min-width: 768px) {
-  .site-nav__more {
-    display: flex;
-  }
-}
-
 @media (min-width: 1024px) {
   .site-nav__list {
     overflow: visible;
     mask-image: none;
-  }
-
-  .site-nav__item--secondary {
-    display: none;
   }
 
   .site-nav__link {
@@ -630,7 +599,7 @@ button {
   }
 }
 
-/* ---------- Menu panel (all 18 sections) ---------- */
+/* ---------- Menu panel (phones: search and the parts of the page) ---------- */
 
 .menu-panel {
   inset: 0 0 0 auto;
@@ -1358,6 +1327,12 @@ button {
 .field__note {
   font-size: 0.8125rem;
   color: var(--ink-muted);
+}
+
+/* The poster maker's disclaimer, set apart at the end of the form. */
+.studio__disclaimer {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
 }
 
 .field__row {
@@ -2115,81 +2090,6 @@ span.pager__step {
   }
 }
 
-/* ---------- Section directory ---------- */
-
-.directory {
-  padding-block: var(--space-7);
-  background: var(--paper);
-}
-
-.directory__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3);
-}
-
-.directory__tile {
-  display: flex;
-  flex-direction: column;
-  min-height: 128px;
-  padding: var(--space-4);
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--red);
-  border-radius: var(--radius);
-  transition: background-color var(--duration), border-color var(--duration);
-}
-
-/* Highlights the tile a menu link just jumped to. */
-.directory__tile:target {
-  background: var(--yellow-soft);
-  border-top-color: var(--yellow);
-  box-shadow: var(--shadow);
-}
-
-.directory__num {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--red);
-  font-variant-numeric: tabular-nums;
-}
-
-.directory__name {
-  margin-top: var(--space-2);
-  font-family: var(--font-headline);
-  font-size: 1.125rem;
-  line-height: 1.35;
-}
-
-.directory__en {
-  font-size: 0.8125rem;
-  color: var(--ink-muted);
-}
-
-.directory__status {
-  margin-top: auto;
-  padding-top: var(--space-3);
-  font-size: 0.75rem;
-  color: var(--ink-muted);
-}
-
-@media (min-width: 768px) {
-  .directory__grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-4);
-  }
-}
-
-@media (min-width: 1024px) {
-  .directory {
-    padding-block: var(--space-8);
-  }
-
-  .directory__grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
 /* ---------- From the archives (English edition) ---------- */
 
 /*
@@ -2319,21 +2219,9 @@ span.pager__step {
   margin-top: var(--space-4);
 }
 
-.site-footer__heading {
-  margin-bottom: var(--space-3);
-  font-size: 1rem;
-  color: var(--yellow);
-}
-
-.site-footer__links {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-1) var(--space-4);
-}
-
-.site-footer__links a {
+/* The logo leads back to the newspaper's home page. */
+.site-footer__home {
   display: inline-block;
-  padding-block: var(--space-1);
 }
 
 .site-footer__credits {
@@ -2366,10 +2254,6 @@ span.pager__step {
 }
 
 @media (min-width: 768px) {
-  .site-footer__links {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .site-footer__credits ul {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2380,10 +2264,6 @@ span.pager__step {
     grid-template-columns: 1fr 1.6fr;
     gap: var(--space-7) var(--space-8);
     padding-block: var(--space-8) var(--space-7);
-  }
-
-  .site-footer__links {
-    grid-template-columns: repeat(4, 1fr);
   }
 
   .site-footer__credits {
