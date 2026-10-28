@@ -284,8 +284,9 @@ Define them as CSS custom properties in one place.
     `index-en.html` with their `css/`, `js/` and `assets/` links rewritten by
     `python tools/build-cms.py` following `cms/hosting.json`. Regenerate them after any
     change to either page or to `hosting.json`; never edit them by hand.
-  - `css/` and `js/` are served by **Cloudflare Pages** from this repository (`_headers` lets
-    the CMS pages load them cross-site). `hosting.json` `scripts` is its address.
+  - `css/` and `js/` are served by **Cloudflare Pages** from this repository, at
+    https://rajyothsava.pages.dev/ (`_headers` lets the CMS pages load them cross-site;
+    every push to `main` redeploys). `hosting.json` `scripts` is its address.
   - **Every image goes in the CMS media gallery** (owner's decision); `hosting.json` `media`
     maps each `assets/` image to its gallery address. Until an image is uploaded, the CMS
     page takes it from Cloudflare. Scripts use no local image paths: the poster draws the

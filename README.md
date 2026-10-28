@@ -10,7 +10,7 @@ Open `index.html` in a browser. There's no build step.
 ## Hosting
 
 - **The live pages are in the CMS.** Paste `cms/index.cms.html` into the prajavani.net CMS page and `cms/index-en.cms.html` into the deccanherald.com one. They're made by `python tools/build-cms.py`; run it again after any change to `index.html`, `index-en.html` or `cms/hosting.json`, and paste again.
-- **Cloudflare Pages** serves the scripts and stylesheet: connect this GitHub repository, with no build command and the repository root as the output. Then put its address in `cms/hosting.json` (`scripts`; it says `https://rajyotsava.pages.dev/` until then) and run the build tool.
+- **Cloudflare Pages** serves the scripts and stylesheet: connect this GitHub repository, with no build command and the repository root as the output. It's connected at **https://rajyothsava.pages.dev/** (`scripts` in `cms/hosting.json`); every push updates it.
 - **Images** go in the CMS media gallery: upload each file listed under `media` in `cms/hosting.json`, paste its gallery address next to it, and run the build tool. Until then the CMS pages take them from Cloudflare.
 - **Fonts** load from the files prajavani.net and deccanherald.com use themselves.
 - **Vercel** is for a test copy with live data: import this GitHub repository (no build). `vercel.json` passes the collection and video-list requests on to prajavani.net and deccanherald.com, so both pages work fully at the Vercel address.
@@ -100,7 +100,6 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Photo stories:** "karunadotsava-photo" needs its final picks (the section shows the first 5).
 - [ ] **Draft note:** the footer says "ಇದು ಮಾದರಿ ಕರಡು. ಪ್ರಕಟಣೆಗೆ ಮುನ್ನ ಪರಿಶೀಲನೆ ಅಗತ್ಯ." (`footerDraftNote`); remove it at launch.
 - [ ] **Images to the CMS media gallery:** upload every image listed in `cms/hosting.json` (the Karunadotsava marks for PV and DH, the favicon, the Facebook QR code, and later the poster example photos), add each gallery address there, run `python tools/build-cms.py` and paste the CMS pages again.
-- [ ] **Cloudflare address:** after connecting Cloudflare Pages, put its real address in `cms/hosting.json` (`scripts`) and rebuild the CMS pages.
 - [ ] **Poster example photos:** the three example posters on the page have no photo (the Wikimedia photos were removed with their credits). Add three Prajavani-owned photos to `assets/` and set each sample's `photo` in `POSTER.samples` (`js/data.js`, `js/data-en.js`).
 - [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
 - [ ] **DH logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg`. The page needs an internet connection to show it; if that link is ever removed, the logo disappears.
