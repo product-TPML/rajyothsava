@@ -37,14 +37,29 @@ body {
   padding: calc(env(safe-area-inset-top, 0px) + 4px) var(--gutter-r) 4px var(--gutter-l);
 }
 .bar .brand { margin-right: auto; }
-.year {
-  font-family: var(--font-headline);
-  font-size: 26px; font-weight: 600; line-height: 1;
-  font-variant-numeric: tabular-nums; letter-spacing: .02em;
+/* Year as a split-flap calendar: one card per digit, each card in two halves.
+   A changing digit's top half folds down (leaf) to reveal the new digit. */
+.year { display: flex; gap: 3px; }
+.flip {
+  --flip-h: 34px;
+  position: relative; width: 21px; height: var(--flip-h);
+  perspective: 160px;
+  font: 600 24px/var(--flip-h) var(--font-headline); color: var(--ink);
+  text-align: center; font-variant-numeric: tabular-nums;
 }
-.year::after {
-  content: ""; display: block; height: 3px; margin-top: 4px;
-  background: var(--yellow); border-radius: 2px;
+.flip-half {
+  position: absolute; left: 0; right: 0; height: 50%; overflow: hidden;
+  backface-visibility: hidden;
+}
+.flip-half > span { display: block; height: var(--flip-h); }
+.flip-top { top: 0; transform-origin: bottom; border-radius: 4px 4px 0 0; background: var(--white); }
+.flip-bottom { bottom: 0; transform-origin: top; border-radius: 0 0 4px 4px; background: var(--paper); }
+.flip-bottom > span { margin-top: calc(var(--flip-h) / -2); }
+.flip-leaf { visibility: hidden; }
+/* The hinge line across the middle of each card. */
+.flip::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px;
+  background: rgb(0 0 0 / 22%);
 }
 .bar .icon-button, .viewer .icon-button {
   flex: none; border: 1px solid rgb(255 255 255 / 45%); font-size: 18px; line-height: 1;
@@ -108,13 +123,14 @@ body {
 
 .stone {
   position: absolute; left: 0; top: 0;
-  width: 90px; height: 120px; box-sizing: border-box;
+  width: 110px; height: 140px; box-sizing: border-box;
   transform-origin: 0 0;
-  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px;
-  border-radius: 45px 45px 6px 6px;
-  background: linear-gradient(var(--yellow) 0 40%, var(--white) 40%);
+  display: flex; align-items: center; justify-content: center; padding-top: 44px;
+  border-radius: 55px 55px 6px 6px;
+  background: linear-gradient(var(--yellow) 0 34%, var(--white) 34%);
   box-shadow: inset 0 -8px 0 rgba(0, 0, 0, .1), 0 4px 8px rgba(0, 0, 0, .22);
-  color: var(--ink); font: 600 25px/1 var(--font-text); font-variant-numeric: tabular-nums;
+  color: var(--ink); font: 600 40px/1 var(--font-headline); font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
 }
 /* Decade arch over the road, like a town's welcome arch, with a mango-leaf thorana under the board. */
 .arch {
@@ -301,7 +317,8 @@ body {
       <img class="brand__mark" src="assets/hero/karunadotsava-pv-720.webp" alt="ಪ್ರಜಾವಾಣಿ ಕರುನಾಡೋತ್ಸವ: ಮುಖಪುಟಕ್ಕೆ" width="720" height="236">
     </a>
   </h1>
-  <div class="year" id="year" aria-live="polite">1956</div>
+  <div class="year" id="year" aria-hidden="true"></div>
+  <span class="visually-hidden" id="yearSpoken" aria-live="polite"></span>
   <button class="icon-button" id="testsBtn" type="button" aria-label="Test options" aria-expanded="false">⚙</button>
 </header>
 
@@ -433,7 +450,7 @@ const DECADES = [
 const S = 2.6, D = 3, R = 1.6;
 const ROAD_HALF = 0.42, DASH = 1.2;
 // Sizes in world units; base is the CSS width each element is drawn at.
-const STONE = { x: 0.47, w: 0.18, h: 0.24, base: 90 };
+const STONE = { x: 0.47, w: 0.22, h: 0.28, base: 110 };
 const ARCH = { w: 1.4, h: 2, base: 560 };
 const PAPER_W = 400;
 const Y0 = ENTRIES[0].year, Y1 = ENTRIES[ENTRIES.length - 1].year;
@@ -667,6 +684,45 @@ function drawScene(c, t) {
   });
 }
 
+// Header year: four split-flap cards. Only digits that change flip; a new change
+// mid-flip cuts the old one short, so fast trips flutter like a real flip board.
+const FLIP_MS = 260;
+const flaps = [0, 1, 2, 3].map(() => {
+  const el = document.createElement("span");
+  el.className = "flip";
+  el.innerHTML = ["flip-top", "flip-bottom", "flip-top flip-leaf", "flip-bottom flip-leaf"]
+    .map(c => `<span class="flip-half ${c}"><span></span></span>`).join("");
+  $("year").appendChild(el);
+  const [top, bottom, leafTop, leafBottom] = [...el.children].map(h => ({ half: h, text: h.firstChild }));
+  return { top, bottom, leafTop, leafBottom, digit: null, anims: [] };
+});
+function setDigit(f, digit) {
+  if (f.digit === digit) return;
+  const old = f.digit ?? digit;
+  f.digit = digit;
+  f.anims.forEach(a => a.cancel());
+  // Behind the leaves: new digit on top, old digit below until the lower leaf covers it.
+  f.top.text.textContent = digit;
+  f.bottom.text.textContent = old;
+  f.leafTop.text.textContent = old;
+  f.leafBottom.text.textContent = digit;
+  const settle = () => {
+    f.bottom.text.textContent = digit;
+    f.leafTop.half.style.visibility = f.leafBottom.half.style.visibility = "";
+  };
+  if (old === digit || reduceMotion.matches) { settle(); return; }
+  f.leafTop.half.style.visibility = f.leafBottom.half.style.visibility = "visible";
+  const half = FLIP_MS / 2;
+  f.anims = [
+    f.leafTop.half.animate([{ transform: "rotateX(0)" }, { transform: "rotateX(-90deg)" }],
+      { duration: half, easing: "ease-in", fill: "forwards" }),
+    f.leafBottom.half.animate([{ transform: "rotateX(90deg)" }, { transform: "rotateX(0)" }],
+      { duration: half, delay: half, easing: "ease-out", fill: "both" })
+  ];
+  f.anims[1].onfinish = () => { if (f.digit === digit) settle(); };
+}
+const setYear = year => String(year).split("").forEach((d, i) => setDigit(flaps[i], d));
+
 function place(item, c, xOffset, worldW, worldH, baseW) {
   const o = visibility(item.z - c.z);
   item.el.style.visibility = o ? "visible" : "hidden";
@@ -687,7 +743,7 @@ function render() {
   pages.forEach(p => place(p, c, 0, 1, R, PAPER_W));
   stones.forEach(s => place(s, c, STONE.x, STONE.w, STONE.h, STONE.base));
   arches.forEach(a => place(a, c, 0, ARCH.w, ARCH.h, ARCH.base));
-  $("year").textContent = moving ? Math.ceil(lookYear - 1e-6) : ENTRIES[cur].year;
+  setYear(moving ? Math.ceil(lookYear - 1e-6) : ENTRIES[cur].year);
 }
 
 // Trip timing: pulls away from a page quickly and settles gently onto the next one.
@@ -771,6 +827,7 @@ function fillText() {
   $("nextBtn").disabled = cur === ENTRIES.length - 1;
   dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
   $("mapFill").style.width = `${ageOf(e.year) * 100}%`;
+  $("yearSpoken").textContent = e.year;
 }
 
 // Story sheet: tap the bar, or swipe it up and down.
