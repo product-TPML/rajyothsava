@@ -8,7 +8,7 @@
 /* Interface text. Elements in index-en.html with data-text="key" receive these. */
 const UI = {
   skipLink: "Skip to main content",
-  headerAction: "DH home",
+  headerAction: "Back to Deccan Herald home", // the header's logo-and-home-icon link: its name and hover text
   searchLabel: "Search Deccan Herald",
   searchPlaceholder: "Search Deccan Herald",
   searchUrl: "https://www.deccanherald.com/search",
@@ -16,6 +16,7 @@ const UI = {
   headerActionUrl: "https://www.deccanherald.com/",
   navLabel: "On this page",
   menuTitle: "On this page",
+  menuHome: "Back to home", // after the newspaper's logo, at the foot of the menu panel
   menuButton: "Menu",
   menuClose: "Close",
 
@@ -83,10 +84,10 @@ const UI = {
 };
 
 /*
- * The menus: the parts of this page, in page order. target → the section's id.
+ * The menus: the parts of this page, in page order. target → the section's id;
+ * icon → from ICONS in js/main.js, beside the link in the phone menu panel.
  * Phones also get a bar fixed to the bottom of the screen with the parts that have
- * short (the label there) and icon (from ICONS in js/main.js), then the menu button:
- * keep it to four.
+ * short (the label there), then the menu button: keep it to four.
  */
 const PAGE_NAV = [
   { label: "Top stories", short: "Home", icon: "home", target: "featured" },

@@ -81,7 +81,10 @@
           <img class="brand__mark" src="https://images.assettype.com/prajavani/2026-10-28/o7l4g50l/karunadotsava-dh-720.webp" alt="Deccan Herald Karunadothsava" width="720" height="232">
         </a>
       </h1>
-      <a class="masthead__action" data-text="headerAction" data-href="headerActionUrl"></a>
+      <a class="masthead__action" data-href="headerActionUrl" data-label="headerAction" data-title="headerAction">
+        <img class="masthead__logo" src="https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg" alt="" width="78" height="68">
+        <svg class="icon masthead__home" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z"/></svg>
+      </a>
       <button class="icon-button masthead__menu" type="button" aria-haspopup="dialog" aria-controls="menu-panel" data-label="menuTitle">
         <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -96,8 +99,10 @@
 
   <dialog class="menu-panel" id="menu-panel" aria-labelledby="menu-panel-title">
     <div class="menu-panel__inner">
+      <!-- The Karunadotsava mark on red, as in the page header; the title names the panel for screen readers. -->
       <div class="menu-panel__header">
-        <h2 class="menu-panel__title" id="menu-panel-title" data-text="menuTitle"></h2>
+        <img class="menu-panel__mark" src="https://images.assettype.com/prajavani/2026-10-28/o7l4g50l/karunadotsava-dh-720.webp" alt="Deccan Herald Karunadothsava" width="720" height="232" loading="lazy">
+        <h2 class="visually-hidden" id="menu-panel-title" data-text="menuTitle"></h2>
         <button class="icon-button menu-panel__close" type="button" data-label="menuClose">
           <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
@@ -113,6 +118,11 @@
         </form>
       </div>
       <ul class="menu-panel__list" id="menu-panel-list"></ul>
+      <!-- Back to the newspaper's home page, at the foot of the panel, with its logo. -->
+      <a class="menu-panel__home" data-href="headerActionUrl">
+        <img class="menu-panel__logo" src="https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg" alt="Deccan Herald" width="78" height="68" loading="lazy">
+        <span class="menu-panel__home-text"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z"/></svg><span data-text="menuHome"></span></span>
+      </a>
     </div>
   </dialog>
 

@@ -8,8 +8,9 @@
   const AUTOPLAY_MS = 6000;
   const SWIPE_PX = 40;
   const COLLECTION_TIMEOUT_MS = 5000;
-  const TOP_STORIES = 20; // read from the top collection, for the stories section
+  const TOP_STORIES = 20; // read from the top collection
   const CAROUSEL_STORIES = 10; // the first of those, in the desk's order, for the carousel
+  const HIGHLIGHTS_SHOWN = 8; // the newest of them in the stories section: three full rows on desktop (lead and one, then three and three); "See all" for the rest
   const PHOTO_STORIES_SHOWN = 5; // one large and four small fill the grid evenly
   const FACTS_SHOWN = 6; // fills two or three columns evenly
   const ARCHIVE_SHOWN = 6; // the same
@@ -88,7 +89,7 @@
     );
 
   /* data-text="key" fills an element's text from UI; these fill an attribute instead. */
-  const ATTRIBUTE_BINDINGS = { label: "aria-label", href: "href", action: "action", placeholder: "placeholder", alt: "alt" };
+  const ATTRIBUTE_BINDINGS = { label: "aria-label", title: "title", href: "href", action: "action", placeholder: "placeholder", alt: "alt" };
 
   function applyText() {
     document.querySelectorAll("[data-text]").forEach((node) => {
@@ -101,13 +102,15 @@
     }
   }
 
-  /* Line icons drawn in the shared .icon style: the phone's bottom bar (PAGE_NAV icon) and the reel links. */
+  /* Line icons drawn in the shared .icon style: the phone's menus (PAGE_NAV icon) and the reel links. */
   const ICONS = {
     home: '<path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z"/>',
     camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
     news: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/>',
     play: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/>',
     archive: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v11h14V9M10 13h4"/>',
+    photo: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-8 8"/>',
+    bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
     instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
   };
 
@@ -119,14 +122,19 @@
 
   /*
    * The menus, linking to the parts of this page that are on it: the top bar, the
-   * phone menu panel, and the phone's bottom bar (the parts with a short label, before
-   * its menu button).
+   * phone menu panel (each with its icon), and the phone's bottom bar (the parts with
+   * a short label, before its menu button).
    */
   function renderNavigation() {
     const parts = PAGE_NAV.filter((part) => has(part.target));
-    const links = (className) => parts.map((part) => el("li", {}, el("a", { class: className, href: `#${part.target}` }, part.label)));
-    document.getElementById("nav-list").append(...links("site-nav__link"));
-    document.getElementById("menu-panel-list").append(...links("menu-panel__link"));
+    document.getElementById("nav-list").append(
+      ...parts.map((part) => el("li", {}, el("a", { class: "site-nav__link", href: `#${part.target}` }, part.label)))
+    );
+    document.getElementById("menu-panel-list").append(
+      ...parts.map((part) =>
+        el("li", {}, el("a", { class: "menu-panel__link", href: `#${part.target}` }, icon(part.icon, "menu-panel__icon"), part.label))
+      )
+    );
     document.getElementById("bottom-nav-list").prepend(
       ...parts
         .filter((part) => part.short)
@@ -186,14 +194,14 @@
 
   /*
    * The top collection feeds the carousel (its first stories, in the desk's order) and
-   * the stories section (all that are read, newest first). It can only be read from the
+   * the stories section (the newest of those read). It can only be read from the
    * newspaper's own site; elsewhere (or offline) both come back empty.
    */
   async function topStories() {
     const stories = await collectionStories(COLLECTIONS.top, TOP_STORIES).catch(() => []);
     return {
       slides: stories.slice(0, CAROUSEL_STORIES),
-      highlights: newestFirst(stories),
+      highlights: newestFirst(stories).slice(0, HIGHLIGHTS_SHOWN),
     };
   }
 

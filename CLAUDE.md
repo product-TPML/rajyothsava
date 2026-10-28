@@ -105,8 +105,9 @@ Define them as CSS custom properties in one place.
   (owner's choice); stories without one show no summary, and if no carousel story has one,
   the line under the carousel is left out.
   The same collection feeds both: the carousel takes its **first 10 stories in the desk's
-  order**; the stories section below ("ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು") takes its **first 20, sorted
-  newest first by publish time**, ignoring the collection order (owner's choice). Reading
+  order**; the stories section below ("ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು") shows the **newest 8 of its first
+  20 by publish time**, ignoring the collection order: three rows on desktop, then "See all"
+  for the whole collection (owner's choice). Reading
   it only works when the site is served from www.prajavani.net (the browser blocks it from
   other addresses). The English page does the same with DH's **"karunadothsava-stories"**
   collection on deccanherald.com (owner's choice).
@@ -130,8 +131,15 @@ Define them as CSS custom properties in one place.
   `https://www.deccanherald.com/search?q=…` for the English one (owner's choice). It is a
   plain HTML form (`method="get"`, input `name="q"`); the address is `UI.searchUrl`
   in each data file.
-- The link back to the newspaper's home page (`UI.headerAction`) is a quiet
-  white text link in the masthead, not a button (owner's choice).
+- The link back to the newspaper's home page is a quiet white link in the masthead, not a
+  button (owner's choice): the newspaper's white logo (the same file as the footer's), a thin
+  rule, then a home icon; its name and hover text are `UI.headerAction` ("ಪ್ರಜಾವಾಣಿ
+  ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ" / "Back to Deccan Herald home"). Desktop only. On phones the same link
+  is a red bar at the foot of the menu panel: the white logo, a rule, a home icon and
+  `UI.menuHome` ("ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ" / "Back to home") (owner's request).
+- The phone menu panel opens with the Karunadotsava mark on site red (as the page header) and
+  a white close button; its title "ಈ ಪುಟದಲ್ಲಿ" is kept for screen readers only. Each section
+  link has its icon (`icon` in `PAGE_NAV`) (owner's requests).
 
 ## Quotes (Kannada page)
 

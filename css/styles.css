@@ -468,11 +468,12 @@ button {
   height: 52px;
 }
 
-/* A quiet text link back to the newspaper's home page. */
+/* A quiet link back to the newspaper's home page: its white logo, a thin rule, a home icon. */
 .masthead__action {
   display: none;
   flex: none;
   align-items: center;
+  gap: var(--space-3);
   min-height: 44px;
   font-size: 0.875rem;
   color: var(--white);
@@ -486,6 +487,19 @@ button {
 .masthead__action:hover {
   opacity: 1;
   text-decoration-color: currentColor;
+}
+
+.masthead__logo {
+  width: auto;
+  height: calc(22px * var(--logo-scale));
+}
+
+.masthead__home {
+  box-sizing: content-box;
+  width: 20px;
+  height: 20px;
+  padding-left: var(--space-3);
+  border-left: 1px solid rgb(255 255 255 / 45%);
 }
 
 /* Phones open the menu panel from here; wider screens from the nav bar. */
@@ -674,21 +688,24 @@ button {
   min-height: 100%;
 }
 
+/* The Karunadotsava mark on site red, as in the page header, with a white close button. */
 .menu-panel__header {
+  --focus-ring: var(--yellow);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-5);
-  border-top: 4px solid var(--red);
-  border-bottom: 1px solid var(--line);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
+  background: var(--red);
+  color: var(--white);
 }
 
-.menu-panel__title {
-  font-size: 1.25rem;
+.menu-panel__mark {
+  width: auto;
+  height: 52px;
 }
 
 .menu-panel__close:hover {
-  background: var(--paper);
+  background: var(--red-dark);
 }
 
 .menu-panel__list {
@@ -698,9 +715,46 @@ button {
   padding: var(--space-3) var(--space-5) var(--space-6);
 }
 
+/* Back to the newspaper's home page: a red bar at the foot of the panel, its white logo, a rule, home. */
+.menu-panel__home {
+  --focus-ring: var(--yellow);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: auto;
+  padding: var(--space-4) var(--space-5);
+  background: var(--red);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.menu-panel__logo {
+  width: auto;
+  height: calc(26px * var(--logo-scale));
+}
+
+.menu-panel__home-text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-left: var(--space-4);
+  border-left: 1px solid rgb(255 255 255 / 45%);
+}
+
+.menu-panel__home-text .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-panel__home:hover .menu-panel__home-text span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .menu-panel__link {
   display: flex;
   align-items: center;
+  gap: var(--space-3);
   min-height: 52px;
   border-bottom: 1px solid var(--line);
   font-weight: 600;
@@ -710,6 +764,16 @@ button {
 .menu-panel__link:hover,
 .menu-panel__link[aria-current] {
   color: var(--red);
+}
+
+.menu-panel__icon {
+  display: flex;
+  color: var(--red);
+}
+
+.menu-panel__icon .icon {
+  width: 20px;
+  height: 20px;
 }
 
 /* ---------- Bottom bar (phones) ---------- */

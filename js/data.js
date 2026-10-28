@@ -8,7 +8,7 @@
 /* Interface text. Elements in index.html with data-text="key" receive these. */
 const UI = {
   skipLink: "ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ತೆರಳಿ",
-  headerAction: "ಪ್ರಜಾವಾಣಿ ಮುಖಪುಟ",
+  headerAction: "ಪ್ರಜಾವಾಣಿ ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ", // the header's logo-and-home-icon link: its name and hover text
   searchLabel: "ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ಹುಡುಕಿ",
   searchPlaceholder: "ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ಹುಡುಕಿ",
   searchUrl: "https://www.prajavani.net/search",
@@ -16,6 +16,7 @@ const UI = {
   headerActionUrl: "https://www.prajavani.net/",
   navLabel: "ಈ ಪುಟದಲ್ಲಿ",
   menuTitle: "ಈ ಪುಟದಲ್ಲಿ",
+  menuHome: "ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ", // after the newspaper's logo, at the foot of the menu panel
   menuButton: "ಮೆನು",
   menuClose: "ಮುಚ್ಚಿ",
 
@@ -107,18 +108,18 @@ const UI = {
 };
 
 /*
- * The menus: the parts of this page, in page order. target → the section's id.
+ * The menus: the parts of this page, in page order. target → the section's id;
+ * icon → from ICONS in js/main.js, beside the link in the phone menu panel.
  * Phones also get a bar fixed to the bottom of the screen with the parts that have
- * short (the label there) and icon (from ICONS in js/main.js), then the menu button:
- * keep it to four.
+ * short (the label there), then the menu button: keep it to four.
  */
 const PAGE_NAV = [
   { label: "ಮುಖ್ಯ ಕಥನಗಳು", short: "ಮುಖಪುಟ", icon: "home", target: "featured" },
   { label: "ಪೋಸ್ಟರ್", short: "ಪೋಸ್ಟರ್", icon: "camera", target: "poster" },
   { label: "ಮುಖ್ಯಾಂಶಗಳು", short: "ಸುದ್ದಿ", icon: "news", target: "highlights" },
   { label: "ವಿಡಿಯೊ", short: "ವಿಡಿಯೊ", icon: "play", target: "videos" },
-  { label: "ಫೋಟೊ ಕಥನಗಳು", target: "photo-stories" },
-  { label: "ಕುತೂಹಲ", target: "facts" },
+  { label: "ಫೋಟೊ ಕಥನಗಳು", icon: "photo", target: "photo-stories" },
+  { label: "ಕುತೂಹಲ", icon: "bulb", target: "facts" },
 ];
 
 /*
