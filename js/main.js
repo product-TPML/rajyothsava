@@ -106,12 +106,53 @@
     }
   }
 
-  /* The top menu and the phone menu panel: links to the parts of this page that are on it. */
+  /* Line icons for the phone's bottom bar (PAGE_NAV icon), drawn in the shared .icon style. */
+  const ICONS = {
+    home: '<path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z"/>',
+    camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+    news: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/>',
+    play: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/>',
+    archive: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v11h14V9M10 13h4"/>',
+  };
+
+  function icon(name) {
+    const holder = el("span", { class: "bottom-nav__icon", "aria-hidden": "true" });
+    holder.innerHTML = `<svg class="icon" viewBox="0 0 24 24">${ICONS[name]}</svg>`;
+    return holder;
+  }
+
+  /*
+   * The menus, linking to the parts of this page that are on it: the top bar, the
+   * phone menu panel, and the phone's bottom bar (the parts with a short label, before
+   * its menu button).
+   */
   function renderNavigation() {
     const parts = PAGE_NAV.filter((part) => has(part.target));
     const links = (className) => parts.map((part) => el("li", {}, el("a", { class: className, href: `#${part.target}` }, part.label)));
     document.getElementById("nav-list").append(...links("site-nav__link"));
     document.getElementById("menu-panel-list").append(...links("menu-panel__link"));
+    document.getElementById("bottom-nav-list").prepend(
+      ...parts
+        .filter((part) => part.short)
+        .map((part) => el("li", {}, el("a", { class: "bottom-nav__link", href: `#${part.target}` }, icon(part.icon), el("span", {}, part.short))))
+    );
+  }
+
+  /* Marks the menu links of the part being read (aria-current) as the reader scrolls. */
+  function setupScrollSpy() {
+    const links = document.querySelectorAll(".site-nav__link, .menu-panel__link, .bottom-nav__link");
+    const watcher = new IntersectionObserver(
+      (entries) => {
+        const reading = entries.find((entry) => entry.isIntersecting);
+        if (!reading) return;
+        links.forEach((link) => {
+          if (link.hash === `#${reading.target.id}`) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" } // a thin band across the middle of the screen
+    );
+    PAGE_NAV.forEach((part) => has(part.target) && watcher.observe(document.getElementById(part.target)));
   }
 
   /* Takes a part off the page, and its links out of the menus. */
@@ -712,6 +753,7 @@
   renderCredits();
   setupSearch();
   setupMenu();
+  setupScrollSpy();
   if (has("all-stories")) setupAllStories();
   // The carousel waits for its stories; its height is fixed, so nothing below it moves.
   topStories().then(({ slides, highlights }) => {

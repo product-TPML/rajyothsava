@@ -86,9 +86,15 @@ Define them as CSS custom properties in one place.
 - Header on phone: the logo is centred or left-aligned with a menu button. Keep it
   compact (≤64px tall) and make it stick on scroll if that doesn't hide content.
 - **Top menu = the parts of this page** (owner's choice, overrides the brief's 18-section
-  menu): ಮುಖ್ಯ ಕಥನಗಳು, ಪ್ರದರ್ಶನ, ಪೋಸ್ಟರ್, ಮುಖ್ಯಾಂಶಗಳು, ವಿಡಿಯೊ, ಫೋಟೊ ಕಥನಗಳು, each jumping to
+  menu): ಮುಖ್ಯ ಕಥನಗಳು, ಪೋಸ್ಟರ್, ಮುಖ್ಯಾಂಶಗಳು, ವಿಡಿಯೊ, ಫೋಟೊ ಕಥನಗಳು (no exhibition: its card
+  sits right under the carousel; owner's choice), each jumping to
   its section (`PAGE_NAV` in each data file). All fit in the bar on desktop; phones swipe the
-  bar, and the menu button opens a panel with search and the same links. A part that isn't
+  bar, and the menu button opens a panel with search and the same links.
+  **Phones also get a bottom bar** (owner's request): four icon links, ಮುಖಪುಟ, ಪೋಸ್ಟರ್,
+  ಸುದ್ದಿ, ವಿಡಿಯೊ (English: Home, Poster, Latest, Archives; the parts in `PAGE_NAV` with
+  `short` and `icon`), then "ಮೆನು" on the right, which opens the menu panel, because the
+  masthead's menu button scrolls away (owner's request). The
+  link for the part being read is marked in every menu as the reader scrolls. A part that isn't
   on the page drops out of the menu. There is no "All sections" list before the footer and
   no section links in the footer (owner's request); `SECTIONS` now only labels the stories
   in the data file.
@@ -203,6 +209,10 @@ Define them as CSS custom properties in one place.
   poster; readers are responsible for the photo, words and how the poster is used, not the
   newspaper (owner's request).
 - The section heading names all three tabs ("ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು, ನಿಮ್ಮ ಸಮುದಾಯ").
+- The floating "make your poster" button copies the Dasara site's greeting button (owner's
+  reference, `FE Experiments/Dasara`): a gold pill with a passing shine, a soft pulse and a
+  nudge of the icon; it shrinks to the icon after a little scrolling and fades out over the
+  poster section and on "See all" lists. On phones it sits just above the bottom bar.
 - Drawn on a canvas entirely in the browser. **The photo is never
   uploaded.** Keep it that way, and keep the privacy note accurate.
 - Colours on the canvas are read from the CSS tokens. Don't hard-code them in JS.

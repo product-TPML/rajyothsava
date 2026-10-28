@@ -14,6 +14,7 @@ const UI = {
   headerActionUrl: "https://www.prajavani.net/",
   navLabel: "ಈ ಪುಟದಲ್ಲಿ",
   menuTitle: "ಈ ಪುಟದಲ್ಲಿ",
+  menuButton: "ಮೆನು",
   menuClose: "ಮುಚ್ಚಿ",
 
   featuredTitle: "ಮುಖ್ಯ ಕಥನಗಳು",
@@ -92,16 +93,18 @@ const UI = {
 };
 
 /*
- * The top menu: the parts of this page, in page order. target → the section's id.
+ * The menus: the parts of this page, in page order. target → the section's id.
+ * Phones also get a bar fixed to the bottom of the screen with the parts that have
+ * short (the label there) and icon (from ICONS in js/main.js), then the menu button:
+ * keep it to four.
  * A part that isn't on the page (photo stories when their collection can't be read)
- * drops out of the menu too.
+ * drops out of the menus too.
  */
 const PAGE_NAV = [
-  { label: "ಮುಖ್ಯ ಕಥನಗಳು", target: "featured" },
-  { label: "ಪ್ರದರ್ಶನ", target: "event" },
-  { label: "ಪೋಸ್ಟರ್", target: "poster" },
-  { label: "ಮುಖ್ಯಾಂಶಗಳು", target: "highlights" },
-  { label: "ವಿಡಿಯೊ", target: "videos" },
+  { label: "ಮುಖ್ಯ ಕಥನಗಳು", short: "ಮುಖಪುಟ", icon: "home", target: "featured" },
+  { label: "ಪೋಸ್ಟರ್", short: "ಪೋಸ್ಟರ್", icon: "camera", target: "poster" },
+  { label: "ಮುಖ್ಯಾಂಶಗಳು", short: "ಸುದ್ದಿ", icon: "news", target: "highlights" },
+  { label: "ವಿಡಿಯೊ", short: "ವಿಡಿಯೊ", icon: "play", target: "videos" },
   { label: "ಫೋಟೊ ಕಥನಗಳು", target: "photo-stories" },
 ];
 
@@ -502,13 +505,14 @@ const POSTER = {
  * banner opens on today's quote; the back arrow steps through earlier days. Quotes
  * whose day hasn't come stay hidden, and until the first date the banner is left out.
  * art names the speaker's silhouette in js/silhouette-art.js (see OPENING below).
- * PLACEHOLDER: the editorial team will send all 30 quotes; these four hold the place.
+ * PLACEHOLDER: the editorial team will send all 30 quotes; these four hold the place,
+ * dated so they show during review (the last one is "today" on 28 October).
  */
 const QUOTES = [
-  { date: "2026-11-01", text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗು ನೀ ಕನ್ನಡವಾಗಿರು", by: "ಕುವೆಂಪು", art: "kuvempu" },
-  { date: "2026-11-02", text: "ದಯವಿಲ್ಲದ ಧರ್ಮವದೇವುದಯ್ಯಾ? ದಯವೇ ಬೇಕು ಸಕಲ ಪ್ರಾಣಿಗಳೆಲ್ಲರಲ್ಲಿ", by: "ಬಸವಣ್ಣ", art: "basavanna" },
-  { date: "2026-11-03", text: "ಕೈಗಾರಿಕೀಕರಣ ಇಲ್ಲವೇ ವಿನಾಶ", by: "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ", art: "visvesvaraya" },
-  { date: "2026-11-04", text: "ಅಭಿಮಾನಿಗಳೇ ನಮ್ಮನೆ ದೇವರು", by: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
+  { date: "2026-10-25", text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗು ನೀ ಕನ್ನಡವಾಗಿರು", by: "ಕುವೆಂಪು", art: "kuvempu" },
+  { date: "2026-10-26", text: "ದಯವಿಲ್ಲದ ಧರ್ಮವದೇವುದಯ್ಯಾ? ದಯವೇ ಬೇಕು ಸಕಲ ಪ್ರಾಣಿಗಳೆಲ್ಲರಲ್ಲಿ", by: "ಬಸವಣ್ಣ", art: "basavanna" },
+  { date: "2026-10-27", text: "ಕೈಗಾರಿಕೀಕರಣ ಇಲ್ಲವೇ ವಿನಾಶ", by: "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ", art: "visvesvaraya" },
+  { date: "2026-10-28", text: "ಅಭಿಮಾನಿಗಳೇ ನಮ್ಮನೆ ದೇವರು", by: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
 ];
 
 /*

@@ -16,6 +16,7 @@ const UI = {
   headerActionUrl: "https://www.deccanherald.com/",
   navLabel: "On this page",
   menuTitle: "On this page",
+  menuButton: "Menu",
   menuClose: "Close",
 
   featuredTitle: "Top stories",
@@ -73,14 +74,16 @@ const UI = {
 };
 
 /*
- * The top menu: the parts of this page, in page order. target → the section's id.
+ * The menus: the parts of this page, in page order. target → the section's id.
+ * Phones also get a bar fixed to the bottom of the screen with the parts that have
+ * short (the label there) and icon (from ICONS in js/main.js), then the menu button:
+ * keep it to four.
  */
 const PAGE_NAV = [
-  { label: "Top stories", target: "featured" },
-  { label: "Exhibition", target: "event" },
-  { label: "Poster", target: "poster" },
-  { label: "Highlights", target: "highlights" },
-  { label: "Archives", target: "archive" },
+  { label: "Top stories", short: "Home", icon: "home", target: "featured" },
+  { label: "Poster", short: "Poster", icon: "camera", target: "poster" },
+  { label: "Highlights", short: "Latest", icon: "news", target: "highlights" },
+  { label: "Archives", short: "Archives", icon: "archive", target: "archive" },
 ];
 
 /*

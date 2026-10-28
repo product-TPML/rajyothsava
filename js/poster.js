@@ -19,6 +19,7 @@
   const MAX_LINES = 3;
   const MOVE_STEP = 24; // canvas pixels per arrow-key press
   const ZOOM_STEP = 0.1;
+  const CTA_COMPACT_AFTER_PX = 240; // the floating button keeps its label for the first bit of scrolling
 
   const root = document.getElementById("poster");
   const samples = document.getElementById("poster-samples");
@@ -487,11 +488,15 @@
   downloadButton.addEventListener("click", download);
   shareButton.addEventListener("click", share);
 
-  // The floating "make your poster" button hides while the teaser is on screen.
+  // The floating "make your poster" button fades out while the teaser is on screen,
+  // and shrinks to its icon once the reader has scrolled a little.
   const cta = document.querySelector(".poster-cta");
   new IntersectionObserver(([entry]) => {
-    cta.hidden = entry.isIntersecting;
+    cta.classList.toggle("is-hidden", entry.isIntersecting);
   }).observe(root);
+  const compactCta = () => cta.classList.toggle("is-compact", scrollY > CTA_COMPACT_AFTER_PX);
+  addEventListener("scroll", compactCta, { passive: true });
+  compactCta();
 
   // The examples are drawn shortly before they scroll into view, so their photos aren't loaded up front.
   const sampleWatcher = new IntersectionObserver(

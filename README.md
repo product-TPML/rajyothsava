@@ -4,6 +4,7 @@ Open `index.html` in a browser. There's no build step.
 
 - **Change text or content:** `js/data.js`. This covers menus, stories, photos, quotes, the poster maker and the opening animation.
 - **Styles:** `css/styles.css`. It's written mobile first, with every colour defined once at the top.
+- **Menus:** the top menu jumps to the parts of the page (`PAGE_NAV` in `js/data.js`). On phones a bar at the bottom of the screen has the four most used, ಮುಖಪುಟ, ಪೋಸ್ಟರ್, ಸುದ್ದಿ, ವಿಡಿಯೊ, then "ಮೆನು", which opens the full menu with search. The one being read lights up as you scroll.
 - **Test with the live collections:** run `python tools/preview-server.py` and open http://localhost:8123/. Opened directly, the page can't read the prajavani.net collections (see below), so the carousel shows its sample stories and the photo stories are left out. This test server fetches the collections for the page. It's for testing only and isn't needed on the live site.
 
 ## English edition (Deccan Herald)
@@ -13,7 +14,7 @@ Open `index.html` in a browser. There's no build step.
 - **Change text or content:** `js/data-en.js` (menu, stories, archive, poster maker, opening).
 - **Left out** compared with the Kannada page: the quotes banner, the videos and the photo stories.
 - **Added:** "From the archives", moments in Karnataka's story as DH reported them (`ARCHIVE` in `js/data-en.js`).
-- **Menu:** like the Kannada page, it jumps to the parts of the page (`PAGE_NAV`), with "Archives" in place of videos and photo stories.
+- **Menu:** like the Kannada page, it jumps to the parts of the page (`PAGE_NAV`), with "Archives" in place of videos and photo stories. The phone's bottom bar has Home, Poster, Latest, Archives and Menu.
 - **Look:** DH's typefaces (Playfair Display for headlines, Roboto Slab for text, as on deccanherald.com) with the same Rajyotsava red and yellow. The page sets `data-brand="dh"` on `<html>`, which switches the fonts in `css/styles.css`.
 
 ## Opening animation
@@ -74,7 +75,7 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Opening personalities:** Basavanna, Kempegowda, Onake Obavva, Kittur Rani Chennamma, Sir M. Visvesvaraya, Kuvempu and Dr Rajkumar. The list and the AI-made silhouettes need editorial approval.
 - [ ] **Collections (carousel and photo stories):** work only when the site is served from www.prajavani.net. If it will live elsewhere, the web team must allow it (a CORS header on the collection address).
 - [ ] **Videos:** the YouTube videos, Shorts and the Instagram Reel in `js/data.js` were picked to try the layout. Replace them with the final links.
-- [ ] **Quotes:** the four in the file (1–4 November) are placeholders. The editorial team will send all 30, one per day; each needs its date and a silhouette.
+- [ ] **Quotes:** the four in the file are placeholders, dated 25–28 October so they show during review. The editorial team will send all 30, one per day; each needs its date and a silhouette.
 - [ ] **Poster address:** `prajavani.net/rajyotsava` is printed on every poster and sent with it. The web team needs to set it up to point to this site, or tell us the real address (`POSTER.address` in `js/data.js`).
 - [ ] **Poster wording:** the headings, prompts, suggestions and the example posters' lines and names (made up for illustration) need editorial approval.
 - [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
