@@ -467,14 +467,6 @@
     document.getElementById("archive-more").hidden = stories.length <= ARCHIVE_SHOWN;
   }
 
-  function renderCredits() {
-    document.getElementById("credits-list").append(
-      ...Object.values(IMAGES).map(({ alt, credit }) =>
-        el("li", {}, el("a", { href: credit.source }, alt), `: ${credit.author}, ${credit.license}`)
-      )
-    );
-  }
-
   /*
    * A video link from YouTube or Instagram, as the editors paste it:
    * { kind: "youtube" | "instagram", id, link, upright }. upright → a YouTube Short or an
@@ -927,7 +919,6 @@
   const quotes = has("quotes-list") ? quotesRunSoFar() : [];
   if (quotes.length) renderQuotes(quotes);
   else document.querySelector(".quotes")?.remove();
-  renderCredits();
   setupSearch();
   setupMenu();
   setupScrollSpy();

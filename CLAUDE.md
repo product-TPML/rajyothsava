@@ -29,28 +29,25 @@ file adds the owner's decisions on top of it. If the two disagree, this file win
 
 ## Brand assets (taken from prajavani.net)
 
-Stored locally in `assets/`, except the two brand logos, which the owner asked to load
-from their published links (the same ones the Dasara site uses).
+Images in `assets/` for development; **at launch every image is uploaded to the CMS media
+gallery** and its address put in `cms/hosting.json` (owner's decision; see Hosting). The two
+brand logos already load from their published links (the same ones the Dasara site uses),
+and the fonts from the live sites.
 
 | Asset | File | Notes |
 |---|---|---|
 | Prajavani logo | `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg` | White ಪ್ರಜಾವಾಣಿ wordmark with Nandi and tagline (SVG, 1327×319). Linked, not downloaded (owner's choice). |
 | Deccan Herald logo | `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg` | White DH letters, Nandi and "DECCAN HERALD", stacked (SVG, 78×68). Used by the English edition. |
 | Karunadotsava mark | `assets/hero/karunadotsava-pv-720.webp`, `assets/hero/karunadotsava-dh-720.webp` | The final event logo from `assets/Karunadothsava Fin logo PV-DH.ai` (supplied by the owner; page 1 DH, page 2 PV): Gandaberunda, newspaper logo and title in gold/white, exported from the .ai without its gold border and gradient plaque, on a transparent background (owner's choice), 720px wide. The header sits it on the site's own red (`--red`); the poster gives it a red box. Used in the masthead (as the whole home link), the opening's top bar and the top of the poster. Re-export from the .ai if the artwork changes; never redraw it. There is no separate hero section; the carousel follows the nav bar. |
-| Photos | `assets/images/` | Freely licensed Wikimedia Commons photos, credited in `js/data.js` and the footer. |
-| Headline font | `assets/fonts/PvHeadlineSemibold3.woff2` | Prajavani headline face, weight 600. Use for headlines, section titles and the carousel. |
-| Body font | `assets/fonts/PrajavaniTextRegular.woff2` | Weight 400. Use for body text, descriptions and menus. |
-| Body semibold | `assets/fonts/PrajavaniTextSemibold.woff2` | Weight 600. Use for category labels, buttons and emphasis. |
+| Headline font | `https://fea.assettype.com/tpml/assets/PvHeadlineSemibold3.woff2` | Prajavani headline face, weight 600: headlines, section titles, carousel. |
+| Body font | `https://fea.assettype.com/tpml/assets/PrajavaniTextRegular.woff2` | Weight 400: body text, descriptions, menus. |
+| Body semibold | `https://fea.assettype.com/tpml/assets/PrajavaniTextSemibold.woff2` | Weight 600: labels, buttons, emphasis. |
+| DH fonts | Google Fonts files deccanherald.com uses | Playfair Display 400/700, Roboto Slab 400/700 (`data-brand="dh"`). |
 
-Font setup (prajavani.net uses the same pattern):
-
-```css
-@font-face { font-family: "PvHeadline"; src: url("assets/fonts/PvHeadlineSemibold3.woff2") format("woff2"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "PvText"; src: url("assets/fonts/PrajavaniTextRegular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "PvText"; src: url("assets/fonts/PrajavaniTextSemibold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
---font-headline: "PvHeadline", "Noto Sans Kannada", serif;
---font-text: "PvText", "Noto Sans Kannada", system-ui, sans-serif;
-```
+**Fonts load from the live sites' own files** (owner's decision): the addresses prajavani.net
+and deccanherald.com use, open to any site (they send `Access-Control-Allow-Origin: *`), so
+they work on the CMS pages, on the test site and locally. The `@font-face` rules are at the
+top of `css/styles.css`; no font files are kept in the project.
 
 - Preload the headline font, because it appears above the fold.
 - The linked logos are the white versions, so use them only on dark or red backgrounds
@@ -281,10 +278,27 @@ Define them as CSS custom properties in one place.
   browser's localStorage, so a hard refresh doesn't replay it), and only on the home page: never
   when the page opens on a "See all" list (`#all/…`). To see it again, use the footer's "watch again"
   link (`?intro`); there is no replay-on-refresh switch.
-- **Hosting (owner's setup):** a single `index.html` lives in the prajavani.net CMS; the JS and
-  CSS files are hosted on Cloudflare. So: one page only (no extra HTML pages; new screens are
-  views inside `index.html`), and keep it light: load heavy data only when the reader asks
-  for it.
+- **Hosting (owner's setup), as on the Dasara site:**
+  - The pages live in the CMS: `cms/index.cms.html` in the prajavani.net CMS and
+    `cms/index-en.cms.html` in the deccanherald.com CMS. They are `index.html` and
+    `index-en.html` with their `css/`, `js/` and `assets/` links rewritten by
+    `python tools/build-cms.py` following `cms/hosting.json`. Regenerate them after any
+    change to either page or to `hosting.json`; never edit them by hand.
+  - `css/` and `js/` are served by **Cloudflare Pages** from this repository (`_headers` lets
+    the CMS pages load them cross-site). `hosting.json` `scripts` is its address.
+  - **Every image goes in the CMS media gallery** (owner's decision); `hosting.json` `media`
+    maps each `assets/` image to its gallery address. Until an image is uploaded, the CMS
+    page takes it from Cloudflare. Scripts use no local image paths: the poster draws the
+    mark the page's header shows.
+  - **Vercel** hosts a test copy from the same repository: `vercel.json` passes
+    `/api/v1/collections/…` (DH's two slugs to deccanherald.com, the rest to prajavani.net)
+    and `/pages/karunadothsava-json` on to the live sites, so the test site reads live data.
+    `.vercelignore` leaves out tools and notes. If DH's collection slugs change, update
+    `vercel.json` too.
+  - The collections' address in both data files is relative (`/api/v1/collections/`): the
+    newspaper's own API on its site, a proxy everywhere else.
+  - One page only (no extra HTML pages; new screens are views inside the page), and keep it
+    light: load heavy data only when the reader asks for it.
 - No existing codebase, so use plain **HTML + CSS + vanilla JavaScript** with no
   frameworks and no build step. `index.html` must open directly in a browser.
 - Suggested layout:
@@ -293,7 +307,7 @@ Define them as CSS custom properties in one place.
   css/styles.css
   js/data.js      ← page menu, carousel slides, cards (edit content here)
   js/main.js      ← menu, carousel, rendering
-  assets/logo, assets/fonts, assets/images
+  assets/logo, assets/fonts
   README.md
   ```
 - Keep all content in `js/data.js`, never hard-coded across the HTML.

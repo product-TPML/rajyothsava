@@ -77,7 +77,6 @@ const UI = {
   footerAbout:
     "Deccan Herald is Karnataka's trusted English daily. This Rajyotsava special brings readers " +
     "stories of the state's pride, people and heritage.",
-  footerCreditsTitle: "Photo credits (Wikimedia Commons)",
   footerCopyright: "© 2026 Deccan Herald",
   openingReplay: "Watch the opening again",
   footerDraftNote: "This is a draft. It needs review before publishing.",
@@ -97,26 +96,6 @@ const PAGE_NAV = [
 ];
 
 /*
- * Photos for the poster maker's example posters. Each key matches files in
- * assets/images: <key>-640.webp and <key>-1280.webp.
- * All are from Wikimedia Commons under the licence shown. Credit is required.
- */
-const IMAGES = {
-  kudremukh: {
-    alt: "Green grassland ridges of Kudremukh",
-    credit: { author: "Dhruvaraj S", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Kudremukh_1.jpg" },
-  },
-  "dollu-kunitha": {
-    alt: "Dollu Kunitha artists dancing as they drum",
-    credit: { author: "Navaneeth Krishnan S", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Dollu_Kunitha_01.jpg" },
-  },
-  "dasara-lights": {
-    alt: "Mysuru Palace glowing in the Dasara lights",
-    credit: { author: "Ananth BS", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Dasara_Navaratri_Festival_Lights_Mysore_Palace_India.jpg" },
-  },
-};
-
-/*
  * Collections on deccanherald.com, read each time the page opens. The desk picks the
  * stories and their order there.
  * top     → its first 10 stories, in the desk's order, are the featured carousel; its
@@ -124,7 +103,9 @@ const IMAGES = {
  * archive → "From the archives", in the desk's order.
  */
 const COLLECTIONS = {
-  api: "https://www.deccanherald.com/api/v1/collections/",
+  // Relative: on deccanherald.com it is the site's own API; elsewhere a proxy answers it
+  // (tools/preview-server.py locally, vercel.json on the test site).
+  api: "/api/v1/collections/",
   imageHost: "https://images.assettype.com/",
   top: "karunadothsava-stories",
   archive: "karunadothsava-archives",
@@ -176,10 +157,12 @@ const EVENT = {
  * prompts  → the choices, one tab each; about says under the tabs what the choice means
  *            for Karunadothsava; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
- * samples  → the example posters on the page, with photos from IMAGES.
+ * samples  → the example posters on the page. photo (optional) → the address of a photo
+ *            the newspaper owns, from the CMS media gallery; without one, the poster
+ *            shows its red background. The Karunadotsava mark on posters is the one in
+ *            the page's header.
  *            PLACEHOLDER: the lines and names are made up for illustration.
  * camera   → which phone camera "Camera" opens ("user" = front, "environment" = back).
- * mark     → the Karunadotsava mark (newspaper logo + event title) at the top of the poster.
  * logo     → the brand logo in the poster's "made at" credit.
  * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
  */
@@ -208,15 +191,14 @@ const POSTER = {
     },
   },
   samples: [
-    { prompt: "dream", image: "kudremukh", line: "May the Western Ghats stay green forever", name: "Anita, Chikkamagaluru" },
-    { prompt: "community", image: "dollu-kunitha", line: "Our village youth keeping the dollu alive", name: "Ramesh, Shivamogga" },
-    { prompt: "pride", image: "dasara-lights", line: "Mysuru glowing in the Dasara lights", name: "Suma, Mysuru" },
+    { prompt: "dream", line: "May the Western Ghats stay green forever", name: "Anita, Chikkamagaluru" },
+    { prompt: "community", line: "Our village youth keeping the dollu alive", name: "Ramesh, Shivamogga" },
+    { prompt: "pride", line: "Mysuru glowing in the Dasara lights", name: "Suma, Mysuru" },
   ],
   lineMax: 90,
   camera: "user",
   placeholder: "Your photo",
   eventLine: "Rajyotsava · 1 November 2026",
-  mark: "assets/hero/karunadotsava-dh-720.webp",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg",
   credit: "Made at {address}",
   address: "deccanherald.com/rajyotsava",

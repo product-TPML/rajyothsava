@@ -1,0 +1,6 @@
+# The test site needs only the pages, css/, js/ and assets/.
+.claude
+tools
+cms
+*.md
+*.ai

@@ -5,7 +5,15 @@ Open `index.html` in a browser. There's no build step.
 - **Change text or content:** `js/data.js`. This covers menus, stories, photos, quotes, the poster maker and the opening animation.
 - **Styles:** `css/styles.css`. It's written mobile first, with every colour defined once at the top.
 - **Menus:** the top menu jumps to the parts of the page (`PAGE_NAV` in `js/data.js`). On phones a bar at the bottom of the screen has the four most used, ಮುಖಪುಟ, ಪೋಸ್ಟರ್, ಸುದ್ದಿ, ವಿಡಿಯೊ, then "ಮೆನು", which opens the full menu with search. The one being read lights up as you scroll.
-- **Test with the live collections:** run `python tools/preview-server.py` and open http://localhost:8123/. Opened directly, the pages can't read the prajavani.net or deccanherald.com collections (see below), so their story sections show "coming soon". This test server fetches the collections for both pages. It's for testing only and isn't needed on the live site.
+- **Test with the live collections:** run `python tools/preview-server.py` and open http://localhost:8123/ (or `/index-en.html`). Opened directly, the pages can't read the prajavani.net or deccanherald.com collections (see below), so their story sections show "coming soon". This test server fetches the collections and video list for both pages. It's for testing only and isn't needed on the live site.
+
+## Hosting
+
+- **The live pages are in the CMS.** Paste `cms/index.cms.html` into the prajavani.net CMS page and `cms/index-en.cms.html` into the deccanherald.com one. They're made by `python tools/build-cms.py`; run it again after any change to `index.html`, `index-en.html` or `cms/hosting.json`, and paste again.
+- **Cloudflare Pages** serves the scripts and stylesheet: connect this GitHub repository, with no build command and the repository root as the output. Then put its address in `cms/hosting.json` (`scripts`; it says `https://rajyotsava.pages.dev/` until then) and run the build tool.
+- **Images** go in the CMS media gallery: upload each file listed under `media` in `cms/hosting.json`, paste its gallery address next to it, and run the build tool. Until then the CMS pages take them from Cloudflare.
+- **Fonts** load from the files prajavani.net and deccanherald.com use themselves.
+- **Vercel** is for a test copy with live data: import this GitHub repository (no build). `vercel.json` passes the collection and video-list requests on to prajavani.net and deccanherald.com, so both pages work fully at the Vercel address.
 
 ## English edition (Deccan Herald)
 
@@ -91,6 +99,9 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Story collection:** "karunadotsava-top" has 5 stories; it can feed 10 to the carousel and 20 to the stories section. The line under the carousel and on the cards shows only a story's subheadline, so each story the desk adds needs one.
 - [ ] **Photo stories:** "karunadotsava-photo" needs its final picks (the section shows the first 5).
 - [ ] **Draft note:** the footer says "ಇದು ಮಾದರಿ ಕರಡು. ಪ್ರಕಟಣೆಗೆ ಮುನ್ನ ಪರಿಶೀಲನೆ ಅಗತ್ಯ." (`footerDraftNote`); remove it at launch.
+- [ ] **Images to the CMS media gallery:** upload every image listed in `cms/hosting.json` (the Karunadotsava marks for PV and DH, the favicon, the Facebook QR code, and later the poster example photos), add each gallery address there, run `python tools/build-cms.py` and paste the CMS pages again.
+- [ ] **Cloudflare address:** after connecting Cloudflare Pages, put its real address in `cms/hosting.json` (`scripts`) and rebuild the CMS pages.
+- [ ] **Poster example photos:** the three example posters on the page have no photo (the Wikimedia photos were removed with their credits). Add three Prajavani-owned photos to `assets/` and set each sample's `photo` in `POSTER.samples` (`js/data.js`, `js/data-en.js`).
 - [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
 - [ ] **DH logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg`. The page needs an internet connection to show it; if that link is ever removed, the logo disappears.
 - [ ] **Exhibition (19 November):** the timings aren't announced yet, so the "Add to Google Calendar" entry is all-day. When they are, set `time` in `EVENT` (`js/data.js` and `js/data-en.js`), e.g. `{ label: "10 am to 7 pm", start: "10:00", end: "19:00" }`; the page and the calendar entry both pick it up. Also confirm the venue name ("Rangoli Metro Art Center, MG Road") and the wording.

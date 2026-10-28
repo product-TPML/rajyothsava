@@ -1,0 +1,6 @@
+# Cloudflare Pages response headers.
+# The pages are served from the CMS (www.prajavani.net, www.deccanherald.com) and load the
+# scripts, stylesheet and any not-yet-uploaded images from here, cross-site.
+/*
+  Access-Control-Allow-Origin: *
+  Cross-Origin-Resource-Policy: cross-origin

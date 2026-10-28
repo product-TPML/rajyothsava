@@ -7,41 +7,57 @@
 
 /* ---------- Fonts ---------- */
 
-/* Prajavani's own typefaces. */
+/*
+ * Prajavani's own typefaces, from the files prajavani.net itself uses (fea.assettype.com,
+ * open to any site). Deccan Herald's are the Google Fonts files deccanherald.com uses.
+ */
 
 @font-face {
   font-family: "PvHeadline";
-  src: url("../assets/fonts/PvHeadlineSemibold3.woff2") format("woff2");
+  src: url("https://fea.assettype.com/tpml/assets/PvHeadlineSemibold3.woff2") format("woff2");
   font-weight: 600;
   font-display: swap;
 }
 
 @font-face {
   font-family: "PvText";
-  src: url("../assets/fonts/PrajavaniTextRegular.woff2") format("woff2");
+  src: url("https://fea.assettype.com/tpml/assets/PrajavaniTextRegular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
   font-family: "PvText";
-  src: url("../assets/fonts/PrajavaniTextSemibold.woff2") format("woff2");
+  src: url("https://fea.assettype.com/tpml/assets/PrajavaniTextSemibold.woff2") format("woff2");
   font-weight: 600;
   font-display: swap;
 }
 
-/* Deccan Herald's typefaces, as on deccanherald.com (Latin only, variable weight; SIL Open Font Licence). */
 @font-face {
   font-family: "Playfair Display";
-  src: url("../assets/fonts/PlayfairDisplay-latin.woff2") format("woff2");
-  font-weight: 600 700;
+  src: url("https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtPK-F2qC0s.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiunDXbtPK-F2qC0s.woff2") format("woff2");
+  font-weight: 700;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Roboto Slab";
-  src: url("../assets/fonts/RobotoSlab-latin.woff2") format("woff2");
-  font-weight: 400 600;
+  src: url("https://fonts.gstatic.com/s/robotoslab/v25/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmb2RjV9Su1cai.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto Slab";
+  src: url("https://fonts.gstatic.com/s/robotoslab/v25/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjoa4Omb2RjV9Su1cai.woff2") format("woff2");
+  font-weight: 700;
   font-display: swap;
 }
 
@@ -2700,22 +2716,6 @@ span.pager__step {
   display: inline-block;
 }
 
-.site-footer__credits {
-  font-size: 0.8125rem;
-}
-
-.site-footer__credits summary {
-  font-weight: 600;
-  color: var(--yellow);
-  cursor: pointer;
-}
-
-.site-footer__credits ul {
-  display: grid;
-  gap: var(--space-1) var(--space-6);
-  margin-top: var(--space-3);
-}
-
 .site-footer__bottom {
   background: var(--red-deep);
   font-size: 0.8125rem;
@@ -2729,21 +2729,9 @@ span.pager__step {
   padding-block: var(--space-4);
 }
 
-@media (min-width: 768px) {
-  .site-footer__credits ul {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (min-width: 1024px) {
   .site-footer__inner {
-    grid-template-columns: 1fr 1.6fr;
-    gap: var(--space-7) var(--space-8);
     padding-block: var(--space-8) var(--space-7);
-  }
-
-  .site-footer__credits {
-    grid-column: 1 / -1;
   }
 }
 

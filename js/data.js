@@ -101,7 +101,6 @@ const UI = {
 
   footerAbout:
     "ಪ್ರಜಾವಾಣಿ ಕನ್ನಡದ ವಿಶ್ವಾಸಾರ್ಹ ದಿನಪತ್ರಿಕೆ. ರಾಜ್ಯೋತ್ಸವದ ಈ ವಿಶೇಷ ತಾಣ ನಾಡಿನ ಹೆಮ್ಮೆಯ ಕಥನಗಳನ್ನು ಓದುಗರಿಗೆ ತಲುಪಿಸುತ್ತದೆ.",
-  footerCreditsTitle: "ಚಿತ್ರ ಮತ್ತು ವಿಡಿಯೊ ಕೃಪೆ (ವಿಕಿಮೀಡಿಯಾ ಕಾಮನ್ಸ್)",
   footerCopyright: "© 2026 ಪ್ರಜಾವಾಣಿ",
   openingReplay: "ಆರಂಭದ ದೃಶ್ಯ ಮತ್ತೆ ನೋಡಿ",
   footerDraftNote: "ಇದು ಮಾದರಿ ಕರಡು. ಪ್ರಕಟಣೆಗೆ ಮುನ್ನ ಪರಿಶೀಲನೆ ಅಗತ್ಯ.",
@@ -123,26 +122,6 @@ const PAGE_NAV = [
 ];
 
 /*
- * Photos for the poster maker's example posters. Each key matches files in
- * assets/images: <key>-640.webp and <key>-1280.webp.
- * All are from Wikimedia Commons under the licence shown. Credit is required.
- */
-const IMAGES = {
-  kudremukh: {
-    alt: "ಕುದುರೆಮುಖದ ಹಸಿರು ಹುಲ್ಲುಗಾವಲಿನ ಬೆಟ್ಟಸಾಲು",
-    credit: { author: "Dhruvaraj S", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Kudremukh_1.jpg" },
-  },
-  "dollu-kunitha": {
-    alt: "ಡೊಳ್ಳು ಬಾರಿಸುತ್ತಾ ಕುಣಿಯುತ್ತಿರುವ ಡೊಳ್ಳು ಕುಣಿತದ ಕಲಾವಿದರು",
-    credit: { author: "Navaneeth Krishnan S", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Dollu_Kunitha_01.jpg" },
-  },
-  "dasara-lights": {
-    alt: "ದಸರಾ ದೀಪಾಲಂಕಾರದಲ್ಲಿ ಬೆಳಗುತ್ತಿರುವ ಮೈಸೂರು ಅರಮನೆ",
-    credit: { author: "Ananth BS", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Dasara_Navaratri_Festival_Lights_Mysore_Palace_India.jpg" },
-  },
-};
-
-/*
  * Collections on prajavani.net, read each time the page opens. The desk picks the
  * stories and their order there.
  * top   → its first 10 stories, in the desk's order, are the featured carousel; its
@@ -151,7 +130,9 @@ const IMAGES = {
  * facts → interesting facts about Karnataka and Kannada, at the end of the page.
  */
 const COLLECTIONS = {
-  api: "https://www.prajavani.net/api/v1/collections/",
+  // Relative: on prajavani.net it is the site's own API; elsewhere a proxy answers it
+  // (tools/preview-server.py locally, vercel.json on the test site).
+  api: "/api/v1/collections/",
   imageHost: "https://images.prajavani.net/",
   top: "karunadotsava-top",
   photo: "karunadotsava-photo",
@@ -217,10 +198,12 @@ const VIDEO_FEED = "/pages/karunadothsava-json";
  * prompts  → the choices, one tab each; about says under the tabs what the choice means
  *            for Karunadotsava; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
- * samples  → the example posters on the page, with photos from IMAGES.
+ * samples  → the example posters on the page. photo (optional) → the address of a photo
+ *            the newspaper owns, from the CMS media gallery; without one, the poster
+ *            shows its red background. The Karunadotsava mark on posters is the one in
+ *            the page's header.
  *            PLACEHOLDER: the lines and names are made up for illustration.
  * camera   → which phone camera "ಕ್ಯಾಮೆರಾ" opens ("user" = front, "environment" = back).
- * mark     → the Karunadotsava mark (newspaper logo + event title) at the top of the poster.
  * logo     → the brand logo in the poster's "made at" credit.
  * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
  */
@@ -249,15 +232,14 @@ const POSTER = {
     },
   },
   samples: [
-    { prompt: "dream", image: "kudremukh", line: "ಪಶ್ಚಿಮ ಘಟ್ಟಗಳು ಎಂದೆಂದೂ ಹಸಿರಾಗಿರಲಿ", name: "ಅನಿತಾ, ಚಿಕ್ಕಮಗಳೂರು" },
-    { prompt: "community", image: "dollu-kunitha", line: "ಡೊಳ್ಳು ಕುಣಿತ ಉಳಿಸಿರುವ ನಮ್ಮೂರ ಯುವಕರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ" },
-    { prompt: "pride", image: "dasara-lights", line: "ದಸರೆಯ ಬೆಳಕಲ್ಲಿ ಮಿನುಗುವ ಮೈಸೂರು", name: "ಸುಮಾ, ಮೈಸೂರು" },
+    { prompt: "dream", line: "ಪಶ್ಚಿಮ ಘಟ್ಟಗಳು ಎಂದೆಂದೂ ಹಸಿರಾಗಿರಲಿ", name: "ಅನಿತಾ, ಚಿಕ್ಕಮಗಳೂರು" },
+    { prompt: "community", line: "ಡೊಳ್ಳು ಕುಣಿತ ಉಳಿಸಿರುವ ನಮ್ಮೂರ ಯುವಕರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ" },
+    { prompt: "pride", line: "ದಸರೆಯ ಬೆಳಕಲ್ಲಿ ಮಿನುಗುವ ಮೈಸೂರು", name: "ಸುಮಾ, ಮೈಸೂರು" },
   ],
   lineMax: 90,
   camera: "user",
   placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
   eventLine: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
-  mark: "assets/hero/karunadotsava-pv-720.webp",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg",
   credit: "{address} ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
   address: "prajavani.net/rajyotsava",

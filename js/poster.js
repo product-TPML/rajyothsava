@@ -74,7 +74,7 @@
   // Fonts and brand images must be ready before the first draw.
   const assets = Promise.all([
     loadImage(POSTER.logo),
-    loadImage(POSTER.mark),
+    loadImage(document.querySelector(".brand__mark").src), // the header's mark, so its address lives only in the page
     document.fonts.load(font(600, 48, HEADLINE)),
     document.fonts.load(font(400, 32, TEXT)),
     document.fonts.load(font(600, 32, TEXT)),
@@ -274,7 +274,7 @@
   /* The example posters on the page, at half size, drawn once they are about to scroll into view. */
   function drawSamples() {
     POSTER.samples.forEach(async (sample, i) => {
-      const image = await loadImage(`assets/images/${sample.image}-1280.webp`);
+      const image = sample.photo ? await loadImage(sample.photo) : null;
       drawPoster(samples.children[i], { ...sample, image, zoom: 1, offsetX: 0, offsetY: 0 });
     });
   }
