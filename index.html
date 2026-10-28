@@ -10,11 +10,17 @@
   <link rel="preload" href="assets/fonts/PvHeadlineSemibold3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/PrajavaniTextRegular.woff2" as="font" type="font/woff2" crossorigin>
   <script>
-    /* Opening animation: once per visit, never for readers who prefer reduced motion. Runs before first paint so the site doesn't flash. */
+    /*
+     * Opening animation: once a day (India time), on the home page only: never on a "See all"
+     * list (#all/…), nor for readers who prefer reduced motion. Runs before first paint so the
+     * site doesn't flash.
+     */
     const REPLAY_ON_REFRESH = true; // TEMPORARY for review: replays on every refresh. Set to false before launch.
     try {
-      if ((REPLAY_ON_REFRESH || !sessionStorage.getItem("pv-opening")) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        sessionStorage.setItem("pv-opening", "seen");
+      const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+      const onHome = !location.hash.startsWith("#all/");
+      if (onHome && (REPLAY_ON_REFRESH || localStorage.getItem("pv-opening") !== today) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        localStorage.setItem("pv-opening", today);
         document.documentElement.classList.add("has-opening");
       }
     } catch {}
@@ -320,6 +326,17 @@
       <div class="container">
         <h2 class="section-title" id="sections-title" data-text="sectionsTitle"></h2>
         <ol class="directory__grid" id="directory-list"></ol>
+      </div>
+    </section>
+
+    <!-- "See all": shown in place of everything above while the address is #all/<list>. -->
+    <section class="all-stories" id="all-stories" aria-labelledby="all-stories-title">
+      <div class="container">
+        <a class="all-stories__back" href="#top" data-text="allStoriesBack"></a>
+        <h2 class="section-title" id="all-stories-title"></h2>
+        <p class="all-stories__status" id="all-stories-status" aria-live="polite"></p>
+        <ul class="card-grid" id="all-stories-list"></ul>
+        <nav class="pager" id="all-stories-pager" data-label="pagerLabel"></nav>
       </div>
     </section>
   </main>

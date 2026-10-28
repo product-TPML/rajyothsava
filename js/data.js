@@ -64,10 +64,19 @@ const UI = {
 
   highlightsTitle: "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು",
   seeAll: "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
-  // Where each section's "See all" button goes.
-  seeAllStories: "https://www.prajavani.net/karunadotsava-top",
+  // Where each section's "See all" button goes: #all/<key> opens STORY_LISTS[key] on this page.
+  seeAllStories: "#all/top",
   seeAllVideos: "https://www.youtube.com/prajavani",
-  seeAllPhotoStories: "https://www.prajavani.net/karunadotsava-photo",
+  seeAllPhotoStories: "#all/photo",
+  allStoriesBack: "ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ",
+  allStoriesLoading: "ಸುದ್ದಿಗಳು ಬರುತ್ತಿವೆ…",
+  allStoriesCount: "{count} ಸುದ್ದಿಗಳು · ಪುಟ {page}/{pages}",
+  allStoriesError: "ಸುದ್ದಿಗಳನ್ನು ಇಲ್ಲಿ ತೆರೆಯಲು ಆಗಲಿಲ್ಲ.",
+  allStoriesErrorLink: "ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ನೋಡಿ",
+  pagerLabel: "ಪುಟಗಳು",
+  pagerPrev: "ಹಿಂದಿನ ಪುಟ",
+  pagerNext: "ಮುಂದಿನ ಪುಟ",
+  pagerPage: "ಪುಟ {page}",
   videosTitle: "ವಿಡಿಯೊ",
   videoPlay: "ವಿಡಿಯೊ ನೋಡಿ: {title}",
   shortsTitle: "ಶಾರ್ಟ್ಸ್ ಮತ್ತು ರೀಲ್ಸ್",
@@ -211,6 +220,17 @@ const COLLECTIONS = {
   imageHost: "https://images.prajavani.net/",
   top: "karunadotsava-top",
   photo: "karunadotsava-photo",
+};
+
+/*
+ * "See all": every story in a collection, newest first, a page at a time. It opens on
+ * this same page (address #all/<key>) in place of the home page, and reads the
+ * collection only then, so the home page stays light.
+ * fallback → the collection's page on prajavani.net, offered if it can't be read.
+ */
+const STORY_LISTS = {
+  top: { collection: COLLECTIONS.top, title: UI.highlightsTitle, fallback: "https://www.prajavani.net/karunadotsava-top" },
+  photo: { collection: COLLECTIONS.photo, title: UI.photoStoriesTitle, fallback: "https://www.prajavani.net/karunadotsava-photo" },
 };
 
 /*
@@ -483,7 +503,7 @@ const QUOTES = [
 ];
 
 /*
- * Opening animation, played once per visit before the site appears.
+ * Opening animation, played once a day, on the home page, before the site appears.
  * figures → flown past in this order (history order), alternating red and black.
  *           art names a silhouette in js/silhouette-art.js, made by tools/silhouette-art.py
  *           from the images in assets/silhouettes.

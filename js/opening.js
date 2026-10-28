@@ -4,8 +4,8 @@
  * left and right as the camera flies by them. Last comes the Karnataka map, filled
  * with the waving Kannada flag, which settles in front while the closing message
  * is held on screen, and then the opening lifts away.
- * The small script in <head> decides whether it plays (once per visit, never with
- * reduced motion); this file builds the scene; css/styles.css holds the timeline.
+ * The small script in <head> decides whether it plays (once a day, home page only,
+ * never with reduced motion); this file builds the scene; css/styles.css holds the timeline.
  */
 (() => {
   "use strict";

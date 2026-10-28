@@ -18,7 +18,7 @@ Open `index.html` in a browser. There's no build step.
 
 ## Opening animation
 
-A short flight into the screen (about 11 seconds) plays once per visit before the site appears:
+A short flight into the screen (about 11 seconds) plays once a day (India time) before the site appears, on the home page only: a shared "See all" link (`#all/…`) opens straight on its list:
 
 1. The camera flies past silhouettes of Kannada personalities, in history order. They alternate red and black, each with one feature highlighted in yellow, and sweep away to the left and right, each facing the way it goes.
 2. The Karnataka map, filled with the waving Kannada flag, flies in at the same speed and settles in front.
@@ -34,7 +34,7 @@ Readers can tap anywhere, press **Skip** or the button, or press Esc to jump str
 
 The **karunadotsava-top** collection on prajavani.net feeds two sections: the top carousel shows its first 10 stories in the order the desk sets there, and "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು" further down shows its first 20, newest first by publish time. Change the collection and the site follows. The site reads it each time the page opens. The short line under the carousel and on the story cards is the story's **subheadline**; stories without one show no line (the opening paragraph is never used), so ask the desk to write one for each story they add. This works only once the site is served from www.prajavani.net; opened from a computer or another address, they show the stories in `SLIDES` and `HIGHLIGHTS` in `js/data.js` instead.
 
-The stories, videos and photo stories sections each end with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" (See all) button. Their addresses are `seeAllStories`, `seeAllVideos` and `seeAllPhotoStories` in `js/data.js`. The English page always uses its own `SLIDES`.
+The stories, videos and photo stories sections each end with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" (See all) button. For stories and photo stories it opens the whole collection on the same page (the address becomes `#all/top` or `#all/photo`): newest first, 24 to a page, with numbered page links, for up to 500 stories. It is read only when opened, so the home page stays light; the browser's back button returns to the home page. The lists are `STORY_LISTS` in `js/data.js`. The videos button goes to Prajavani's YouTube channel (`seeAllVideos`). The English page always uses its own `SLIDES`.
 
 ## Videos
 
@@ -71,7 +71,7 @@ The opening and the quotes share one set of silhouettes. The source images are i
 
 ## Temporary / to replace before launch
 
-- [ ] **Opening replays on every refresh:** this is for review only. Set `REPLAY_ON_REFRESH` to `false` in the small script in the `<head>` of `index.html`, so readers see it once per visit.
+- [ ] **Opening replays on every refresh:** this is for review only. Set `REPLAY_ON_REFRESH` to `false` in the small script in the `<head>` of `index.html`, so readers see it once a day.
 - [ ] **Opening personalities:** Basavanna, Kempegowda, Onake Obavva, Kittur Rani Chennamma, Sir M. Visvesvaraya, Kuvempu and Dr Rajkumar. The list and the AI-made silhouettes need editorial approval.
 - [ ] **Collections (carousel and photo stories):** work only when the site is served from www.prajavani.net. If it will live elsewhere, the web team must allow it (a CORS header on the collection address).
 - [ ] **Videos:** the YouTube videos, Shorts and the Instagram Reel in `js/data.js` were picked to try the layout. Replace them with the final links.
@@ -87,5 +87,5 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **DH poster address:** `deccanherald.com/rajyotsava` is printed on English posters (`POSTER.address` in `js/data-en.js`); the web team needs to set it up.
 - [ ] **Exhibition (19 November):** the timings aren't announced yet, so the "Add to Google Calendar" entry is all-day. When they are, set `time` in `EVENT` (`js/data.js` and `js/data-en.js`), e.g. `{ label: "10 am to 7 pm", start: "10:00", end: "19:00" }`; the page and the calendar entry both pick it up. Also confirm the venue name ("Rangoli Metro Art Center, MG Road") and the wording.
 - [ ] **Karunadotsava mark:** `assets/hero/karunadotsava-pv-720.webp` and `-dh-720.webp` are exported from `assets/Karunadothsava Fin logo PV-DH.ai` without the gold border and gradient plaque; the site's red goes behind them. If the design team updates the .ai, they need re-exporting.
-- [ ] **Exhibition road test (`exhibition-road.html`):** a stand-alone phone test of the "ಕರುನಾಡಿನ ಹಾದಿ" walk-through, not linked from the site yet. It uses the site's stylesheet (fonts, colours, masthead and Karunadotsava mark), but the five pages are drawn placeholders with sample write-ups, the one-line captions on the decade arches (`DECADES`, e.g. "ಕರ್ನಾಟಕ ಎಂಬ ಹೆಸರು") are samples for the editorial team to replace, and its content, scene styles and script sit inside the page rather than in `js/data.js`, `css/styles.css` and `js/main.js`. The ⚙ test options (layout A/B, swipe up/down) are for review only. Once the choices are made, move it into the shared files properly and add the English edition.
+- [ ] **Exhibition road test (`exhibition-road.html`):** a stand-alone phone test of the "ಕರುನಾಡಿನ ಹಾದಿ" walk-through, not linked from the site yet. It uses the site's stylesheet (fonts, colours, masthead and Karunadotsava mark), but the five pages are drawn placeholders with sample write-ups, the one-line captions on the decade arches (`DECADES`, e.g. "ಕರ್ನಾಟಕ ಎಂಬ ಹೆಸರು") are samples for the editorial team to replace, and its content, scene styles and script sit inside the page rather than in `js/data.js`, `css/styles.css` and `js/main.js`. The ⚙ test option (swipe up or down to move ahead) is for review only. Once the choices are made, move it into the shared files properly and add the English edition.
 - [ ] **Prajavani logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg`. Same caveat: needs the internet, and depends on that link staying up.

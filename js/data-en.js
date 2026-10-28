@@ -443,7 +443,7 @@ const POSTER = {
 };
 
 /*
- * Opening animation, played once per visit before the site appears.
+ * Opening animation, played once a day before the site appears.
  * figures → flown past in this order (history order), alternating red and black.
  *           art names a silhouette in js/silhouette-art.js.
  * finale  → the closing screen with the map and flag.

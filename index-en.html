@@ -10,11 +10,12 @@
   <link rel="preload" href="assets/fonts/PlayfairDisplay-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/RobotoSlab-latin.woff2" as="font" type="font/woff2" crossorigin>
   <script>
-    /* Opening animation: once per visit, never for readers who prefer reduced motion. Runs before first paint so the site doesn't flash. */
+    /* Opening animation: once a day (India time), never for readers who prefer reduced motion. Runs before first paint so the site doesn't flash. */
     const REPLAY_ON_REFRESH = true; // TEMPORARY for review: replays on every refresh. Set to false before launch.
     try {
-      if ((REPLAY_ON_REFRESH || !sessionStorage.getItem("dh-opening")) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        sessionStorage.setItem("dh-opening", "seen");
+      const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+      if ((REPLAY_ON_REFRESH || localStorage.getItem("dh-opening") !== today) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        localStorage.setItem("dh-opening", today);
         document.documentElement.classList.add("has-opening");
       }
     } catch {}

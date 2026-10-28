@@ -1737,6 +1737,108 @@ button {
   margin-top: var(--space-6);
 }
 
+/* ---------- See all (every story in a collection) ---------- */
+
+/* Shown in place of the home page while the address is #all/… */
+.all-stories {
+  display: none;
+  padding-block: var(--space-6) var(--space-8);
+}
+
+main[data-view="all"] > * {
+  display: none;
+}
+
+main[data-view="all"] > .all-stories {
+  display: block;
+}
+
+.all-stories__back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: var(--space-2);
+  font-weight: 600;
+  color: var(--red);
+}
+
+.all-stories__back::before {
+  content: "‹";
+  margin-right: var(--space-2);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.all-stories__status {
+  margin: calc(-1 * var(--space-3)) 0 var(--space-5);
+  color: var(--ink-muted);
+}
+
+.all-stories__status a {
+  font-weight: 600;
+  color: var(--red);
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+  margin-top: var(--space-7);
+}
+
+.pager__page,
+.pager__step,
+.pager__gap {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  height: 44px;
+  padding-inline: var(--space-2);
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.pager a {
+  border: 1px solid var(--line);
+  color: var(--ink);
+  transition: border-color var(--duration), color var(--duration);
+}
+
+.pager a:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.pager__step {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+span.pager__step {
+  color: var(--line-strong);
+}
+
+.pager__page[aria-current="page"] {
+  background: var(--red);
+  color: var(--white);
+}
+
+.pager__gap {
+  min-width: auto;
+  color: var(--ink-muted);
+}
+
+.pager__page--near {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .pager__page--near {
+    display: grid;
+  }
+}
+
 /* ---------- Videos ---------- */
 
 .videos {

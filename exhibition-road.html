@@ -18,7 +18,6 @@
   --dock-h: 60px;
   --peek-h: 56px;
   --sheet-h: 70vh;
-  --info-bottom: 116px;
   --leaf: #2f6a32; /* mango leaves on the decade arches */
 }
 html, body { height: 100%; }
@@ -61,9 +60,10 @@ body {
   content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px;
   background: rgb(0 0 0 / 22%);
 }
-.bar .icon-button, .viewer .icon-button {
-  flex: none; border: 1px solid rgb(255 255 255 / 45%); font-size: 18px; line-height: 1;
-}
+/* Header button: plain icon on the red, like the main site's menu button. */
+.bar .icon-button { flex: none; color: var(--white); }
+.bar .icon-button:hover, .bar .icon-button[aria-expanded="true"] { background: var(--red-dark); }
+.viewer .icon-button { flex: none; border: 1px solid rgb(255 255 255 / 45%); }
 
 /* Scene */
 .stage { position: fixed; inset: 0; z-index: 0; touch-action: none; }
@@ -162,86 +162,83 @@ body {
   background: conic-gradient(from 315deg at 50% 100%, var(--leaf) 90deg, transparent 0) 0 0 / 40px 40px repeat-x;
 }
 
+/* First-visit hint: fades in, and fades away after the first trip. */
 .hint {
   position: fixed; left: 50%; z-index: 15; transform: translateX(-50%);
   display: flex; align-items: center; gap: 8px;
-  padding: 8px 16px; border-radius: 999px;
-  background: rgba(27, 21, 18, .86); color: var(--white);
+  padding: 8px 16px 8px 12px; border-radius: 999px;
+  background: rgb(28 20 22 / 86%); color: var(--white);
   font-size: 15px; font-weight: 600; white-space: nowrap; pointer-events: none;
+  box-shadow: var(--shadow-raised);
+  animation: hint-in .5s .6s both var(--ease);
+  transition: opacity var(--duration-slow);
 }
-.hint-arrow { display: inline-block; animation: nudge 1.2s ease-in-out infinite; }
-[data-swipe="down"] .hint-arrow { --dir: 1; }
-@keyframes nudge { 50% { transform: translateY(calc(var(--dir, -1) * 6px)); } }
+.hint.is-gone { opacity: 0; }
+.hint .icon { width: 20px; height: 20px; color: var(--yellow); animation: nudge 1.2s ease-in-out infinite; }
+[data-swipe="down"] .hint .icon { --dir: 1; rotate: 180deg; }
+@keyframes nudge { 50% { translate: 0 calc(var(--dir, -1) * 5px); } }
+@keyframes hint-in { from { opacity: 0; translate: 0 8px; } }
 
-/* Date and headline under the page (layout A) */
-.info {
-  position: fixed; left: 0; right: 0; bottom: var(--info-bottom); z-index: 20;
-  padding: 10px var(--gutter-r) 8px var(--gutter-l);
-  background: var(--cream); border-top: 1px solid var(--line);
-}
-[data-layout="b"] .info { display: none; }
-.info-date, .peek-date { color: var(--red); font-weight: 600; font-size: 14px; line-height: 1.5; }
-.info-head {
-  margin: 0; font-size: 20px; font-weight: 600; line-height: 1.35;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-
-/* Story sheet */
+/* Story sheet: the peek bar (date and headline) stays as its header when opened. */
 .sheet {
   position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 22;
   height: var(--sheet-h);
   display: flex; flex-direction: column;
   background: var(--white); border-radius: 16px 16px 0 0;
-  box-shadow: 0 -6px 24px rgba(40, 20, 10, .18);
+  box-shadow: 0 -6px 24px rgb(40 20 10 / 18%);
   transform: translateY(calc(var(--sheet-h) - var(--peek-h)));
-  transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+  transition: transform .35s var(--ease);
 }
 .sheet.open { transform: none; }
 .peek {
   position: relative; flex: none;
   display: flex; align-items: center; gap: 12px; text-align: left;
   min-height: 56px; box-sizing: border-box;
-  padding: 14px var(--gutter-r) 8px var(--gutter-l);
+  padding: 16px var(--gutter-r) 10px var(--gutter-l);
   border: 0; background: transparent; touch-action: none;
 }
 .peek::before {
-  content: ""; position: absolute; top: 6px; left: 50%; width: 40px; height: 4px;
-  margin-left: -20px; border-radius: 2px; background: var(--line);
+  content: ""; position: absolute; top: 6px; left: 50%; width: 36px; height: 4px;
+  margin-left: -18px; border-radius: 2px; background: var(--line-strong);
 }
-.peek-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.peek-a { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.sheet.open .peek { border-bottom: 1px solid var(--line); }
+.peek-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.peek-date {
+  color: var(--red); font-weight: 600; font-size: 13px; line-height: 1.5; letter-spacing: .02em;
+}
 .peek-head {
   font-family: var(--font-headline);
-  font-size: 17px; font-weight: 600; line-height: 1.35;
+  font-size: 18px; font-weight: 600; line-height: 1.35;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-[data-layout="a"] .peek-b, [data-layout="b"] .peek-a { display: none; }
+.sheet.open .peek-head { font-size: 22px; -webkit-line-clamp: 4; text-wrap: balance; }
 .chev {
-  flex: none; width: 32px; height: 32px; border-radius: 50%;
-  display: grid; place-items: center; background: var(--cream); color: var(--red);
-  font-size: 16px; transition: transform .3s;
+  flex: none; width: 36px; height: 36px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--yellow-soft); color: var(--red);
+  transition: rotate var(--duration-slow) var(--ease);
 }
-.sheet.open .chev { transform: rotate(180deg); }
-.moving .info > *, .moving .peek-b { opacity: .35; transition: opacity .2s; }
+.chev .icon { width: 20px; height: 20px; }
+.sheet.open .chev { rotate: 180deg; }
+.peek-text { transition: opacity var(--duration); }
+.moving .peek-text { opacity: .35; }
 
 .sheet-body {
   flex: 1; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y;
-  padding: 0 var(--gutter-r) 24px var(--gutter-l);
+  padding: 16px var(--gutter-r) 32px var(--gutter-l);
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
 }
 .sheet-body > * { max-width: 62ch; }
-.story-date { margin: 8px 0 0; color: var(--red); font-weight: 600; font-size: 14px; }
-.story-head { margin: 2px 0 12px; font-size: 24px; font-weight: 600; line-height: 1.3; text-wrap: balance; }
-.story-body p { margin: 0 0 14px; font-size: 17px; line-height: 1.7; }
-.credit { margin: 4px 0 18px; color: var(--ink-muted); font-size: 13px; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 10px; }
-.next-stop {
-  display: flex; align-items: center; justify-content: space-between; width: 100%;
-  min-height: 52px; padding: 0 16px; box-sizing: border-box;
-  border: 0; border-radius: 10px; background: var(--red); color: var(--white);
-  font-size: 16px; font-weight: 600;
+.story-body p { margin: 0 0 16px; font-size: 17px; line-height: 1.75; }
+.story-body p:first-child { font-size: 18px; }
+.credit {
+  margin: 4px 0 20px; padding-top: 10px; border-top: 1px solid var(--line);
+  color: var(--ink-muted); font-size: 13px; line-height: 1.6;
 }
-.next-stop:focus-visible { outline-color: var(--yellow); }
+.sheet-actions { display: flex; flex-direction: column; gap: 10px; }
+.sheet-actions .button { justify-content: space-between; min-height: 52px; border-radius: 10px; font-size: 16px; }
+.sheet-actions .button--primary:focus-visible { outline-color: var(--yellow); }
 
-/* Map dock */
+/* Map dock: previous / next and the timeline of stops. */
 .dock {
   position: fixed; inset: auto 0 0; z-index: 25;
   display: flex; align-items: center; gap: 10px;
@@ -249,37 +246,46 @@ body {
   background: var(--cream); border-top: 1px solid var(--line);
 }
 .nav-btn {
-  flex: none; width: 44px; height: 44px; border-radius: 50%;
-  border: 0; background: var(--red); color: var(--white); font-size: 22px; line-height: 1;
+  flex: none; display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0; border-radius: 50%;
+  border: 0; background: var(--red); color: var(--white);
+  box-shadow: var(--shadow);
+  transition: background-color var(--duration), scale var(--duration);
 }
-.nav-btn:disabled { background: var(--line); color: var(--ink-muted); cursor: default; }
+.nav-btn:active:enabled { scale: .92; }
+.nav-btn:hover:enabled { background: var(--red-dark); }
+.nav-btn:disabled { background: var(--line); color: var(--ink-muted); box-shadow: none; cursor: default; }
 .map { position: relative; flex: 1; height: 48px; margin: 0 10px; }
-.map::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 18px; height: 2px; background: var(--line);
+.map::before, .map-fill {
+  content: ""; position: absolute; left: 0; top: 17px; height: 3px; border-radius: 2px;
 }
-.map-fill { position: absolute; left: 0; top: 18px; height: 2px; background: var(--red); }
+.map::before { right: 0; background: var(--line); }
+.map-fill { background: var(--red); transition: width var(--duration-slow) var(--ease); }
 .dot {
   position: absolute; top: 0; width: 24px; height: 38px; margin-left: -12px;
   border: 0; background: transparent; padding: 0;
 }
 .dot::before {
   content: ""; position: absolute; left: 50%; top: 19px; width: 10px; height: 10px;
-  transform: translate(-50%, -50%); border-radius: 50%;
+  translate: -50% -50%; border-radius: 50%;
   background: var(--cream); border: 2px solid var(--red); box-sizing: border-box;
+  transition: width var(--duration), height var(--duration), border-width var(--duration);
 }
+.dot:active::before { scale: 1.3; }
 .dot[aria-current="true"]::before {
   width: 18px; height: 18px; background: var(--red); border: 3px solid var(--yellow);
+  box-shadow: 0 0 0 4px rgb(168 15 34 / 14%);
 }
 .map-end { position: absolute; bottom: 0; font-size: 11px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
 .map-end.end { right: 0; }
 
-/* Test options */
+/* Test options (review only). */
 .tests {
   position: fixed; z-index: 40;
-  top: calc(env(safe-area-inset-top, 0px) + 62px); right: var(--gutter-r);
+  top: calc(env(safe-area-inset-top, 0px) + 66px); right: var(--gutter-r);
   width: min(320px, calc(100% - 32px)); box-sizing: border-box;
   padding: 14px 16px; border-radius: 12px;
-  background: var(--white); box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+  background: var(--white); box-shadow: var(--shadow-raised);
 }
 .tests h2 { margin: 0 0 4px; font-size: 16px; }
 .tests p { margin: 0 0 10px; color: var(--ink-muted); font-size: 13px; line-height: 1.5; }
@@ -287,26 +293,43 @@ body {
 .tests legend { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
 .tests label { display: flex; align-items: center; gap: 8px; min-height: 40px; font-size: 15px; }
 .tests input { width: 20px; height: 20px; accent-color: var(--red); }
-.tests .done { width: 100%; min-height: 44px; border: 0; border-radius: 8px; background: var(--red); color: var(--white); font-weight: 600; }
+.tests .button { width: 100%; }
 
-/* Full-screen page viewer */
+/* Full-screen page viewer. */
 .viewer {
   position: fixed; inset: 0; z-index: 50;
   display: flex; flex-direction: column;
   background: var(--night); color: var(--white);
+  animation: viewer-in var(--duration-slow) var(--ease);
 }
+@keyframes viewer-in { from { opacity: 0; } }
 .viewer-bar {
   display: flex; align-items: center; gap: 8px;
   padding: calc(env(safe-area-inset-top, 0px) + 6px) var(--gutter-r) 6px var(--gutter-l);
 }
-.viewer-bar span { flex: 1; font-weight: 600; }
+.viewer-title { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.viewer-date { color: var(--yellow); font-size: 12px; font-weight: 600; line-height: 1.5; }
+.viewer-head {
+  font: 600 16px/1.35 var(--font-headline);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.viewer .icon-button:hover { background: rgb(255 255 255 / 10%); }
 .viewer :focus-visible { outline-color: var(--yellow); }
-.viewer-scroll { flex: 1; overflow: auto; touch-action: pan-x pan-y; padding: 8px 16px 24px; }
-.viewer-page { position: relative; margin: 0 auto; }
+/* Pinch (phone) or wheel (desktop) zooms; drag moves a zoomed page. Handled in script. */
+.viewer-stage { position: relative; flex: 1; overflow: hidden; touch-action: none; cursor: zoom-in; }
+.viewer-stage.is-zoomed { cursor: grab; }
+.viewer-stage.is-dragging { cursor: grabbing; }
+.viewer-page { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.viewer-page .paper { animation: page-in var(--duration-slow) var(--ease); }
+@keyframes page-in { from { opacity: 0; scale: .96; } }
+.viewer-note {
+  margin: 0; padding: 8px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  text-align: center; color: rgb(255 255 255 / 70%); font-size: 13px;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .sheet, .chev { transition: none; }
-  .hint-arrow { animation: none; }
+  .sheet, .chev, .map-fill { transition: none; }
+  .hint, .hint .icon, .viewer, .viewer-page .paper { animation: none; }
 }
 </style>
 </head>
@@ -319,7 +342,9 @@ body {
   </h1>
   <div class="year" id="year" aria-hidden="true"></div>
   <span class="visually-hidden" id="yearSpoken" aria-live="polite"></span>
-  <button class="icon-button" id="testsBtn" type="button" aria-label="Test options" aria-expanded="false">⚙</button>
+  <button class="icon-button" id="testsBtn" type="button" aria-label="Test options" aria-expanded="false">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+  </button>
 </header>
 
 <div class="stage" id="stage">
@@ -327,63 +352,67 @@ body {
   <div class="world" id="world" aria-hidden="true"></div>
 </div>
 
-<div class="hint" id="hint"><span class="hint-arrow" id="hintArrow">↑</span><span id="hintText">ಮುಂದೆ ಸಾಗಲು ಮೇಲಕ್ಕೆ ಸರಿಸಿ</span></div>
-
-<div class="info" id="info">
-  <div class="info-date" id="infoDate"></div>
-  <h2 class="info-head" id="infoHead"></h2>
+<div class="hint" id="hint">
+  <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+  <span id="hintText">ಮುಂದೆ ಸಾಗಲು ಮೇಲಕ್ಕೆ ಸರಿಸಿ</span>
 </div>
 
 <section class="sheet" id="sheet" aria-label="ಕಥೆ">
   <button class="peek" id="peek" type="button" aria-expanded="false" aria-controls="sheetBody">
     <span class="peek-text">
-      <span class="peek-a">ಕಥೆ ಓದಿ</span>
-      <span class="peek-b peek-date" id="peekDate"></span>
-      <span class="peek-b peek-head" id="peekHead"></span>
+      <span class="peek-date" id="peekDate"></span>
+      <span class="peek-head" id="peekHead"></span>
     </span>
-    <span class="chev" aria-hidden="true">▲</span>
+    <span class="chev" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></span>
   </button>
   <div class="sheet-body" id="sheetBody">
-    <p class="story-date" id="storyDate"></p>
-    <h2 class="story-head" id="storyHead"></h2>
     <div class="story-body" id="storyBody"></div>
     <p class="credit" id="credit"></p>
-    <button class="next-stop" id="nextStop" type="button"></button>
+    <div class="sheet-actions">
+      <button class="button button--outline" id="viewPage" type="button">
+        <span>ಮೂಲ ಪುಟ ನೋಡಿ</span>
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+      <button class="button button--primary" id="nextStop" type="button"></button>
+    </div>
   </div>
 </section>
 
 <nav class="dock" id="dock" aria-label="ಕಾಲರೇಖೆ">
-  <button class="nav-btn" id="prevBtn" type="button" aria-label="ಹಿಂದಿನ ಪುಟ">‹</button>
+  <button class="nav-btn" id="prevBtn" type="button" aria-label="ಹಿಂದಿನ ಪುಟ">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
   <div class="map" id="map">
     <div class="map-fill" id="mapFill"></div>
   </div>
-  <button class="nav-btn" id="nextBtn" type="button" aria-label="ಮುಂದಿನ ಪುಟ">›</button>
+  <button class="nav-btn" id="nextBtn" type="button" aria-label="ಮುಂದಿನ ಪುಟ">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
 </nav>
 
 <div class="tests" id="tests" hidden>
   <h2>Test options</h2>
-  <p>Swipe to travel, tap the page to open it, pull up the story. Switch these to compare.</p>
-  <fieldset>
-    <legend>Layout</legend>
-    <label><input type="radio" name="layout" id="layoutA" value="a"> A · date and headline under the page</label>
-    <label><input type="radio" name="layout" id="layoutB" value="b"> B · date and headline in the story bar</label>
-  </fieldset>
+  <p>Swipe to travel, tap the page to open it, pull up the story. Switch this to compare.</p>
   <fieldset>
     <legend>Swipe to move ahead</legend>
     <label><input type="radio" name="swipe" id="swipeUp" value="up"> Swipe up</label>
     <label><input type="radio" name="swipe" id="swipeDown" value="down"> Swipe down</label>
   </fieldset>
-  <button class="done" id="testsDone" type="button">Done</button>
+  <button class="button button--primary" id="testsDone" type="button">Done</button>
 </div>
 
-<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="ಪುಟ">
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="viewerHead">
   <div class="viewer-bar">
-    <span id="viewerTitle"></span>
-    <button class="icon-button" id="zoomOut" type="button" aria-label="ಚಿಕ್ಕದು">−</button>
-    <button class="icon-button" id="zoomIn" type="button" aria-label="ದೊಡ್ಡದು">+</button>
-    <button class="icon-button" id="viewerClose" type="button" aria-label="ಮುಚ್ಚಿ">✕</button>
+    <span class="viewer-title">
+      <span class="viewer-date" id="viewerDate"></span>
+      <span class="viewer-head" id="viewerHead"></span>
+    </span>
+    <button class="icon-button" id="viewerClose" type="button" aria-label="ಮುಚ್ಚಿ">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
   </div>
-  <div class="viewer-scroll" id="viewerScroll"><div class="viewer-page" id="viewerPage"></div></div>
+  <div class="viewer-stage" id="viewerStage"><div class="viewer-page" id="viewerPage"></div></div>
+  <p class="viewer-note" id="viewerNote"></p>
 </div>
 
 <script>
@@ -475,11 +504,11 @@ const $ = id => document.getElementById(id);
 const canvas = $("scene"), ctx = canvas.getContext("2d");
 const world = $("world");
 
-let settings = { layout: "b", swipe: "up" };
-try { Object.assign(settings, JSON.parse(localStorage.getItem("road-test") || "{}")); } catch (e) {}
+let settings = { swipe: "up" };
+try { settings.swipe = JSON.parse(localStorage.getItem("road-test") || "{}").swipe || "up"; } catch (e) {}
 
 let view = { W: 0, H: 0, F: 1, h0: 1, horizon: 0, groundBottom: 0 };
-let camZ = zOf(Y0) - D, pull = 0, cur = 0, moving = false, lastArrive = 0, zoom = 1;
+let camZ = zOf(Y0) - D, pull = 0, cur = 0, moving = false, lastArrive = 0;
 
 function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
 const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
@@ -572,17 +601,14 @@ function layout() {
 
   const headerBottom = document.querySelector(".bar").getBoundingClientRect().bottom;
   const dockH = $("dock").offsetHeight, peekH = $("peek").offsetHeight;
-  const infoH = settings.layout === "a" ? $("info").offsetHeight : 0;
   const root = document.documentElement.style;
   root.setProperty("--dock-h", `${dockH}px`);
   root.setProperty("--peek-h", `${peekH}px`);
   root.setProperty("--sheet-h", `${H - headerBottom - dockH}px`);
-  root.setProperty("--info-bottom", `${dockH + peekH}px`);
 
   // The arrived page stands on the road, as large as the free space allows.
-  const top = headerBottom + 12, bottom = H - dockH - peekH - infoH - 40;
-  const widthShare = settings.layout === "a" ? 0.72 : 0.84;
-  const pw = Math.max(120, Math.min(widthShare * W, (bottom - top) / R));
+  const top = headerBottom + 12, bottom = H - dockH - peekH - 40;
+  const pw = Math.max(120, Math.min(0.84 * W, (bottom - top) / R));
   const h0 = 0.58 * R;
   // groundBottom: lowest point of the road not hidden by the bars at the bottom.
   view = { W, H, F: pw * D, h0, horizon: bottom - pw * h0, groundBottom: bottom + 40 };
@@ -790,7 +816,7 @@ function travelPath(from, to) {
 function go(j) {
   if (j < 0 || j >= ENTRIES.length || j === cur || moving) return;
   setSheet(false);
-  $("hint").hidden = true;
+  $("hint").classList.add("is-gone");
   const gap = Math.abs(ENTRIES[j].year - ENTRIES[cur].year);
   const from = camZ, to = zOf(ENTRIES[j].year) - D;
   const reduce = reduceMotion.matches;
@@ -816,13 +842,12 @@ const step = d => go(cur + d);
 
 function fillText() {
   const e = ENTRIES[cur], next = ENTRIES[cur + 1];
-  $("infoDate").textContent = $("peekDate").textContent = $("storyDate").textContent = e.date;
-  $("infoHead").textContent = $("peekHead").textContent = $("storyHead").textContent = e.headline;
+  $("peekDate").textContent = e.date;
+  $("peekHead").textContent = e.headline;
   $("storyBody").innerHTML = e.paras.map(p => `<p>${p}</p>`).join("");
   $("credit").textContent = CREDIT;
-  $("nextStop").innerHTML = next
-    ? `<span>ಮುಂದಿನ ನಿಲ್ದಾಣ: ${next.year}</span><span aria-hidden="true">→</span>`
-    : `<span>ಮೊದಲಿನಿಂದ ಮತ್ತೆ ಆರಂಭಿಸಿ</span><span aria-hidden="true">↺</span>`;
+  $("nextStop").innerHTML = (next ? `<span>ಮುಂದಿನ ನಿಲ್ದಾಣ: ${next.year}</span>` : `<span>ಮೊದಲಿನಿಂದ ಮತ್ತೆ ಆರಂಭಿಸಿ</span>`) +
+    `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="${next ? "M5 12h14M13 6l6 6-6 6" : "M4 12a8 8 0 1 0 3-6.2M4 4v4h4"}"/></svg>`;
   $("prevBtn").disabled = cur === 0;
   $("nextBtn").disabled = cur === ENTRIES.length - 1;
   dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
@@ -848,6 +873,7 @@ peek.addEventListener("click", () => {
   setSheet(!sheet.classList.contains("open"));
 });
 $("nextStop").addEventListener("click", () => go(cur + 1 < ENTRIES.length ? cur + 1 : 0));
+$("viewPage").addEventListener("click", () => openViewer());
 
 // Travelling: swipe on the scene, arrows, mouse wheel or keyboard.
 const stage = $("stage");
@@ -878,39 +904,119 @@ $("prevBtn").addEventListener("click", () => step(-1));
 $("nextBtn").addEventListener("click", () => step(1));
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") { closeViewer(); setSheet(false); toggleTests(false); return; }
-  if (!$("viewer").hidden || e.target.closest(".tests, .sheet-body, .map")) return;
+  if (!$("viewer").hidden) { viewerKey(e); return; }
+  if (e.target.closest(".tests, .sheet-body, .map")) return;
   if (["ArrowDown", "PageDown", "ArrowRight"].includes(e.key)) { e.preventDefault(); step(1); }
   if (["ArrowUp", "PageUp", "ArrowLeft"].includes(e.key)) { e.preventDefault(); step(-1); }
 });
 
-// Full-screen page with zoom.
-function sizeViewer() {
-  const w = (innerWidth - 32) * zoom;
-  const holder = $("viewerPage");
-  holder.style.width = `${w}px`; holder.style.height = `${w * R}px`;
-  holder.firstChild.style.transform = `scale(${w / PAPER_W})`;
-  $("zoomOut").disabled = zoom === 1; $("zoomIn").disabled = zoom === 3;
+// Full-screen page. Phones pinch to zoom, computers use the mouse wheel or trackpad;
+// a zoomed page is dragged around, and a double tap or double click zooms in and back out.
+const viewerStage = $("viewerStage"), viewerPage = $("viewerPage");
+const ZOOM = { max: 4, doubleTap: 2.5, wheel: 0.0015, margin: 16 };
+const touchScreen = matchMedia("(pointer: coarse)");
+let fit = { w: 0, h: 0 }, zoom = { s: 1, x: 0, y: 0 };
+
+// Fit the whole page in the stage at zoom 1.
+function fitViewer() {
+  const r = viewerStage.getBoundingClientRect(), m = ZOOM.margin;
+  const w = Math.min(r.width - 2 * m, (r.height - 2 * m) / R);
+  fit = { w, h: w * R, stageW: r.width, stageH: r.height };
+  viewerPage.style.width = `${w}px`; viewerPage.style.height = `${w * R}px`;
+  viewerPage.firstChild.style.transform = `scale(${w / PAPER_W})`;
+  setZoom(zoom.s, zoom.x, zoom.y);
 }
+// Keep the page centred while it fits, and its edges inside the stage once it is bigger.
+function setZoom(s, x, y) {
+  s = clamp(s, 1, ZOOM.max);
+  const w = fit.w * s, h = fit.h * s;
+  x = w <= fit.stageW ? (fit.stageW - w) / 2 : clamp(x, fit.stageW - w, 0);
+  y = h <= fit.stageH ? (fit.stageH - h) / 2 : clamp(y, fit.stageH - h, 0);
+  zoom = { s, x, y };
+  viewerPage.style.transform = `translate(${x}px,${y}px) scale(${s})`;
+  viewerStage.classList.toggle("is-zoomed", s > 1);
+}
+// Zoom to scale s, keeping the point (px, py) of the stage still.
+function zoomAt(s, px, py) {
+  const k = clamp(s, 1, ZOOM.max) / zoom.s;
+  setZoom(zoom.s * k, px - (px - zoom.x) * k, py - (py - zoom.y) * k);
+}
+const stagePoint = e => {
+  const r = viewerStage.getBoundingClientRect();
+  return [e.clientX - r.left, e.clientY - r.top];
+};
+
+const fingers = new Map();
+let lastTap = 0, pinch = null;
+viewerStage.addEventListener("pointerdown", e => {
+  fingers.set(e.pointerId, stagePoint(e));
+  viewerStage.classList.add("is-dragging");
+  pinch = null;
+  if (fingers.size === 1) {
+    const now = performance.now();
+    if (now - lastTap < 300) {
+      const [x, y] = stagePoint(e);
+      zoomAt(zoom.s > 1 ? 1 : ZOOM.doubleTap, x, y);
+      lastTap = 0;
+    } else lastTap = now;
+  }
+  viewerStage.setPointerCapture(e.pointerId);
+});
+viewerStage.addEventListener("pointermove", e => {
+  if (!fingers.has(e.pointerId)) return;
+  const [px, py] = fingers.get(e.pointerId), [x, y] = stagePoint(e);
+  fingers.set(e.pointerId, [x, y]);
+  if (fingers.size === 1) { setZoom(zoom.s, zoom.x + x - px, zoom.y + y - py); return; }
+  // Two fingers: zoom by the change in their distance, around their midpoint, and follow the midpoint.
+  const [a, b] = [...fingers.values()];
+  const mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], dist = Math.hypot(a[0] - b[0], a[1] - b[1]);
+  if (pinch) {
+    zoomAt(zoom.s * dist / pinch.dist, mid[0], mid[1]);
+    setZoom(zoom.s, zoom.x + mid[0] - pinch.mid[0], zoom.y + mid[1] - pinch.mid[1]);
+  }
+  pinch = { dist, mid };
+});
+const releaseFinger = e => {
+  fingers.delete(e.pointerId);
+  pinch = null;
+  if (!fingers.size) viewerStage.classList.remove("is-dragging");
+};
+viewerStage.addEventListener("pointerup", releaseFinger);
+viewerStage.addEventListener("pointercancel", releaseFinger);
+viewerStage.addEventListener("wheel", e => {
+  e.preventDefault();
+  const [x, y] = stagePoint(e);
+  zoomAt(zoom.s * Math.exp(-e.deltaY * ZOOM.wheel), x, y);
+}, { passive: false });
+// Keyboard: + and - zoom around the centre, 0 resets.
+function viewerKey(e) {
+  const centre = [fit.stageW / 2, fit.stageH / 2];
+  if (e.key === "+" || e.key === "=") zoomAt(zoom.s * 1.25, ...centre);
+  else if (e.key === "-") zoomAt(zoom.s / 1.25, ...centre);
+  else if (e.key === "0") setZoom(1, 0, 0);
+}
+
 function openViewer() {
   const e = ENTRIES[cur], el = document.createElement("article");
   el.className = "paper"; el.innerHTML = paperHTML(e); paintPaper(el, e);
-  $("viewerPage").replaceChildren(el);
-  $("viewerTitle").textContent = e.date;
-  zoom = 1; $("viewer").hidden = false; sizeViewer();
+  viewerPage.replaceChildren(el);
+  $("viewerDate").textContent = e.date;
+  $("viewerHead").textContent = e.headline;
+  $("viewerNote").textContent = touchScreen.matches
+    ? "ಎರಡು ಬೆರಳುಗಳಿಂದ ಹಿಗ್ಗಿಸಿ ಓದಿ"
+    : "ಮೌಸ್ ಚಕ್ರ ಅಥವಾ ಟ್ರ್ಯಾಕ್‌ಪ್ಯಾಡ್‌ನಿಂದ ಹಿಗ್ಗಿಸಿ ಓದಿ";
+  $("viewer").hidden = false;
+  zoom = { s: 1, x: 0, y: 0 };
+  fitViewer();
   $("viewerClose").focus();
 }
 function closeViewer() { $("viewer").hidden = true; }
 $("viewerClose").addEventListener("click", closeViewer);
-$("zoomIn").addEventListener("click", () => { zoom = Math.min(3, zoom + 1); sizeViewer(); });
-$("zoomOut").addEventListener("click", () => { zoom = Math.max(1, zoom - 1); sizeViewer(); });
 
 // Test options.
 function applySettings() {
-  document.body.dataset.layout = settings.layout;
   document.body.dataset.swipe = settings.swipe;
-  $("layout" + settings.layout.toUpperCase()).checked = true;
   $(settings.swipe === "up" ? "swipeUp" : "swipeDown").checked = true;
-  $("hintArrow").textContent = settings.swipe === "up" ? "↑" : "↓";
   $("hintText").textContent = settings.swipe === "up" ? "ಮುಂದೆ ಸಾಗಲು ಮೇಲಕ್ಕೆ ಸರಿಸಿ" : "ಮುಂದೆ ಸಾಗಲು ಕೆಳಕ್ಕೆ ಸರಿಸಿ";
   try { localStorage.setItem("road-test", JSON.stringify(settings)); } catch (e) {}
   layout();
@@ -924,7 +1030,7 @@ $("testsDone").addEventListener("click", () => toggleTests(false));
 document.querySelectorAll(".tests input").forEach(input =>
   input.addEventListener("change", () => { settings[input.name] = input.value; applySettings(); }));
 
-addEventListener("resize", () => { layout(); if (!$("viewer").hidden) sizeViewer(); });
+addEventListener("resize", () => { layout(); if (!$("viewer").hidden) fitViewer(); });
 fillText();
 applySettings();
 document.fonts && document.fonts.ready.then(layout);

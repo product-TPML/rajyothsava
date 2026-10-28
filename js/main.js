@@ -11,6 +11,10 @@
   const TOP_STORIES = 20; // read from the top collection, for the stories section
   const CAROUSEL_STORIES = 10; // the first of those, in the desk's order, for the carousel
   const PHOTO_STORIES_SHOWN = 5; // one large and four small fill the grid evenly
+  const ALL_STORIES = 500; // the most a "See all" list is expected to hold, read in one go
+  const STORIES_PER_PAGE = 24; // fills two or three columns evenly
+  // Only what the page shows, so a collection of 500 stays around 100 KB.
+  const STORY_FIELDS = "headline,subheadline,author-name,sections,url,published-at,hero-image-s3-key,hero-image-alt-text,hero-image-caption";
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const sectionsById = Object.fromEntries(SECTIONS.map((section) => [section.id, section]));
 
@@ -127,7 +131,6 @@
     );
   }
 
-  /* Carousel slides from SLIDES in the data file, in the same shape as collection slides. */
   /* Stories from the data file (SLIDES, HIGHLIGHTS) in the same shape as collection stories. */
   function localStories(list) {
     return list.map((story) => {
@@ -138,7 +141,9 @@
 
   /* The stories in a collection on prajavani.net (COLLECTIONS in the data file), with a photo each. */
   async function collectionStories(slug, limit) {
-    const response = await fetch(`${COLLECTIONS.api}${slug}?limit=${limit}`, { signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS) });
+    const response = await fetch(`${COLLECTIONS.api}${slug}?limit=${limit}&story-fields=${STORY_FIELDS}`, {
+      signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS),
+    });
     if (!response.ok) throw new Error(`Collection ${slug}: HTTP ${response.status}`);
     const { items } = await response.json();
     return items
@@ -155,6 +160,8 @@
       }));
   }
 
+  const newestFirst = (stories) => [...stories].sort((a, b) => b.published - a.published);
+
   /*
    * The top collection feeds the carousel (its first stories, in the desk's order) and
    * the stories section (all that are read, newest first). Where the page has no
@@ -166,7 +173,7 @@
     if (!stories.length) return { slides: localStories(SLIDES), highlights: localStories(HIGHLIGHTS) };
     return {
       slides: stories.slice(0, CAROUSEL_STORIES),
-      highlights: [...stories].sort((a, b) => b.published - a.published),
+      highlights: newestFirst(stories),
     };
   }
 
@@ -263,31 +270,115 @@
     document.getElementById("event-calendar").href = calendarUrl(EVENT);
   }
 
-  function renderHighlights(stories) {
-    document.getElementById("highlights-list").append(
-      ...stories.map((story, i) => {
-        const isLead = i === 0;
-        return el(
-          "li",
-          { class: isLead ? "card card--lead" : "card" },
-          el(
-            "div",
-            { class: "card__media" },
-            photo(story.image, {
-              sizes: isLead ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 120px",
-            })
-          ),
-          el(
-            "div",
-            { class: "card__body" },
-            el("span", { class: "tag" }, story.tag),
-            el("h3", { class: "card__title" }, el("a", { class: "card__link", href: story.href }, story.title)),
-            story.summary && el("p", { class: "card__summary" }, story.summary),
-            byline("p", story.author, story.published)
-          )
-        );
-      })
+  function storyCard(story, { lead = false } = {}) {
+    return el(
+      "li",
+      { class: lead ? "card card--lead" : "card" },
+      el(
+        "div",
+        { class: "card__media" },
+        photo(story.image, {
+          sizes: lead ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 120px",
+        })
+      ),
+      el(
+        "div",
+        { class: "card__body" },
+        el("span", { class: "tag" }, story.tag),
+        el("h3", { class: "card__title" }, el("a", { class: "card__link", href: story.href }, story.title)),
+        story.summary && el("p", { class: "card__summary" }, story.summary),
+        byline("p", story.author, story.published)
+      )
     );
+  }
+
+  function renderHighlights(stories) {
+    document.getElementById("highlights-list").append(...stories.map((story, i) => storyCard(story, { lead: i === 0 })));
+  }
+
+  /*
+   * Page links: first, last, and the current page with its neighbours; "…" fills the
+   * gaps. Phones leave out the neighbours so the row fits.
+   */
+  function pagerLinks(key, current, pages) {
+    const href = (page) => (page === 1 ? `#all/${key}` : `#all/${key}/${page}`);
+    const step = (page, label, arrow) =>
+      page >= 1 && page <= pages
+        ? el("a", { class: "pager__step", href: href(page), "aria-label": label }, arrow)
+        : el("span", { class: "pager__step", "aria-hidden": "true" }, arrow);
+
+    const shown = [...new Set([1, current - 1, current, current + 1, pages])]
+      .filter((page) => page >= 1 && page <= pages)
+      .sort((a, b) => a - b);
+    const links = [];
+    shown.forEach((page, i) => {
+      if (i > 0 && page - shown[i - 1] > 1) links.push(el("span", { class: "pager__gap", "aria-hidden": "true" }, "…"));
+      const near = Math.abs(page - current) === 1 && page !== 1 && page !== pages;
+      const className = near ? "pager__page pager__page--near" : "pager__page";
+      const label = format(UI.pagerPage, { page });
+      links.push(
+        page === current
+          ? el("span", { class: className, "aria-current": "page", "aria-label": label }, page)
+          : el("a", { class: className, href: href(page), "aria-label": label }, page)
+      );
+    });
+    return [step(current - 1, UI.pagerPrev, "‹"), ...links, step(current + 1, UI.pagerNext, "›")];
+  }
+
+  /*
+   * "See all": while the address is #all/<key>[/<page>], the page shows every story in
+   * STORY_LISTS[key], newest first, a page at a time, in place of the home page. Each
+   * collection is read once, the first time it is opened. Page links change the
+   * address, so the browser's back button steps back through them.
+   */
+  function setupAllStories() {
+    const main = document.getElementById("main");
+    const section = document.getElementById("all-stories");
+    const title = document.getElementById("all-stories-title");
+    const status = document.getElementById("all-stories-status");
+    const list = document.getElementById("all-stories-list");
+    const pager = document.getElementById("all-stories-pager");
+    const read = {};
+
+    async function show(key, page) {
+      const { collection, title: listTitle, fallback } = STORY_LISTS[key];
+      const hash = location.hash;
+      title.textContent = listTitle;
+      list.replaceChildren();
+      pager.replaceChildren();
+      status.textContent = UI.allStoriesLoading;
+      section.scrollIntoView();
+
+      read[key] ??= collectionStories(collection, ALL_STORIES).then(newestFirst);
+      const stories = await read[key].catch(() => []);
+      if (location.hash !== hash) return; // the reader moved on while it loaded
+      if (!stories.length) {
+        delete read[key];
+        status.replaceChildren(UI.allStoriesError, " ", el("a", { href: fallback }, UI.allStoriesErrorLink));
+        return;
+      }
+
+      const pages = Math.ceil(stories.length / STORIES_PER_PAGE);
+      const current = Math.min(page, pages);
+      status.textContent = format(UI.allStoriesCount, { count: stories.length, page: current, pages });
+      list.append(...stories.slice((current - 1) * STORIES_PER_PAGE, current * STORIES_PER_PAGE).map((story) => storyCard(story)));
+      if (pages > 1) pager.append(...pagerLinks(key, current, pages));
+    }
+
+    function route() {
+      const [, key, page] = location.hash.match(/^#all\/(\w+)(?:\/(\d+))?$/) || [];
+      if (Object.hasOwn(STORY_LISTS, key ?? "")) {
+        main.dataset.view = "all";
+        show(key, Math.max(1, Number(page) || 1));
+      } else if (main.dataset.view) {
+        // Back to the home page, at the place the address points to.
+        delete main.dataset.view;
+        document.getElementById(location.hash.slice(1))?.scrollIntoView();
+      }
+    }
+
+    window.addEventListener("hashchange", route);
+    route();
   }
 
   function renderDirectory() {
@@ -655,6 +746,7 @@
   renderCredits();
   setupSearch();
   setupMenu();
+  if (has("all-stories")) setupAllStories();
   // The carousel waits for its stories; its height is fixed, so nothing below it moves.
   topStories().then(({ slides, highlights }) => {
     renderCarousel(slides);

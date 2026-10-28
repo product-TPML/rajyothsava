@@ -151,10 +151,15 @@ Define them as CSS custom properties in one place.
 
 ## "See all" buttons
 
-- Every section with more stories than it shows ends with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" button to the
-  full page (owner's request): stories → prajavani.net/karunadotsava-top, photo stories →
-  prajavani.net/karunadotsava-photo, videos → Prajavani's YouTube channel (prajavani.net has
-  no video page). The addresses are `seeAll…` in `UI` in `js/data.js`.
+- Every section with more stories than it shows ends with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" button (owner's
+  request). Stories and photo stories open the full list **on the same page**: the address
+  becomes `#all/top` or `#all/photo` and the home content is swapped for every story in that
+  collection (up to 500), newest first, 24 to a page with numbered page links (owner's request).
+  The collection is read only when the list is opened, and with only the fields shown, so the
+  home page stays light. If it can't be read, the list offers the collection's page on
+  prajavani.net. Lists are `STORY_LISTS` in `js/data.js`; the code is `setupAllStories`.
+- Videos → Prajavani's YouTube channel (prajavani.net has no video page). The addresses are
+  `seeAll…` in `UI` in `js/data.js`.
 
 ## Exhibition
 
@@ -198,6 +203,14 @@ Define them as CSS custom properties in one place.
 
 ## Tech and structure
 
+- **Opening animation (owner's choice):** once a day per reader (India time, remembered in the
+  browser's localStorage, so a hard refresh doesn't replay it), and only on the home page: never
+  when the page opens on a "See all" list (`#all/…`). `REPLAY_ON_REFRESH` in the `<head>` script
+  replays it on every refresh for review; set it to `false` before launch.
+- **Hosting (owner's setup):** a single `index.html` lives in the prajavani.net CMS; the JS and
+  CSS files are hosted on Cloudflare. So: one page only (no extra HTML pages; new screens are
+  views inside `index.html`), and keep it light: load heavy data only when the reader asks
+  for it.
 - No existing codebase, so use plain **HTML + CSS + vanilla JavaScript** with no
   frameworks and no build step. `index.html` must open directly in a browser.
 - Suggested layout:
