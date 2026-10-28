@@ -1,8 +1,8 @@
 /*
  * All content for the English edition (Deccan Herald, index-en.html) lives here.
- * It mirrors js/data.js, without the quotes, videos and photo stories, and adds
- * ARCHIVE. Edit this file to change text, menu sections, stories, the poster maker
- * or the opening animation. No other file needs to change.
+ * It mirrors js/data.js, without the quotes, videos, photo stories and facts, and adds
+ * "From the archives". Stories come only from deccanherald.com collections: when they
+ * can't be read, or there are none yet, their section says so (emptyStories).
  */
 
 /* Interface text. Elements in index-en.html with data-text="key" receive these. */
@@ -55,12 +55,24 @@ const UI = {
   cameraClose: "Close",
 
   highlightsTitle: "Latest highlights",
+  seeAll: "See all",
+  seeAllStories: "#all/top",
+  seeAllArchive: "#all/archive",
+  emptyStories: "Stories will appear here soon.",
+  allStoriesBack: "Back to the home page",
+  allStoriesLoading: "Loading stories…",
+  allStoriesCount: "{count} stories · page {page} of {pages}",
+  allStoriesError: "These stories couldn't be opened here.",
+  allStoriesErrorLink: "See them on Deccan Herald",
+  pagerLabel: "Pages",
+  pagerPrev: "Previous page",
+  pagerNext: "Next page",
+  pagerPage: "Page {page}",
 
   archiveTitle: "From the archives",
   archiveLead:
     "Deccan Herald has reported on Karnataka since 1948. Revisit the moments that shaped the state, " +
     "as our pages recorded them at the time.",
-  archiveComingSoon: "Archive page coming soon",
 
   footerAbout:
     "Deccan Herald is Karnataka's trusted English daily. This Rajyotsava special brings readers " +
@@ -85,100 +97,14 @@ const PAGE_NAV = [
 ];
 
 /*
- * Newspaper sections, for the label on each story in this file (SLIDES, HIGHLIGHTS:
- * section = an id here). Each story links to its section on deccanherald.com.
- */
-const SECTIONS = [
-  { id: "karnataka", name: "Karnataka", href: "https://www.deccanherald.com/india/karnataka" },
-  { id: "bengaluru", name: "Bengaluru", href: "https://www.deccanherald.com/top-bengaluru-news" },
-  { id: "india", name: "India", href: "https://www.deccanherald.com/india" },
-  { id: "world", name: "World", href: "https://www.deccanherald.com/world" },
-  { id: "business", name: "Business", href: "https://www.deccanherald.com/top-business-news" },
-  { id: "opinion", name: "Opinion", href: "https://www.deccanherald.com/opinion" },
-  { id: "sports", name: "Sports", href: "https://www.deccanherald.com/top-sports-news" },
-  { id: "entertainment", name: "Entertainment", href: "https://www.deccanherald.com/entertainment" },
-  { id: "technology", name: "Technology", href: "https://www.deccanherald.com/technology" },
-  { id: "education", name: "Education", href: "https://www.deccanherald.com/education" },
-  { id: "health", name: "Health", href: "https://www.deccanherald.com/health" },
-  { id: "specials", name: "DH Specials", href: "https://www.deccanherald.com/dh-specials" },
-];
-
-/*
- * Photos. Each key matches files in assets/images: <key>-640.webp and <key>-1280.webp.
+ * Photos for the poster maker's example posters. Each key matches files in
+ * assets/images: <key>-640.webp and <key>-1280.webp.
  * All are from Wikimedia Commons under the licence shown. Credit is required.
  */
 const IMAGES = {
-  hampi: {
-    alt: "The stone chariot in the Vittala temple complex, Hampi",
-    credit: { author: "Ram Nagesh Thota", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Iconic_Stone_Chariot_@_Vittala_Temple,_Hampi,_Karnataka.jpg" },
-  },
-  "mysuru-palace": {
-    alt: "Mysuru Palace lit up at night",
-    credit: { author: "Ingo Mehling", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Mysuru_Palace_-_Night_View.jpg" },
-  },
-  dasara: {
-    alt: "Dasara elephants walking in a line past KR Circle, Mysuru",
-    credit: { author: "Basavaraj M", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:KR_Circle_Mysore_1510.jpg" },
-  },
-  "jog-falls": {
-    alt: "Jog Falls plunging into a green valley",
-    credit: { author: "SajjadF", license: "CC BY-SA 3.0", source: "https://commons.wikimedia.org/wiki/File:Jog_Falls_2013.JPG" },
-  },
-  yakshagana: {
-    alt: "Yakshagana artists putting on face paint in the green room",
-    credit: { author: "Pablo Studio", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Yakshagana_Artist.jpg" },
-  },
-  "gol-gumbaz": {
-    alt: "Gol Gumbaz in Vijayapura and the garden in front of it",
-    credit: { author: "Rangan Datta Wiki", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Gol_Gumbaz,_Bijapur_1.jpg" },
-  },
-  belur: {
-    alt: "The carved front of the Chennakeshava temple, Belur",
-    credit: { author: "Dineshkannambadi", license: "CC BY-SA 3.0", source: "https://commons.wikimedia.org/wiki/File:Chennakeshava_Temple_at_Belur.jpg" },
-  },
   kudremukh: {
     alt: "Green grassland ridges of Kudremukh",
     credit: { author: "Dhruvaraj S", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Kudremukh_1.jpg" },
-  },
-  udupi: {
-    alt: "The colourful gateway of the Sri Krishna Matha, Udupi",
-    credit: { author: "Ashok Prabhakaran", license: "CC BY-SA 2.0", source: "https://commons.wikimedia.org/wiki/File:Udupi_Sri_Krishna_Matha_Temple.jpg" },
-  },
-  "vidhana-soudha": {
-    alt: "The east gate of the Vidhana Soudha, Bengaluru",
-    credit: { author: "Moheen Reeyad", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Gate_3_(East),_Vidhana_Soudha_(01).jpg" },
-  },
-  badami: {
-    alt: "A cave temple carved into the red sandstone cliffs of Badami",
-    credit: { author: "Rajeshodayanchal", license: "CC BY-SA 3.0", source: "https://commons.wikimedia.org/wiki/File:A-cave-temple-at-badami.JPG" },
-  },
-  pattadakal: {
-    alt: "Ancient temples on the green grounds of Pattadakal",
-    credit: { author: "Vinayaraj", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Pattadakal_temple_complex_-_hamvrvb102k22_(30).jpg" },
-  },
-  "mysore-pak": {
-    alt: "Mysore pak served on a banana leaf",
-    credit: { author: "Charles Haynes", license: "CC BY-SA 2.0", source: "https://commons.wikimedia.org/wiki/File:Mysore_pak.jpg" },
-  },
-  bandipur: {
-    alt: "A tusker in the forest at Bandipur",
-    credit: { author: "Yathin S Krishnappa", license: "CC BY-SA 3.0", source: "https://commons.wikimedia.org/wiki/File:Elephas_maximus_(Bandipur).jpg" },
-  },
-  gokarna: {
-    alt: "Visitors playing on the shore of Om Beach, Gokarna",
-    credit: { author: "Sourabh.biswas003", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:PXL_20260103_101009613_People_and_Beach_Om_Beach_Gokarna,_Karnataka_20.jpg" },
-  },
-  channapatna: {
-    alt: "Craftsmen making wooden toys in a Channapatna workshop",
-    credit: { author: "KartikMistry", license: "CC BY-SA 3.0", source: "https://commons.wikimedia.org/wiki/File:Channapatna_toys_artists.jpg" },
-  },
-  "kodagu-coffee": {
-    alt: "Buds opening on a coffee branch in Kodagu",
-    credit: { author: "Timothy A. Gonsalves", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Flower_Buds_Coffee_Robusta_Coorg_Feb24_D72_25939.jpg" },
-  },
-  shravanabelagola: {
-    alt: "The monolithic statue of Gommateshwara at Shravanabelagola",
-    credit: { author: "Venkygrams", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Shravanabelagola_-_Gommateshwara_Statue_1.jpg" },
   },
   "dollu-kunitha": {
     alt: "Dollu Kunitha artists dancing as they drum",
@@ -191,83 +117,29 @@ const IMAGES = {
 };
 
 /*
- * Articles. Featured carousel: exactly 10 slides. section = an id from SECTIONS.
- * Author names are PLACEHOLDERS. Replace them with the real bylines.
+ * Collections on deccanherald.com, read each time the page opens. The desk picks the
+ * stories and their order there.
+ * top     → its first 10 stories, in the desk's order, are the featured carousel; its
+ *           first 20, newest first, are the stories section below.
+ * archive → "From the archives", in the desk's order.
  */
-const SLIDES = [
-  {
-    image: "hampi",
-    author: "S Ramesh",
-    section: "karnataka",
-    title: "Hampi: the glory of Vijayanagara, carved in stone",
-    summary: "The stone chariot at the Vittala temple still stands as a witness to the empire's artistic wealth.",
-  },
-  {
-    image: "mysuru-palace",
-    author: "K N Suma",
-    section: "karnataka",
-    title: "Mysuru Palace, shimmering in a hundred thousand lights",
-    summary: "The palace by night, lit by thousands of bulbs, crowns the festive season of the state.",
-  },
-  {
-    image: "dasara",
-    author: "Manjunath Hegde",
-    section: "karnataka",
-    title: "Dasara elephants rehearse on the streets of Mysuru",
-    summary: "For the city, the elephants' practice walks before the Jamboo Savari are the festival's prelude.",
-  },
-  {
-    image: "jog-falls",
-    author: "Prakash Shetty",
-    section: "specials",
-    title: "Jog Falls in full flow after the monsoon",
-    summary: "The Sharavathi's Raja, Rani, Roarer and Rocket cascades plunge through the green of the Malnad.",
-  },
-  {
-    image: "yakshagana",
-    author: "Ganesh Bhat",
-    section: "entertainment",
-    title: "Yakshagana: from the green room to the stage",
-    summary: "The care artists take over their make-up in the chowki is the lifeblood of this coastal art.",
-  },
-  {
-    image: "gol-gumbaz",
-    author: "Anita Patil",
-    section: "specials",
-    title: "Gol Gumbaz: the dome where a whisper echoes",
-    summary: "In the gallery of Vijayapura's great monument, a word spoken once comes back many times.",
-  },
-  {
-    image: "belur",
-    author: "R Srinivas",
-    section: "karnataka",
-    title: "Belur: a marvel of Hoysala sculpture",
-    summary: "The fine carvings of the Chennakeshava temple mirror the skill of its sculptors.",
-  },
-  {
-    image: "kudremukh",
-    author: "Deepa Gowda",
-    section: "specials",
-    title: "Kudremukh: green waves of the Western Ghats",
-    summary: "These shola forests and grasslands are the cradle of the state's rivers.",
-  },
-  {
-    image: "udupi",
-    author: "Vinay Kamath",
-    section: "karnataka",
-    title: "Udupi: the heart of coastal tradition",
-    summary: "The Sri Krishna Matha and its Car Street bring tradition and celebration together.",
-  },
-  {
-    image: "vidhana-soudha",
-    author: "DH News Service",
-    section: "bengaluru",
-    title: "Vidhana Soudha: the seat of the state's government",
-    summary: "Bengaluru's grand legislature building is a symbol of Karnataka's democracy.",
-  },
-];
+const COLLECTIONS = {
+  api: "https://www.deccanherald.com/api/v1/collections/",
+  imageHost: "https://images.assettype.com/",
+  top: "karunadothsava-stories",
+  archive: "karunadothsava-archives",
+};
 
-/* "Latest highlights" cards. The first card is shown larger as the lead story. */
+/*
+ * "See all": every story in a collection, a page at a time, on this same page (address
+ * #all/<key>), read only then. keepOrder → the desk's order rather than newest first.
+ * fallback → the collection's page on deccanherald.com, offered if it can't be read.
+ */
+const STORY_LISTS = {
+  top: { collection: COLLECTIONS.top, title: UI.highlightsTitle, fallback: "https://www.deccanherald.com/karunadothsava-stories" },
+  archive: { collection: COLLECTIONS.archive, title: UI.archiveTitle, fallback: "https://www.deccanherald.com/karunadothsava-archives", keepOrder: true },
+};
+
 /*
  * The exhibition announced right after the carousel, with an "Add to Google Calendar"
  * button that opens Google Calendar with the details filled in.
@@ -296,110 +168,6 @@ const EVENT = {
   time: null,
   location: "Rangoli Metro Art Center, MG Road, Bengaluru",
 };
-
-const HIGHLIGHTS = [
-  {
-    image: "badami",
-    author: "Santosh Kulkarni",
-    section: "karnataka",
-    title: "The cave temples of Badami: poetry in red stone",
-    summary: "The Chalukya-era cave temples open into a world of art carved straight from the rock.",
-  },
-  {
-    image: "pattadakal",
-    author: "Anita Patil",
-    section: "specials",
-    title: "Pattadakal: where two styles meet",
-    summary: "Dravida and Nagara temples stand side by side in one complex.",
-  },
-  {
-    image: "mysore-pak",
-    author: "K N Suma",
-    section: "specials",
-    title: "Mysore pak: from the palace kitchen to every home",
-    summary: "Gram flour, ghee and sugar: the story of a sweet with just three ingredients.",
-  },
-  {
-    image: "bandipur",
-    author: "Deepa Gowda",
-    section: "karnataka",
-    title: "Bandipur: home of the wild elephant",
-    summary: "Part of the Nilgiri Biosphere, this forest is a model for wildlife conservation.",
-  },
-  {
-    image: "gokarna",
-    author: "Prakash Shetty",
-    section: "specials",
-    title: "An evening on the beaches of Gokarna",
-    summary: "Visitors at play among the waves of Om Beach.",
-  },
-  {
-    image: "channapatna",
-    author: "Manjunath Hegde",
-    section: "business",
-    title: "Channapatna toys: colours that bloom in wood",
-    summary: "A craft handed down for generations looks for new markets.",
-  },
-  {
-    image: "kodagu-coffee",
-    author: "Kaveri Poovaiah",
-    section: "business",
-    title: "Blossom time in the coffee estates of Kodagu",
-    summary: "Rain and flowering decide the year's sums for the growers.",
-  },
-  {
-    image: "shravanabelagola",
-    author: "R Srinivas",
-    section: "karnataka",
-    title: "Shravanabelagola: the calm gaze of Gommata",
-    summary: "The monolith atop Vindhyagiri is a symbol of renunciation and peace.",
-  },
-];
-
-/*
- * "From the archives": moments in Karnataka's story that Deccan Herald reported,
- * in date order. year is shown large; date is the dateline.
- * PLACEHOLDER: the headlines and notes are written for the layout. Replace them
- * with the real archive pages and check every date with the DH library.
- */
-const ARCHIVE = [
-  {
-    year: "1956",
-    date: "1 November 1956",
-    title: "A united Mysore State is born",
-    summary: "Kannada-speaking districts of Bombay, Hyderabad and Madras, and the state of Coorg, joined old Mysore to form one state.",
-  },
-  {
-    year: "1967",
-    date: "1967",
-    title: "Kuvempu wins the Jnanpith",
-    summary: "Sri Ramayana Darshanam made Kuvempu the first Kannada writer to receive the country's highest literary honour.",
-  },
-  {
-    year: "1973",
-    date: "1 November 1973",
-    title: "Mysore becomes Karnataka",
-    summary: "On Rajyotsava day the state took the name Karnataka, under Chief Minister D Devaraj Urs.",
-  },
-  {
-    year: "1982",
-    date: "April 1982",
-    title: "Dr Rajkumar joins the Gokak agitation",
-    summary: "The matinee idol's entry turned the demand for Kannada's primacy in schools into a statewide movement.",
-  },
-  {
-    year: "2008",
-    date: "31 October 2008",
-    title: "Kannada declared a classical language",
-    summary: "On the eve of Rajyotsava, the Centre granted Kannada classical status, recognising its long literary history.",
-  },
-  {
-    year: "2014",
-    date: "1 November 2014",
-    title: "Bangalore becomes Bengaluru",
-    summary: "The capital and eleven other cities took back their Kannada names on Rajyotsava day.",
-  },
-];
 
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of

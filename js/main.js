@@ -12,6 +12,7 @@
   const CAROUSEL_STORIES = 10; // the first of those, in the desk's order, for the carousel
   const PHOTO_STORIES_SHOWN = 5; // one large and four small fill the grid evenly
   const FACTS_SHOWN = 6; // fills two or three columns evenly
+  const ARCHIVE_SHOWN = 6; // the same
   const VIDEOS_SHOWN = 5; // in the player's list; about as tall as the player on desktop
   const REELS_SHOWN = 10; // each reel is Instagram's whole player, so the row stays short
   const VIDEOS_PER_PAGE = 12; // on a "See all" page: fills two or three columns evenly
@@ -20,7 +21,6 @@
   // Only what the page shows, so a collection of 500 stays around 100 KB.
   const STORY_FIELDS = "headline,subheadline,author-name,sections,url,published-at,hero-image-s3-key,hero-image-alt-text,hero-image-caption";
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const sectionsById = Object.fromEntries(SECTIONS.map((section) => [section.id, section]));
 
   /*
    * Each block runs only on pages that have it: the English (DH) edition leaves out
@@ -28,8 +28,6 @@
    */
   const has = (id) => document.getElementById(id) !== null;
   const format = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => values[key]);
-  // Stories in the data file link to their section where it has a page, else the newspaper's home page.
-  const sectionHref = (section) => section.href || UI.headerActionUrl;
 
   /* Small element helper: el("a", { href: "#" }, "text", childNode) */
   function el(tag, attrs = {}, ...children) {
@@ -43,14 +41,7 @@
     return node;
   }
 
-  /* One of our own photos in assets/images, at two widths. */
-  const localImage = (key) => ({
-    src: `assets/images/${key}-640.webp`,
-    srcset: `assets/images/${key}-640.webp 640w, assets/images/${key}-1280.webp 1280w`,
-    alt: IMAGES[key].alt,
-  });
-
-  /* A story photo from prajavani.net's image server, which resizes on request. */
+  /* A story photo from the newspaper's image server (COLLECTIONS.imageHost), which resizes on request. */
   function collectionImage(story) {
     const at = (width) => `${COLLECTIONS.imageHost}${story["hero-image-s3-key"]}?w=${width}&auto=format%2Ccompress`;
     return {
@@ -160,21 +151,17 @@
     PAGE_NAV.forEach((part) => has(part.target) && watcher.observe(document.getElementById(part.target)));
   }
 
-  /* Takes a part off the page, and its links out of the menus. */
-  function removeSection(id) {
-    document.getElementById(id).remove();
-    document.querySelectorAll(`a[href="#${id}"]`).forEach((link) => link.closest("li").remove());
+  /*
+   * A part whose stories or videos can't be read, or has none yet, keeps its heading and
+   * says so; no sample content stands in (owner's choice).
+   */
+  function showEmpty(id, message) {
+    const container = document.getElementById(id).querySelector(".container");
+    [...container.children].forEach((child) => child.matches(".section-title") || child.remove());
+    container.append(el("p", { class: "empty-state" }, message));
   }
 
-  /* Stories from the data file (SLIDES, HIGHLIGHTS) in the same shape as collection stories. */
-  function localStories(list) {
-    return list.map((story) => {
-      const section = sectionsById[story.section];
-      return { ...story, tag: section.name, href: sectionHref(section), image: localImage(story.image) };
-    });
-  }
-
-  /* The stories in a collection on prajavani.net (COLLECTIONS in the data file), with a photo each. */
+  /* The stories in a collection on the newspaper's site (COLLECTIONS in the data file), with a photo each. */
   async function collectionStories(slug, limit) {
     const response = await fetch(`${COLLECTIONS.api}${slug}?limit=${limit}&story-fields=${STORY_FIELDS}`, {
       signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS),
@@ -199,13 +186,11 @@
 
   /*
    * The top collection feeds the carousel (its first stories, in the desk's order) and
-   * the stories section (all that are read, newest first). Where the page has no
-   * collection, or it can't be read (offline, or a page not served from prajavani.net,
-   * which the browser blocks), SLIDES and HIGHLIGHTS are used instead.
+   * the stories section (all that are read, newest first). It can only be read from the
+   * newspaper's own site; elsewhere (or offline) both come back empty.
    */
   async function topStories() {
-    const stories = typeof COLLECTIONS === "undefined" ? [] : await collectionStories(COLLECTIONS.top, TOP_STORIES).catch(() => []);
-    if (!stories.length) return { slides: localStories(SLIDES), highlights: localStories(HIGHLIGHTS) };
+    const stories = await collectionStories(COLLECTIONS.top, TOP_STORIES).catch(() => []);
     return {
       slides: stories.slice(0, CAROUSEL_STORIES),
       highlights: newestFirst(stories),
@@ -361,13 +346,14 @@
   }
 
   /*
-   * Every list the "See all" view can show: each collection in STORY_LISTS (newest first)
+   * Every list the "See all" view can show: each collection in STORY_LISTS (newest first
+   * unless keepOrder)
    * and, on pages with videos, the two kinds from the editors' video list.
    * read → all the items; render → the cards for one page of them.
    */
   function seeAllLists() {
     const lists = Object.fromEntries(
-      Object.entries(STORY_LISTS).map(([key, { collection, title, fallback }]) => [
+      Object.entries(STORY_LISTS).map(([key, { collection, title, fallback, keepOrder }]) => [
         key,
         {
           title,
@@ -375,7 +361,7 @@
           count: UI.allStoriesCount,
           perPage: STORIES_PER_PAGE,
           grid: "card-grid",
-          read: () => collectionStories(collection, ALL_STORIES).then(newestFirst),
+          read: () => collectionStories(collection, ALL_STORIES).then(keepOrder ? (stories) => stories : newestFirst),
           render: async (stories) => stories.map((story) => storyCard(story)),
         },
       ])
@@ -462,21 +448,23 @@
     route();
   }
 
-  /* "From the archives": one clipping per moment, newest last. */
-  function renderArchive() {
+  /*
+   * "From the archives": the first stories in its collection, in the desk's order, each
+   * a clipping (a double rule across the top) with its photo, headline and subheadline.
+   */
+  function renderArchive(stories) {
     document.getElementById("archive-list").append(
-      ...ARCHIVE.map((story) =>
+      ...stories.slice(0, ARCHIVE_SHOWN).map((story) =>
         el(
           "li",
           { class: "archive__item" },
-          el("span", { class: "archive__year", "aria-hidden": "true" }, story.year),
-          el("p", { class: "archive__dateline" }, story.date),
-          el("h3", { class: "archive__title" }, story.title),
-          el("p", { class: "archive__summary" }, story.summary),
-          el("p", { class: "archive__status" }, UI.archiveComingSoon)
+          el("div", { class: "archive__media" }, photo(story.image, { sizes: "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw" })),
+          el("h3", { class: "archive__title" }, el("a", { class: "card__link", href: story.href }, story.title)),
+          story.summary && el("p", { class: "archive__summary" }, story.summary)
         )
       )
     );
+    document.getElementById("archive-more").hidden = stories.length <= ARCHIVE_SHOWN;
   }
 
   function renderCredits() {
@@ -703,7 +691,7 @@
    */
   async function setupVideoSection() {
     const { wide, upright } = await videoFeed();
-    if (!wide.length && !upright.length) return removeSection("videos");
+    if (!wide.length && !upright.length) return showEmpty("videos", UI.emptyVideos);
     if (wide.length) setupVideos(await withTitles(wide.slice(0, VIDEOS_SHOWN)));
     else document.getElementById("video-wide").remove();
     if (upright.length) renderShorts(upright.slice(0, REELS_SHOWN).map((source) => ({ source, title: "" })));
@@ -939,7 +927,6 @@
   const quotes = has("quotes-list") ? quotesRunSoFar() : [];
   if (quotes.length) renderQuotes(quotes);
   else document.querySelector(".quotes")?.remove();
-  if (has("archive-list")) renderArchive();
   renderCredits();
   setupSearch();
   setupMenu();
@@ -947,6 +934,11 @@
   if (has("all-stories")) setupAllStories();
   // The carousel waits for its stories; its height is fixed, so nothing below it moves.
   topStories().then(({ slides, highlights }) => {
+    if (!slides.length) {
+      showEmpty("featured", UI.emptyStories);
+      showEmpty("highlights", UI.emptyStories);
+      return;
+    }
     renderCarousel(slides);
     setupCarousel(slides);
     renderHighlights(highlights);
@@ -957,15 +949,19 @@
     watchVideoFocus();
   }
   if (has("photo-stories-list")) {
-    // Left out when its collection can't be read.
     collectionStories(COLLECTIONS.photo, PHOTO_STORIES_SHOWN)
       .catch(() => [])
-      .then((stories) => (stories.length ? renderPhotoStories(stories) : removeSection("photo-stories")));
+      .then((stories) => (stories.length ? renderPhotoStories(stories) : showEmpty("photo-stories", UI.emptyStories)));
   }
   if (has("facts-list")) {
-    // Left out when its collection can't be read.
     collectionStories(COLLECTIONS.facts, FACTS_SHOWN)
       .catch(() => [])
-      .then((stories) => (stories.length ? renderFacts(stories) : removeSection("facts")));
+      .then((stories) => (stories.length ? renderFacts(stories) : showEmpty("facts", UI.emptyStories)));
+  }
+  if (has("archive-list")) {
+    // One more than is shown, to know whether "See all" has more to show.
+    collectionStories(COLLECTIONS.archive, ARCHIVE_SHOWN + 1)
+      .catch(() => [])
+      .then((stories) => (stories.length ? renderArchive(stories) : showEmpty("archive", UI.emptyStories)));
   }
 })();

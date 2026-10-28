@@ -1,11 +1,11 @@
 """
 Serves the site on this computer with the live prajavani.net collections, for testing.
 
-Browsers let only pages on www.prajavani.net read its collections, so opened anywhere
-else the carousel falls back to SLIDES and the photo stories are left out. This server
-passes collection requests on to prajavani.net from the same address as the page, so
-the browser allows them. The site's own files are not changed: only the copy of
-js/data.js it sends points the collections at this server.
+Browsers let only pages on www.prajavani.net (and www.deccanherald.com) read their
+collections, so opened anywhere else the story sections show their "coming soon" note.
+This server passes collection requests on to each site from the same address as the
+page, so the browser allows them. The site's own files are not changed: only the copies
+of js/data.js and js/data-en.js it sends point the collections at this server.
 
 The video list (VIDEO_FEED, /pages/karunadothsava-json) comes from the CMS page on
 prajavani.net once it has links in it; until then, from cms/karunadothsava-json.json.
@@ -26,6 +26,9 @@ ROOT = Path(__file__).resolve().parent.parent
 PORT = 8123
 UPSTREAM = "https://www.prajavani.net"
 COLLECTIONS_PATH = "/api/v1/collections/"
+# The English edition's collections, from deccanherald.com, under their own local path.
+DH_UPSTREAM = "https://www.deccanherald.com"
+DH_COLLECTIONS_PATH = "/dh/api/v1/collections/"
 VIDEO_FEED_PATH = "/pages/karunadothsava-json"
 VIDEO_FEED_FILE = ROOT / "cms" / "karunadothsava-json.json"
 
@@ -33,23 +36,27 @@ VIDEO_FEED_FILE = ROOT / "cms" / "karunadothsava-json.json"
 class PreviewHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith(COLLECTIONS_PATH):
-            self.proxy_collection()
+            self.proxy_collection(UPSTREAM + self.path)
+        elif self.path.startswith(DH_COLLECTIONS_PATH):
+            self.proxy_collection(DH_UPSTREAM + self.path[len("/dh"):])
         elif self.path.split("?")[0] == VIDEO_FEED_PATH:
             self.send_video_feed()
         elif self.path.split("?")[0] == "/js/data.js":
-            self.send_data_file()
+            self.send_data_file("data.js", UPSTREAM + COLLECTIONS_PATH, COLLECTIONS_PATH)
+        elif self.path.split("?")[0] == "/js/data-en.js":
+            self.send_data_file("data-en.js", DH_UPSTREAM + COLLECTIONS_PATH, DH_COLLECTIONS_PATH)
         else:
             super().do_GET()
 
-    def proxy_collection(self):
-        request = urllib.request.Request(UPSTREAM + self.path, headers={"User-Agent": "Mozilla/5.0"})
+    def proxy_collection(self, url):
+        request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         try:
             with urllib.request.urlopen(request, timeout=10) as response:
                 self.send_body(response.status, response.read(), "application/json")
         except urllib.error.HTTPError as error:
             self.send_body(error.code, error.read(), "application/json")
         except urllib.error.URLError as error:
-            self.send_error(502, f"prajavani.net could not be reached: {error.reason}")
+            self.send_error(502, f"{url} could not be reached: {error.reason}")
 
     def send_video_feed(self):
         request = urllib.request.Request(UPSTREAM + VIDEO_FEED_PATH, headers={"User-Agent": "Mozilla/5.0"})
@@ -62,9 +69,9 @@ class PreviewHandler(http.server.SimpleHTTPRequestHandler):
             body = VIDEO_FEED_FILE.read_bytes()
         self.send_body(200, body, "application/json")
 
-    def send_data_file(self):
-        text = (ROOT / "js" / "data.js").read_text(encoding="utf-8")
-        text = text.replace(UPSTREAM + COLLECTIONS_PATH, COLLECTIONS_PATH)
+    def send_data_file(self, name, live_api, local_api):
+        text = (ROOT / "js" / name).read_text(encoding="utf-8")
+        text = text.replace(live_api, local_api)
         self.send_body(200, text.encode("utf-8"), "text/javascript; charset=utf-8")
 
     def send_body(self, status, body, content_type):

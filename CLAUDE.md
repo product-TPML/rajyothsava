@@ -106,10 +106,14 @@ Define them as CSS custom properties in one place.
   the line under the carousel is left out.
   The same collection feeds both: the carousel takes its **first 10 stories in the desk's
   order**; the stories section below ("ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು") takes its **first 20, sorted
-  newest first by publish time**, ignoring the collection order (owner's choice). If the
-  collection can't be read, they show `SLIDES` and `HIGHLIGHTS` instead. Reading it only works when the site is served from
-  www.prajavani.net (the browser blocks it from other addresses). The English page has
-  no collection yet and uses its `SLIDES`.
+  newest first by publish time**, ignoring the collection order (owner's choice). Reading
+  it only works when the site is served from www.prajavani.net (the browser blocks it from
+  other addresses). The English page does the same with DH's **"karunadothsava-stories"**
+  collection on deccanherald.com (owner's choice).
+- **No sample content, ever (owner's rule, both sites).** If a collection or the video list
+  can't be read, or is empty, the section keeps its heading and shows a dashed "coming soon"
+  note (`showEmpty` in js/main.js; `emptyStories` / `emptyVideos` in the data files). Never
+  add placeholder stories, videos or archive items as a fallback.
 - Featured carousel uses a **stacked-card ("fanned") design**, modelled on the top
   carousel of thehindu.com and chosen by the owner. The current story is a tall
   portrait card in front, and neighbouring stories fan out behind it, smaller and dimmer.
@@ -163,7 +167,7 @@ Define them as CSS custom properties in one place.
   first in the player); YouTube Shorts and Instagram Reels to their own sideways row.
   YouTube titles come from YouTube's oEmbed (readable from any address), cut at the first
   " | " and without hashtags. Unknown links are skipped. If the list can't be read or is
-  empty, the section and its menu links are left out. The starting file is
+  empty, the section shows its "coming soon" note. The starting file is
   `cms/karunadothsava-json.json`; the preview server uses it if the CMS page is empty. The
   CMS caches the page (`s-maxage=900`), so edits can take up to 15 minutes to show.
 - YouTube shows its cover and loads the player (youtube-nocookie.com) only when tapped.
@@ -183,7 +187,7 @@ Define them as CSS custom properties in one place.
 
 - From the **"karunadotsava-photo"** collection (`COLLECTIONS.photo`), same reading as the
   carousel. The first 5 show (one large, four small fill the grid evenly), each opening the
-  story on prajavani.net. If the collection can't be read, the section is left out.
+  story on prajavani.net. If the collection can't be read, the section shows its "coming soon" note.
 
 ## "See all" buttons
 
@@ -260,8 +264,11 @@ Define them as CSS custom properties in one place.
 - `index-en.html` + `js/data-en.js`: the same site in English for Deccan Herald (DH),
   requested by the owner. It uses the DH Karunadotsava mark and DH logo (see Brand assets)
   in place of Prajavani's, spells the title "Karunadothsava" to match the mark, and DH's typefaces through `data-brand="dh"` on `<html>`.
-- Owner's choices: no quotes banner, no videos, no photo stories, no section list at
-  the end of the page; adds "From the archives" (`ARCHIVE`).
+- Owner's choices: no quotes banner, no videos, no photo stories, no facts; adds "From the
+  archives" from DH's **"karunadothsava-archives"** collection (the first 6 in the desk's
+  order, as clippings with photo, headline and subheadline; "See all" for the rest).
+- Its collections are `COLLECTIONS` in `js/data-en.js` (api on deccanherald.com, photos from
+  images.assettype.com); like Prajavani's, they can only be read from www.deccanherald.com.
 - It shares `css/styles.css` and every script with the Kannada page. `js/main.js` runs
   each block only if the page has it. Never fork a script or stylesheet per edition;
   put the differences in the data file or a brand token.

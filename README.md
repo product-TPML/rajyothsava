@@ -5,7 +5,7 @@ Open `index.html` in a browser. There's no build step.
 - **Change text or content:** `js/data.js`. This covers menus, stories, photos, quotes, the poster maker and the opening animation.
 - **Styles:** `css/styles.css`. It's written mobile first, with every colour defined once at the top.
 - **Menus:** the top menu jumps to the parts of the page (`PAGE_NAV` in `js/data.js`). On phones a bar at the bottom of the screen has the four most used, ಮುಖಪುಟ, ಪೋಸ್ಟರ್, ಸುದ್ದಿ, ವಿಡಿಯೊ, then "ಮೆನು", which opens the full menu with search. The one being read lights up as you scroll.
-- **Test with the live collections:** run `python tools/preview-server.py` and open http://localhost:8123/. Opened directly, the page can't read the prajavani.net collections (see below), so the carousel shows its sample stories and the photo stories are left out. This test server fetches the collections for the page. It's for testing only and isn't needed on the live site.
+- **Test with the live collections:** run `python tools/preview-server.py` and open http://localhost:8123/. Opened directly, the pages can't read the prajavani.net or deccanherald.com collections (see below), so their story sections show "coming soon". This test server fetches the collections for both pages. It's for testing only and isn't needed on the live site.
 
 ## English edition (Deccan Herald)
 
@@ -13,7 +13,8 @@ Open `index.html` in a browser. There's no build step.
 
 - **Change text or content:** `js/data-en.js` (menu, stories, archive, poster maker, opening).
 - **Left out** compared with the Kannada page: the quotes banner, the videos and the photo stories.
-- **Added:** "From the archives", moments in Karnataka's story as DH reported them (`ARCHIVE` in `js/data-en.js`).
+- **Stories:** the carousel and stories section work as on the Kannada page, from DH's **karunadothsava-stories** collection on deccanherald.com.
+- **Added:** "From the archives", from DH's **karunadothsava-archives** collection: the first 6 in the desk's order, with "See all" for the rest.
 - **Menu:** like the Kannada page, it jumps to the parts of the page (`PAGE_NAV`), with "Archives" in place of videos and photo stories. The phone's bottom bar has Home, Poster, Latest, Archives and Menu.
 - **Look:** DH's typefaces (Playfair Display for headlines, Roboto Slab for text, as on deccanherald.com) with the same Rajyotsava red and yellow. The page sets `data-brand="dh"` on `<html>`, which switches the fonts in `css/styles.css`.
 
@@ -33,9 +34,9 @@ Readers can tap anywhere, press **Skip** or the button, or press Esc to jump str
 
 ## Carousel
 
-The **karunadotsava-top** collection on prajavani.net feeds two sections: the top carousel shows its first 10 stories in the order the desk sets there, and "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು" further down shows its first 20, newest first by publish time. Change the collection and the site follows. The site reads it each time the page opens. The short line under the carousel and on the story cards is the story's **subheadline**; stories without one show no line (the opening paragraph is never used), so ask the desk to write one for each story they add. This works only once the site is served from www.prajavani.net; opened from a computer or another address, they show the stories in `SLIDES` and `HIGHLIGHTS` in `js/data.js` instead.
+The **karunadotsava-top** collection on prajavani.net feeds two sections: the top carousel shows its first 10 stories in the order the desk sets there, and "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು" further down shows its first 20, newest first by publish time. Change the collection and the site follows. The site reads it each time the page opens. The short line under the carousel and on the story cards is the story's **subheadline**; stories without one show no line (the opening paragraph is never used), so ask the desk to write one for each story they add. This works only once the site is served from www.prajavani.net. If the collection can't be read or is empty, both sections show "ಸುದ್ದಿಗಳು ಶೀಘ್ರದಲ್ಲೇ ಇಲ್ಲಿ ಬರಲಿವೆ." The site never shows sample stories (this goes for every section, on both sites).
 
-The stories, videos and photo stories sections each end with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" (See all) button. For stories and photo stories it opens the whole collection on the same page (the address becomes `#all/top` or `#all/photo`): newest first, 24 to a page, with numbered page links, for up to 500 stories. It is read only when opened, so the home page stays light; the browser's back button returns to the home page. The lists are `STORY_LISTS` in `js/data.js`. The videos section has two: under the YouTube videos, "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to Prajavani's YouTube channel (`seeAllYoutube`); under the reels, "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to its Instagram (`seeAllInstagram`). The English page always uses its own `SLIDES`.
+The stories, videos and photo stories sections each end with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" (See all) button. For stories and photo stories it opens the whole collection on the same page (the address becomes `#all/top` or `#all/photo`): newest first, 24 to a page, with numbered page links, for up to 500 stories. It is read only when opened, so the home page stays light; the browser's back button returns to the home page. The lists are `STORY_LISTS` in `js/data.js`. The videos section has two: under the YouTube videos, "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to Prajavani's YouTube channel (`seeAllYoutube`); under the reels, "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to its Instagram (`seeAllInstagram`). The English page has the same for its stories and archives.
 
 ## Polls and contests
 
@@ -48,14 +49,14 @@ The editorial team keeps the video links on the CMS page **`/pages/karunadothsav
 - **Normal YouTube videos** go in the big player, with a list beside it. The first one is in the player when the page opens.
 - **YouTube Shorts and Instagram Reels** go in their own row, which scrolls sideways.
 - **Titles** of YouTube videos and Shorts come from YouTube automatically (the part before any " | ", without hashtags). Instagram shows its own caption.
-- Links that aren't YouTube or Instagram are skipped. If the page is empty or can't be read, the videos section is left out.
+- Links that aren't YouTube or Instagram are skipped. If the page is empty or can't be read, the videos section shows "ವಿಡಿಯೊಗಳು ಶೀಘ್ರದಲ್ಲೇ ಇಲ್ಲಿ ಬರಲಿವೆ."
 - prajavani.net keeps a copy of the page for up to 15 minutes, so a change can take that long to show.
 
 YouTube videos show their cover and load YouTube's player only when tapped. The "ರೀಲ್ಸ್" row is for Instagram Reels: each shows just the video (Instagram's player, trimmed of its header, side bars and comments strip), with a "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ನೋಡಿ ↗" link under it. Only one video plays at a time: starting another stops the one before (a reel goes back to its cover). YouTube won't play on a page opened as a file from a computer; it works once the site is on a web address.
 
 ## Photo stories
 
-The photo stories section shows the first 5 stories in the **karunadotsava-photo** collection on prajavani.net, one large and four small, each opening the story on prajavani.net. Like the carousel, this works only once the site is served from www.prajavani.net; elsewhere the section is left out.
+The photo stories section shows the first 5 stories in the **karunadotsava-photo** collection on prajavani.net, one large and four small, each opening the story on prajavani.net. Like the carousel, this works only once the site is served from www.prajavani.net; elsewhere the section shows "coming soon".
 
 ## Quotes
 
@@ -79,7 +80,8 @@ The opening and the quotes share one set of silhouettes. The source images are i
 
 ## Temporary / to replace before launch
 
-- [ ] **Collections (carousel and photo stories):** work only when the site is served from www.prajavani.net. If it will live elsewhere, the web team must allow it (a CORS header on the collection address).
+- [ ] **Collections:** work only when each page is served from its newspaper's site (www.prajavani.net, www.deccanherald.com). If they will live elsewhere, the web team must allow it (a CORS header on the collection address).
+- [ ] **DH collections:** "karunadothsava-stories" and "karunadothsava-archives" currently return about 37,000 general news stories each (they look automatic, not hand-picked), so the archives section shows ordinary news. The DH desk should make them hand-picked collections with only Karunadothsava stories and archive pages.
 - [ ] **Videos:** the CMS page `/pages/karunadothsava-json` holds the test links (picked to try the layout). The editors replace them with the final links.
 - [ ] **Quotes:** the four in the file are placeholders, dated 25–28 October so they show during review. The editorial team will send all 30 in one sheet: each quote with its date, speaker and a link to the speaker's photo. Each photo is then restyled into a silhouette (see Silhouettes).
 - [ ] **Poster addresses:** `prajavani.net/rajyotsava` (Kannada) and `deccanherald.com/rajyotsava` (English) are printed on every poster and sent with it. The web team sets both up the same way to point to each edition, or tells us the real addresses (`POSTER.address` in `js/data.js` and `js/data-en.js`).
@@ -91,8 +93,6 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Draft note:** the footer says "ಇದು ಮಾದರಿ ಕರಡು. ಪ್ರಕಟಣೆಗೆ ಮುನ್ನ ಪರಿಶೀಲನೆ ಅಗತ್ಯ." (`footerDraftNote`); remove it at launch.
 - [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
 - [ ] **DH logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg`. The page needs an internet connection to show it; if that link is ever removed, the logo disappears.
-- [ ] **DH archive stories:** the six headlines and notes in `ARCHIVE` (`js/data-en.js`) were written for the layout. Replace them with the real archive pages and have the DH library check every date. Each card says "Archive page coming soon" until there is a page to link to.
-- [ ] **DH stories and bylines:** the English carousel and highlight stories are translations of the Kannada placeholders, with made-up bylines.
 - [ ] **Exhibition (19 November):** the timings aren't announced yet, so the "Add to Google Calendar" entry is all-day. When they are, set `time` in `EVENT` (`js/data.js` and `js/data-en.js`), e.g. `{ label: "10 am to 7 pm", start: "10:00", end: "19:00" }`; the page and the calendar entry both pick it up. Also confirm the venue name ("Rangoli Metro Art Center, MG Road") and the wording.
 - [ ] **Karunadotsava mark:** `assets/hero/karunadotsava-pv-720.webp` and `-dh-720.webp` are exported from `assets/Karunadothsava Fin logo PV-DH.ai` without the gold border and gradient plaque; the site's red goes behind them. If the design team updates the .ai, they need re-exporting.
 - [ ] **Exhibition road test (`exhibition-road.html`):** a stand-alone phone test of the "ಕರುನಾಡಿನ ಹಾದಿ" walk-through, not linked from the site yet. It uses the site's stylesheet (fonts, colours, masthead and Karunadotsava mark), but the pages are drawn placeholders: five have sample write-ups (`FEATURED`) and 45 are dummy filler (`DUMMY`, made-up topics and dates) to try the road with about 50 entries, all to be replaced with the real list. Its content, scene styles and script sit inside the page rather than in `js/data.js`, `css/styles.css` and `js/main.js`. The ⚙ test option (swipe up or down to move ahead) is for review only. Once the choices are made, move it into the shared files properly and add the English edition.
