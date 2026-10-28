@@ -15,6 +15,7 @@
 :root {
   --gutter-l: max(16px, env(safe-area-inset-left, 0px));
   --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --header-h: 60px;
   --dock-h: 60px;
   --peek-h: 56px;
   --sheet-h: 70vh;
@@ -29,11 +30,11 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Header: the site's red masthead and Karunadotsava mark, fixed on top of the scene. */
+/* Header: the site's own masthead (sizes, padding and container come from styles.css),
+   fixed on top of the scene. The year and test button sit together on the right. */
 .bar {
   position: fixed; inset: 0 0 auto; z-index: 30;
-  display: flex; align-items: center; gap: 12px;
-  padding: calc(env(safe-area-inset-top, 0px) + 4px) var(--gutter-r) 4px var(--gutter-l);
+  padding-top: env(safe-area-inset-top, 0px);
 }
 .bar .brand { margin-right: auto; }
 /* Year as a split-flap calendar: one card per digit, each card in two halves.
@@ -294,7 +295,7 @@ body {
 /* Test options (review only). */
 .tests {
   position: fixed; z-index: 40;
-  top: calc(env(safe-area-inset-top, 0px) + 66px); right: var(--gutter-r);
+  top: calc(var(--header-h) + 6px); right: var(--gutter-r);
   width: min(320px, calc(100% - 32px)); box-sizing: border-box;
   padding: 14px 16px; border-radius: 12px;
   background: var(--white); box-shadow: var(--shadow-raised);
@@ -347,16 +348,18 @@ body {
 </head>
 <body>
 <header class="masthead bar">
-  <h1 class="brand">
-    <a class="brand__link" href="index.html">
-      <img class="brand__mark" src="assets/hero/karunadotsava-pv-720.webp" alt="ಪ್ರಜಾವಾಣಿ ಕರುನಾಡೋತ್ಸವ: ಮುಖಪುಟಕ್ಕೆ" width="720" height="236">
-    </a>
-  </h1>
-  <div class="year" id="year" aria-hidden="true"></div>
-  <span class="visually-hidden" id="yearSpoken" aria-live="polite"></span>
-  <button class="icon-button" id="testsBtn" type="button" aria-label="Test options" aria-expanded="false">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
-  </button>
+  <div class="container masthead__inner">
+    <h1 class="brand">
+      <a class="brand__link" href="index.html">
+        <img class="brand__mark" src="assets/hero/karunadotsava-pv-720.webp" alt="ಪ್ರಜಾವಾಣಿ ಕರುನಾಡೋತ್ಸವ: ಮುಖಪುಟಕ್ಕೆ" width="720" height="236">
+      </a>
+    </h1>
+    <div class="year" id="year" aria-hidden="true"></div>
+    <span class="visually-hidden" id="yearSpoken" aria-live="polite"></span>
+    <button class="icon-button" id="testsBtn" type="button" aria-label="Test options" aria-expanded="false">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+    </button>
+  </div>
 </header>
 
 <div class="stage" id="stage">
@@ -693,6 +696,7 @@ function layout() {
   const headerBottom = document.querySelector(".bar").getBoundingClientRect().bottom;
   const dockH = $("dock").offsetHeight, peekH = $("peek").offsetHeight;
   const root = document.documentElement.style;
+  root.setProperty("--header-h", `${headerBottom}px`);
   root.setProperty("--dock-h", `${dockH}px`);
   root.setProperty("--peek-h", `${peekH}px`);
   root.setProperty("--sheet-h", `${H - headerBottom - dockH}px`);

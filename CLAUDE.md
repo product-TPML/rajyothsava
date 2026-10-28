@@ -143,6 +143,15 @@ Define them as CSS custom properties in one place.
   into the silhouette style (black on white, one feature in pure blue, square PNG). We then
   run them through `tools/silhouette-art.py` as the README describes. Don't draw them ourselves.
 
+## Polls and contests (Kannada page)
+
+- To the right of the quotes (below them on phones), in place of the old intro text: polls and
+  contests on Prajavani's Facebook page (owner's request). Its own white card, side by side
+  with the quote's deep red card and of equal weight, not part of the quotes (owner's choice). A QR code to the page (tablet and
+  up; a phone can't scan its own screen) and a button linking to it. Text and address are
+  `contests…` in `UI` in `js/data.js`. The QR code is `assets/icons/facebook-qr.svg`, made by
+  `python tools/facebook-qr.py <address>`; remake it if the address changes.
+
 ## Videos (Kannada page)
 
 - YouTube and Instagram embeds; the owner pastes the links by hand into `VIDEOS` (wide

@@ -37,6 +37,10 @@ The **karunadotsava-top** collection on prajavani.net feeds two sections: the to
 
 The stories, videos and photo stories sections each end with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" (See all) button. For stories and photo stories it opens the whole collection on the same page (the address becomes `#all/top` or `#all/photo`): newest first, 24 to a page, with numbered page links, for up to 500 stories. It is read only when opened, so the home page stays light; the browser's back button returns to the home page. The lists are `STORY_LISTS` in `js/data.js`. The videos button goes to Prajavani's YouTube channel (`seeAllVideos`). The English page always uses its own `SLIDES`.
 
+## Polls and contests
+
+Beside the quotes, a panel invites readers to polls and contests on Prajavani's Facebook page (https://www.facebook.com/prajavani.net), with a QR code to scan from a computer and a button for phones. The words and the address are the `contests…` lines in `js/data.js`. If the address changes, change `contestsUrl` and remake the QR code: `python tools/facebook-qr.py <new address>` (needs `pip install segno`).
+
 ## Videos
 
 Paste the links in `js/data.js`, exactly as copied from YouTube or Instagram:

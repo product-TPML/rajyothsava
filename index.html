@@ -164,21 +164,29 @@
     <section class="intro">
       <div class="container intro__inner">
         <div class="quotes" role="region" aria-roledescription="carousel" data-label="quotesLabel">
+          <p class="intro__eyebrow" id="quotes-day" aria-live="polite"></p>
           <ul class="quotes__list" id="quotes-list"></ul>
           <div class="quotes__nav" id="quotes-nav">
             <button class="round-button" type="button" data-step="1" data-label="quotesPrev">
               <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
             </button>
-            <p class="quotes__day" id="quotes-day" aria-live="polite"></p>
             <button class="round-button" type="button" data-step="-1" data-label="quotesNext">
               <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
         </div>
-        <div class="intro__body">
-          <p data-text="introText"></p>
-          <a class="button button--accent" href="#highlights" data-text="introAction"></a>
-        </div>
+        <!-- Polls and contests on the Facebook page: a code to scan from a computer, a link for phones. -->
+        <aside class="contests" aria-labelledby="contests-title">
+          <p class="intro__eyebrow" data-text="contestsEyebrow"></p>
+          <div class="contests__main">
+            <div>
+              <h2 class="contests__title" id="contests-title" data-text="contestsTitle"></h2>
+              <p class="contests__text" data-text="contestsText"></p>
+            </div>
+            <img class="contests__qr" src="assets/icons/facebook-qr.svg" width="29" height="29" data-alt="contestsQrAlt">
+          </div>
+          <a class="button button--primary contests__action" data-href="contestsUrl" data-text="contestsAction" target="_blank" rel="noopener"></a>
+        </aside>
       </div>
     </section>
 

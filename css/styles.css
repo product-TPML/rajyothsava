@@ -1047,16 +1047,52 @@ body {
 
 /* ---------- Introductory banner ---------- */
 
+/*
+ * Two cards of equal weight, built alike: a small label at the top, the content in the
+ * middle (portrait left on the quote, QR code right on the contests, mirroring), and
+ * the controls along the bottom. The quote is on deep red, polls and contests on white.
+ */
 .intro {
-  --focus-ring: var(--yellow);
   padding-block: var(--space-6);
-  background: var(--red-dark);
-  color: rgb(255 255 255 / 85%);
+  background: var(--paper);
 }
 
 .intro__inner {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-4);
+}
+
+.quotes,
+.contests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius);
+}
+
+.quotes {
+  --focus-ring: var(--yellow);
+  background: var(--red-dark);
+  color: rgb(255 255 255 / 85%);
+}
+
+.contests {
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink-muted);
+}
+
+/* "ಇಂದಿನ ನುಡಿಮುತ್ತು" / the quote's day, and "ಪೋಲ್ ಮತ್ತು ಸ್ಪರ್ಧೆ". */
+.intro__eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--red);
+}
+
+.quotes .intro__eyebrow {
+  color: var(--yellow);
 }
 
 /* Quotes, one at a time: all share one grid cell, so the tallest sets the height and nothing jumps. */
@@ -1117,26 +1153,55 @@ body {
   font-size: 0.9375rem;
 }
 
-/* Back to earlier days, the day shown between the arrows. */
+/* The middle of each card takes the spare height, so the controls line up at the bottom. */
+.quotes__list,
+.contests__main {
+  flex: 1;
+  align-content: center;
+}
+
+/* Back to earlier days, and forward again. */
 .quotes__nav {
   display: flex;
+  gap: var(--space-2);
+}
+
+/* Polls and contests on the Facebook page. Phones: the link only (a phone can't scan its own screen). */
+.contests__main {
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: var(--space-3);
-  margin-top: var(--space-4);
+  gap: var(--space-5);
 }
 
-.quotes__day {
-  min-width: 10em;
-  font-size: 0.875rem;
-  text-align: center;
+.contests__title {
+  font-size: 1.375rem;
+  line-height: 1.35;
+  color: var(--ink);
 }
 
-.intro__body {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-4);
-  font-size: 1.0625rem;
+.contests__text {
+  margin-top: var(--space-2);
+  font-size: 0.9375rem;
+}
+
+.contests__qr {
+  display: none;
+  width: 120px;
+  height: 120px;
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.contests__action {
+  align-self: flex-start;
+}
+
+@media (min-width: 768px) {
+  .contests__qr {
+    display: block;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1145,18 +1210,32 @@ body {
   }
 
   .intro__inner {
-    grid-template-columns: 1.2fr 1fr;
-    align-items: center;
-    gap: var(--space-8);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+  }
+
+  .quotes,
+  .contests {
+    gap: var(--space-5);
+    padding: var(--space-6);
   }
 
   .quote {
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: 120px 1fr;
     gap: var(--space-5);
   }
 
   .quote__text {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .contests__title {
+    font-size: 1.625rem;
+  }
+
+  .contests__qr {
+    width: 136px;
+    height: 136px;
   }
 }
 

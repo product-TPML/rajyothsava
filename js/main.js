@@ -93,7 +93,7 @@
     );
 
   /* data-text="key" fills an element's text from UI; these fill an attribute instead. */
-  const ATTRIBUTE_BINDINGS = { label: "aria-label", href: "href", action: "action", placeholder: "placeholder" };
+  const ATTRIBUTE_BINDINGS = { label: "aria-label", href: "href", action: "action", placeholder: "placeholder", alt: "alt" };
 
   function applyText() {
     document.querySelectorAll("[data-text]").forEach((node) => {

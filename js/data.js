@@ -27,10 +27,14 @@ const UI = {
   quotesNext: "ಮುಂದಿನ ದಿನದ ನುಡಿಮುತ್ತು",
   quotesToday: "ಇಂದಿನ ನುಡಿಮುತ್ತು",
   quotesDay: "{month} {day}ರ ನುಡಿಮುತ್ತು",
-  introText:
-    "ನಾಡು, ನುಡಿ, ಕಲೆ ಮತ್ತು ಪರಂಪರೆಯ ಸಂಭ್ರಮಕ್ಕೆ ಪ್ರಜಾವಾಣಿಯ ಈ ವಿಶೇಷ ಸಂಚಿಕೆ ಮೀಸಲು. " +
-    "ಕರ್ನಾಟಕದ ಮೂಲೆಮೂಲೆಗಳ ಕಥನಗಳು, ಚಿತ್ರಗಳು ಮತ್ತು ಅಭಿಪ್ರಾಯಗಳನ್ನು ಒಂದೇ ಕಡೆ ಓದಿ.",
-  introAction: "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳನ್ನು ಓದಿ",
+  // Beside the quotes: polls and contests on the Facebook page. If the address changes,
+  // remake the QR code: python tools/facebook-qr.py <address>
+  contestsEyebrow: "ಪೋಲ್ ಮತ್ತು ಸ್ಪರ್ಧೆ",
+  contestsTitle: "ರಾಜ್ಯೋತ್ಸವ ಪೋಲ್, ಸ್ಪರ್ಧೆಗಳಲ್ಲಿ ಭಾಗವಹಿಸಿ",
+  contestsText: "ಪ್ರಜಾವಾಣಿ ಫೇಸ್‌ಬುಕ್ ಪುಟದಲ್ಲಿ ಪ್ರತಿದಿನ ಹೊಸ ಪೋಲ್ ಮತ್ತು ಸ್ಪರ್ಧೆ. ಕೋಡ್ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ ಅಥವಾ ಪುಟಕ್ಕೆ ಭೇಟಿ ನೀಡಿ.",
+  contestsAction: "ಫೇಸ್‌ಬುಕ್‌ನಲ್ಲಿ ಭಾಗವಹಿಸಿ",
+  contestsUrl: "https://www.facebook.com/prajavani.net",
+  contestsQrAlt: "ಪ್ರಜಾವಾಣಿ ಫೇಸ್‌ಬುಕ್ ಪುಟ ತೆರೆಯುವ ಕ್ಯೂಆರ್ ಕೋಡ್",
 
   posterEyebrow: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್",
   posterTitle: "ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು, ನಿಮ್ಮ ಸಮುದಾಯ",
