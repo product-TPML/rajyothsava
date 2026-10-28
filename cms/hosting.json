@@ -1,8 +1,8 @@
 {
   "scripts": "https://rajyothsava.pages.dev/",
   "media": {
-    "assets/icons/favicon-pv.svg": "",
-    "assets/icons/favicon-dh.svg": "",
+    "assets/icons/favicon-pv.svg": "https://images.assettype.com/prajavani/2026-10-28/8hxyq3pa/favicon-pv.svg",
+    "assets/icons/favicon-dh.svg": "https://images.assettype.com/prajavani/2026-10-28/7f9csoo2/favicon-dh.svg",
     "assets/hero/karunadotsava-pv-720.webp": "https://images.assettype.com/prajavani/2026-10-28/4ofcatud/karunadotsava-pv-720.webp",
     "assets/hero/karunadotsava-dh-720.webp": "https://images.assettype.com/prajavani/2026-10-28/o7l4g50l/karunadotsava-dh-720.webp",
     "assets/icons/facebook-qr.svg": "https://images.assettype.com/prajavani/2026-10-28/5kpwk64v/facebook-qr.svg"
