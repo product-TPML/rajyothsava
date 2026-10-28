@@ -106,17 +106,18 @@
     }
   }
 
-  /* Line icons for the phone's bottom bar (PAGE_NAV icon), drawn in the shared .icon style. */
+  /* Line icons drawn in the shared .icon style: the phone's bottom bar (PAGE_NAV icon) and the reel links. */
   const ICONS = {
     home: '<path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z"/>',
     camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
     news: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/>',
     play: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/>',
     archive: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v11h14V9M10 13h4"/>',
+    instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
   };
 
-  function icon(name) {
-    const holder = el("span", { class: "bottom-nav__icon", "aria-hidden": "true" });
+  function icon(name, className) {
+    const holder = el("span", { class: className, "aria-hidden": "true" });
     holder.innerHTML = `<svg class="icon" viewBox="0 0 24 24">${ICONS[name]}</svg>`;
     return holder;
   }
@@ -134,7 +135,7 @@
     document.getElementById("bottom-nav-list").prepend(
       ...parts
         .filter((part) => part.short)
-        .map((part) => el("li", {}, el("a", { class: "bottom-nav__link", href: `#${part.target}` }, icon(part.icon), el("span", {}, part.short))))
+        .map((part) => el("li", {}, el("a", { class: "bottom-nav__link", href: `#${part.target}` }, icon(part.icon, "bottom-nav__icon"), el("span", {}, part.short))))
     );
   }
 
@@ -437,20 +438,47 @@
   }
 
   /*
-   * A video link from YouTube or Instagram, as pasted into the data file:
-   * { kind: "youtube" | "instagram", id }.
+   * A video link from YouTube or Instagram, as the editors paste it:
+   * { kind: "youtube" | "instagram", id, link, upright }. upright → a YouTube Short or an
+   * Instagram Reel. Anything else gives null.
    */
   function videoSource(link) {
-    const url = new URL(link);
-    if (url.hostname.endsWith("instagram.com")) return { kind: "instagram", id: url.pathname.split("/")[2] };
-    const id = url.hostname === "youtu.be" ? url.pathname.slice(1) : url.searchParams.get("v") || url.pathname.split("/")[2];
-    return { kind: "youtube", id };
+    let url;
+    try {
+      url = new URL(link);
+    } catch {
+      return null;
+    }
+    const [, first, second] = url.pathname.split("/");
+    if (url.hostname.endsWith("instagram.com")) return second ? { kind: "instagram", id: second, link, upright: true } : null;
+    if (!/(^|\.)(youtube\.com|youtu\.be)$/.test(url.hostname)) return null;
+    const id = url.hostname === "youtu.be" ? first : url.searchParams.get("v") || second;
+    return id ? { kind: "youtube", id, link, upright: first === "shorts" } : null;
+  }
+
+  /* The links on the CMS page (VIDEO_FEED), which serves them as JSON: { "videos": [...] }. */
+  async function videoLinks() {
+    const response = await fetch(VIDEO_FEED, { signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS) });
+    if (!response.ok) throw new Error(`Video list: HTTP ${response.status}`);
+    const { videos } = await response.json();
+    return Array.isArray(videos) ? videos : [];
+  }
+
+  /* A YouTube video's title from YouTube, without its " | channel" endings and hashtags. */
+  async function youtubeTitle(source) {
+    try {
+      const response = await fetch(`https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(source.link)}`);
+      const { title } = await response.json();
+      return title.split(" | ")[0].replace(/#\S+/g, "").trim();
+    } catch {
+      return "";
+    }
   }
 
   function videoFrame(source, title) {
     const src =
       source.kind === "youtube"
-        ? `https://www.youtube-nocookie.com/embed/${source.id}?autoplay=1&rel=0`
+        ? `https://www.youtube-nocookie.com/embed/${source.id}?autoplay=1&rel=0&enablejsapi=1`
         : `https://www.instagram.com/reel/${source.id}/embed/`;
     return el("iframe", {
       class: "video-frame",
@@ -472,15 +500,55 @@
       el("img", { class: "media__img", src: `https://i.ytimg.com/vi/${source.id}/${cover}.jpg`, alt: "", loading: "lazy" }),
       el("span", { class: "video-cover__play", "aria-hidden": "true" })
     );
-    button.addEventListener("click", () => button.replaceWith(videoFrame(source, title)));
+    button.addEventListener("click", () => {
+      const frame = videoFrame(source, title);
+      button.replaceWith(frame);
+      nowPlaying(frame);
+    });
     return button;
   }
 
+  /*
+   * One video at a time. The players are YouTube's and Instagram's own frames, so when a
+   * new one starts, the one before stops: YouTube is asked to pause; Instagram can't be
+   * asked, so its frame is reloaded, which stops it.
+   */
+  let playingFrame = null;
+
+  function nowPlaying(frame) {
+    if (playingFrame && playingFrame !== frame && playingFrame.isConnected) stopVideo(playingFrame);
+    playingFrame = frame;
+  }
+
+  function stopVideo(frame) {
+    if (frame.src.includes("youtube")) {
+      frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: "pauseVideo", args: [] }), "*");
+    } else {
+      frame.src = frame.src;
+    }
+  }
+
+  /*
+   * A reader starts an Instagram reel inside Instagram's frame, which the page can't see,
+   * but the frame takes the focus. So while the focus is away from the page, the page
+   * checks which frame has it, which also catches moving straight from one reel to the next.
+   */
+  function watchVideoFocus() {
+    let timer;
+    const check = () => {
+      if (document.activeElement?.classList.contains("video-frame")) nowPlaying(document.activeElement);
+    };
+    window.addEventListener("blur", () => {
+      check();
+      timer = setInterval(check, 300);
+    });
+    window.addEventListener("focus", () => clearInterval(timer));
+  }
+
   /* Wide videos: one player plus a list; choosing from the list plays it in the player. */
-  function setupVideos() {
+  function setupVideos(videos) {
     const player = document.getElementById("video-player");
     const list = document.getElementById("video-list");
-    const videos = VIDEOS.map((video) => ({ ...video, source: videoSource(video.link) }));
 
     const items = videos.map((video, i) =>
       el(
@@ -502,10 +570,14 @@
 
     function load(index, { play }) {
       const video = videos[index];
-      player.replaceChildren(play ? videoFrame(video.source, video.title) : videoCover(video.source, video.title, "hqdefault"));
-      document.getElementById("video-tag").textContent = sectionsById[video.section].name;
+      if (play) {
+        const frame = videoFrame(video.source, video.title);
+        player.replaceChildren(frame);
+        nowPlaying(frame);
+      } else {
+        player.replaceChildren(videoCover(video.source, video.title, "hqdefault"));
+      }
       document.getElementById("video-title").textContent = video.title;
-      document.getElementById("video-summary").textContent = video.summary;
       items.forEach((item, i) => item.firstChild.setAttribute("aria-current", String(i === index)));
     }
 
@@ -522,23 +594,48 @@
    * tapped; Instagram gives no cover, so Reels show Instagram's own player, loaded
    * as they scroll near.
    */
-  function renderShorts() {
+  function renderShorts(shorts) {
     document.getElementById("shorts-list").append(
-      ...SHORTS.map((short) => {
-        const source = videoSource(short.link);
+      ...shorts.map(({ source, title }) => {
         if (source.kind === "instagram") {
-          const frame = videoFrame(source, short.title);
+          const frame = videoFrame(source, UI.reelTitle);
           frame.loading = "lazy";
-          return el("li", { class: "short short--instagram" }, frame);
+          frame.setAttribute("scrolling", "no"); // the player is cropped to its video; nothing inside should scroll
+          return el(
+            "li",
+            { class: "short short--instagram" },
+            el("div", { class: "short__frame" }, frame),
+            el("a", { class: "short__link", href: source.link, target: "_blank", rel: "noopener" }, icon("instagram", "short__icon"), UI.reelOnInstagram)
+          );
         }
         return el(
           "li",
           { class: "short" },
-          el("div", { class: "short__frame" }, videoCover(source, short.title, "oardefault")),
-          el("p", { class: "short__title" }, short.title)
+          el("div", { class: "short__frame" }, videoCover(source, title, "oardefault")),
+          el("p", { class: "short__title" }, title)
         );
       })
     );
+  }
+
+  /*
+   * The videos section from the editors' list of links: wide videos in the player,
+   * Shorts and Reels in their row. A part with nothing to show is left out, and so is
+   * the whole section if the list can't be read.
+   */
+  async function setupVideoSection() {
+    const links = await videoLinks().catch(() => []);
+    const sources = links.map((link) => videoSource(String(link).trim())).filter(Boolean);
+    const videos = await Promise.all(
+      sources.map(async (source) => ({ source, title: source.kind === "youtube" ? await youtubeTitle(source) : "" }))
+    );
+    const wide = videos.filter((video) => !video.source.upright);
+    const upright = videos.filter((video) => video.source.upright);
+    if (!videos.length) return removeSection("videos");
+    if (wide.length) setupVideos(wide);
+    else document.querySelector(".video-gallery").remove();
+    if (upright.length) renderShorts(upright);
+    else document.getElementById("shorts-row").remove();
   }
 
   /* The first photo stories in their collection, each opening on prajavani.net; the first is shown large. */
@@ -763,8 +860,8 @@
   });
   if (quotes.length) setupQuotes(quotes);
   if (has("video-list")) {
-    setupVideos();
-    renderShorts();
+    setupVideoSection();
+    watchVideoFocus();
   }
   if (has("photo-stories-list")) {
     // Left out when its collection can't be read.

@@ -7,6 +7,9 @@ passes collection requests on to prajavani.net from the same address as the page
 the browser allows them. The site's own files are not changed: only the copy of
 js/data.js it sends points the collections at this server.
 
+The video list (VIDEO_FEED, /pages/karunadothsava-json) comes from the CMS page on
+prajavani.net once it has links in it; until then, from cms/karunadothsava-json.json.
+
 For testing only; the live site needs no server of its own.
 
 Run from the project folder, then open http://localhost:8123/
@@ -23,12 +26,16 @@ ROOT = Path(__file__).resolve().parent.parent
 PORT = 8123
 UPSTREAM = "https://www.prajavani.net"
 COLLECTIONS_PATH = "/api/v1/collections/"
+VIDEO_FEED_PATH = "/pages/karunadothsava-json"
+VIDEO_FEED_FILE = ROOT / "cms" / "karunadothsava-json.json"
 
 
 class PreviewHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith(COLLECTIONS_PATH):
             self.proxy_collection()
+        elif self.path.split("?")[0] == VIDEO_FEED_PATH:
+            self.send_video_feed()
         elif self.path.split("?")[0] == "/js/data.js":
             self.send_data_file()
         else:
@@ -43,6 +50,17 @@ class PreviewHandler(http.server.SimpleHTTPRequestHandler):
             self.send_body(error.code, error.read(), "application/json")
         except urllib.error.URLError as error:
             self.send_error(502, f"prajavani.net could not be reached: {error.reason}")
+
+    def send_video_feed(self):
+        request = urllib.request.Request(UPSTREAM + VIDEO_FEED_PATH, headers={"User-Agent": "Mozilla/5.0"})
+        try:
+            with urllib.request.urlopen(request, timeout=10) as response:
+                body = response.read()
+        except (urllib.error.HTTPError, urllib.error.URLError):
+            body = b""
+        if b'"videos"' not in body:  # the CMS page is still empty
+            body = VIDEO_FEED_FILE.read_bytes()
+        self.send_body(200, body, "application/json")
 
     def send_data_file(self):
         text = (ROOT / "js" / "data.js").read_text(encoding="utf-8")

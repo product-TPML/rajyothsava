@@ -154,13 +154,28 @@ Define them as CSS custom properties in one place.
 
 ## Videos (Kannada page)
 
-- YouTube and Instagram embeds; the owner pastes the links by hand into `VIDEOS` (wide
-  YouTube videos: big player plus list) and `SHORTS` (YouTube Shorts and Instagram Reels,
-  in their own sideways-scrolling row, because they are upright). `videoSource` in
-  `js/main.js` reads the id from any pasted link.
+- YouTube and Instagram embeds. **The editorial team keeps only a list of links** on the CMS
+  page `/pages/karunadothsava-json` (`VIDEO_FEED`), served as JSON `{ "videos": [links] }`,
+  in any order; the front end does the rest (owner's decision). `videoSource` in
+  `js/main.js` reads each link: wide YouTube videos go to the big player plus list (the
+  first in the player); YouTube Shorts and Instagram Reels to their own sideways row.
+  YouTube titles come from YouTube's oEmbed (readable from any address), cut at the first
+  " | " and without hashtags. Unknown links are skipped. If the list can't be read or is
+  empty, the section and its menu links are left out. The starting file is
+  `cms/karunadothsava-json.json`; the preview server uses it if the CMS page is empty. The
+  CMS caches the page (`s-maxage=900`), so edits can take up to 15 minutes to show.
 - YouTube shows its cover and loads the player (youtube-nocookie.com) only when tapped.
-  Instagram gives no cover, so Reels show Instagram's own frame (owner is fine with it);
-  cards are 326px wide, the narrowest Instagram's player allows.
+  The upright row ("ರೀಲ್ಸ್") is for **Instagram Reels only** (owner's decision). Instagram
+  blocks other sites from showing its cover images, so each reel is Instagram's player,
+  **cropped to the video** (owner's request, to lose the black side bars): a 240px 9:16
+  window onto a larger player shifted past its 54px header, sized by 326/229.5 (its 4:5
+  media box width / the video's width). If Instagram changes its player's layout, those
+  numbers in css/styles.css need checking. A "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ನೋಡಿ ↗" link under each reel
+  opens it on Instagram.
+- **One video at a time** (owner's request): starting a video stops the one before.
+  YouTube is told to pause (`enablejsapi=1` + postMessage); Instagram has no such API, so
+  its frame is reloaded. Starting a reel happens inside Instagram's frame, so the page
+  notices by which frame has the focus (`watchVideoFocus` in js/main.js).
 
 ## Photo stories (Kannada page)
 

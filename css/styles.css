@@ -2091,10 +2091,6 @@ span.pager__step {
   color: var(--white);
 }
 
-.videos .tag {
-  color: var(--yellow);
-}
-
 .video-gallery {
   display: grid;
   gap: var(--space-5);
@@ -2160,20 +2156,9 @@ span.pager__step {
   background: var(--red);
 }
 
-.video-player__info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-2);
-  padding-top: var(--space-4);
-}
-
 .video-player__title {
+  padding-top: var(--space-4);
   font-size: 1.375rem;
-}
-
-.video-player__summary {
-  color: rgb(255 255 255 / 80%);
 }
 
 .video-list {
@@ -2212,8 +2197,13 @@ span.pager__step {
   background: #000;
 }
 
+/* Titles come from YouTube and can run long: two lines at most. */
 .video-list__title,
 .short__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   font-family: var(--font-headline);
   font-weight: 600;
   font-size: 0.9375rem;
@@ -2226,18 +2216,40 @@ span.pager__step {
   font-size: 1.25rem;
 }
 
+/* A slim gold scrollbar on a faint track, in place of the browser's grey one. */
 .shorts {
   display: flex;
   gap: var(--space-4);
-  padding-bottom: var(--space-3);
+  padding-bottom: var(--space-5);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(246 199 68 / 75%) rgb(255 255 255 / 10%);
+}
+
+/* The same look where the standard properties aren't supported (Safari). */
+.shorts::-webkit-scrollbar {
+  height: 6px;
+}
+
+.shorts::-webkit-scrollbar-track {
+  border-radius: 3px;
+  background: rgb(255 255 255 / 10%);
+}
+
+.shorts::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgb(246 199 68 / 75%);
+}
+
+.shorts::-webkit-scrollbar-thumb:hover {
+  background: var(--yellow);
 }
 
 .short {
   flex: none;
-  width: 326px;
+  width: 240px;
   scroll-snap-align: start;
 }
 
@@ -2252,11 +2264,43 @@ span.pager__step {
   margin-top: var(--space-2);
 }
 
-/* Instagram's player brings its own white frame and caption; at this height none of it scrolls. */
+/*
+ * Instagram's player puts a reel in a 4:5 box, under a 54px header, with black bars at the
+ * sides (the 9:16 video is centred in it). The card is a 9:16 window onto the video alone:
+ * the player is drawn wider by 326/229.5 (box width / video width) and shifted up past
+ * its header, so the bars, the header and the strip below fall outside the window.
+ */
+.short--instagram .short__frame {
+  position: relative;
+}
+
 .short--instagram .video-frame {
-  height: 620px;
-  border-radius: var(--radius);
-  background: var(--white);
+  position: absolute;
+  top: -54px;
+  left: 50%;
+  width: calc(100% * 326 / 229.5);
+  height: calc(100% + 54px + 200px);
+  translate: -50% 0;
+}
+
+.short__link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(255 255 255 / 80%);
+  transition: color var(--duration);
+}
+
+.short__link:hover {
+  color: var(--yellow);
+}
+
+.short__icon .icon {
+  width: 18px;
+  height: 18px;
 }
 
 @media (min-width: 1024px) {

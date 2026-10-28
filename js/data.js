@@ -85,7 +85,9 @@ const UI = {
   pagerPage: "ಪುಟ {page}",
   videosTitle: "ವಿಡಿಯೊ",
   videoPlay: "ವಿಡಿಯೊ ನೋಡಿ: {title}",
-  shortsTitle: "ಶಾರ್ಟ್ಸ್ ಮತ್ತು ರೀಲ್ಸ್",
+  shortsTitle: "ರೀಲ್ಸ್",
+  reelTitle: "ಇನ್‌ಸ್ಟಾಗ್ರಾಂ ರೀಲ್",
+  reelOnInstagram: "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ನೋಡಿ ↗",
   photoStoriesTitle: "ಫೋಟೊ ಕಥನಗಳು",
 
   footerAbout:
@@ -113,8 +115,8 @@ const PAGE_NAV = [
 ];
 
 /*
- * Newspaper sections, for the label on each story in this file (SLIDES, HIGHLIGHTS,
- * VIDEOS: section = an id here). Those stories link to the newspaper's home page.
+ * Newspaper sections, for the label on each story in this file (SLIDES, HIGHLIGHTS:
+ * section = an id here). Those stories link to the newspaper's home page.
  */
 const SECTIONS = [
   { id: "news", name: "ಸುದ್ದಿ" },
@@ -416,39 +418,13 @@ const HIGHLIGHTS = [
 ];
 
 /*
- * Videos. Paste each link as copied from YouTube or Instagram.
- * VIDEOS → wide YouTube videos, in the player and the list beside it; the first one
- *          is in the player when the page loads. section = an id from SECTIONS.
- * SHORTS → upright videos in their own row: YouTube Shorts and Instagram Reels.
- * PLACEHOLDER: picked from Prajavani's channels to try the layout.
+ * Videos come from a page on the CMS that the editorial team keeps: a list of links
+ * (YouTube videos, YouTube Shorts, Instagram Reels) in any order. The page sorts them:
+ * wide YouTube videos go in the player and its list (the first in the player); Shorts
+ * and Reels in the upright row. YouTube titles are fetched from YouTube. The file to
+ * paste there is cms/karunadothsava-json.json. If it can't be read, the section is left out.
  */
-const VIDEOS = [
-  {
-    link: "https://www.youtube.com/watch?v=v8bZBvSFPwM",
-    section: "lifestyle",
-    title: "ಸುಲಭವಾಗಿ ಮಾಡುವ ರುಚಿಕರ ಅವರೆಕಾಳು ಉಪ್ಪಿಟ್ಟು",
-    summary: "ಕರುನಾಡ ಸವಿಯೂಟ ಸರಣಿಯಲ್ಲಿ ಅವರೆಕಾಳು ಉಪ್ಪಿಟ್ಟು ಮಾಡುವ ವಿಧಾನ.",
-  },
-  {
-    link: "https://www.youtube.com/watch?v=awF_8sI_jJA",
-    section: "business",
-    title: "ವರ್ಷಕ್ಕೆ ₹40 ಲಕ್ಷ ಆದಾಯ; ಬದುಕನ್ನೇ ಬದಲಿಸಿದ ರೇಷ್ಮೆ",
-    summary: "ರೇಷ್ಮೆ ಕೃಷಿಯಿಂದ ಬದುಕು ಕಟ್ಟಿಕೊಂಡ ರೈತನ ಕಥೆ.",
-  },
-  {
-    link: "https://www.youtube.com/watch?v=W2ab8_lGlpY",
-    section: "lifestyle",
-    title: "ಮಂಗಳೂರು ಸೌತೆಕಾಯಿ ಹುಳಿ: ಅನ್ನದ ಜೊತೆ ಸವಿದರೆ ಸೂಪರ್ ರುಚಿ",
-    summary: "ಕರಾವಳಿಯ ಅಡುಗೆಮನೆಯ ಜನಪ್ರಿಯ ಸಾಂಬಾರ್.",
-  },
-];
-
-const SHORTS = [
-  { link: "https://www.youtube.com/shorts/YlaXtECjb7k", title: "ದಸರಾ ಅಂಬಾರಿ ಹೊತ್ತ ಅಭಿಮನ್ಯು ಆನೆಗೆ ಬೀಳ್ಕೊಡುಗೆ" },
-  { link: "https://www.instagram.com/reel/De_UypSgE5f/", title: "ಆಂಧ್ರಪ್ರದೇಶದಲ್ಲಿ ‘ಒರ್ನಾಬ್’ ಚಂಡಮಾರುತದ ಅಬ್ಬರ" },
-  { link: "https://www.youtube.com/shorts/NvOLvtVUBlw", title: "ಪ್ರಜಾವಾಣಿ ಸಿನಿ ಸಮ್ಮಾನಕ್ಕೆ ಕಿಚ್ಚ ಸುದೀಪ್ ಎಂಟ್ರಿ" },
-  { link: "https://www.youtube.com/shorts/ak5vM6PFRcY", title: "ವಿಧಾನಸೌಧದಲ್ಲಿ ಸ್ವಾತಂತ್ರ್ಯ ದಿನ ಸಂಭ್ರಮ" },
-];
+const VIDEO_FEED = "/pages/karunadothsava-json";
 
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of

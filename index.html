@@ -185,7 +185,10 @@
             </div>
             <img class="contests__qr" src="assets/icons/facebook-qr.svg" width="29" height="29" data-alt="contestsQrAlt">
           </div>
-          <a class="button button--primary contests__action" data-href="contestsUrl" data-text="contestsAction" target="_blank" rel="noopener"></a>
+          <a class="button button--primary contests__action" data-href="contestsUrl" target="_blank" rel="noopener">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/></svg>
+            <span data-text="contestsAction"></span>
+          </a>
         </aside>
       </div>
     </section>
@@ -307,16 +310,14 @@
         <div class="video-gallery">
           <div class="video-player">
             <div class="video-player__frame" id="video-player"></div>
-            <div class="video-player__info">
-              <span class="tag" id="video-tag"></span>
-              <h3 class="video-player__title" id="video-title"></h3>
-              <p class="video-player__summary" id="video-summary"></p>
-            </div>
+            <h3 class="video-player__title" id="video-title"></h3>
           </div>
           <ul class="video-list" id="video-list"></ul>
         </div>
-        <h3 class="shorts__title" data-text="shortsTitle"></h3>
-        <ul class="shorts" id="shorts-list"></ul>
+        <div class="shorts-row" id="shorts-row">
+          <h3 class="shorts__title" data-text="shortsTitle"></h3>
+          <ul class="shorts" id="shorts-list"></ul>
+        </div>
         <div class="see-all">
           <a class="button button--accent" data-text="seeAll" data-href="seeAllVideos"></a>
         </div>

@@ -43,12 +43,15 @@ Beside the quotes, a panel invites readers to polls and contests on Prajavani's 
 
 ## Videos
 
-Paste the links in `js/data.js`, exactly as copied from YouTube or Instagram:
+The editorial team keeps the video links on the CMS page **`/pages/karunadothsava-json`**, as JSON: one list of links, exactly as copied from YouTube or Instagram, in any order. `cms/karunadothsava-json.json` is the file to start from. The page does the rest:
 
-- **`VIDEOS`:** wide YouTube videos, shown in the big player with a list beside it. Each also needs a title, a short summary and a section.
-- **`SHORTS`:** upright videos (YouTube Shorts and Instagram Reels) in their own row, which scrolls sideways. Each needs a title.
+- **Normal YouTube videos** go in the big player, with a list beside it. The first one is in the player when the page opens.
+- **YouTube Shorts and Instagram Reels** go in their own row, which scrolls sideways.
+- **Titles** of YouTube videos and Shorts come from YouTube automatically (the part before any " | ", without hashtags). Instagram shows its own caption.
+- Links that aren't YouTube or Instagram are skipped. If the page is empty or can't be read, the videos section is left out.
+- prajavani.net keeps a copy of the page for up to 15 minutes, so a change can take that long to show.
 
-YouTube videos show their cover and load YouTube's player only when tapped. Instagram gives no cover, so Reels appear in Instagram's own white frame. YouTube won't play on a page opened as a file from a computer; it works once the site is on a web address.
+YouTube videos show their cover and load YouTube's player only when tapped. The "ರೀಲ್ಸ್" row is for Instagram Reels: each shows just the video (Instagram's player, trimmed of its header, side bars and comments strip), with a "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ನೋಡಿ ↗" link under it. Only one video plays at a time: starting another stops the one before (a reel goes back to its cover). YouTube won't play on a page opened as a file from a computer; it works once the site is on a web address.
 
 ## Photo stories
 
@@ -78,7 +81,7 @@ The opening and the quotes share one set of silhouettes. The source images are i
 
 - [ ] **Opening personalities:** Basavanna, Kempegowda, Onake Obavva, Kittur Rani Chennamma, Sir M. Visvesvaraya, Kuvempu and Dr Rajkumar. The list and the AI-made silhouettes need editorial approval.
 - [ ] **Collections (carousel and photo stories):** work only when the site is served from www.prajavani.net. If it will live elsewhere, the web team must allow it (a CORS header on the collection address).
-- [ ] **Videos:** the YouTube videos, Shorts and the Instagram Reel in `js/data.js` were picked to try the layout. Replace them with the final links.
+- [ ] **Videos:** the CMS page `/pages/karunadothsava-json` holds the test links (picked to try the layout). The editors replace them with the final links.
 - [ ] **Quotes:** the four in the file are placeholders, dated 25–28 October so they show during review. The editorial team will send all 30, one per day; each needs its date and a silhouette.
 - [ ] **Poster address:** `prajavani.net/rajyotsava` is printed on every poster and sent with it. The web team needs to set it up to point to this site, or tell us the real address (`POSTER.address` in `js/data.js`).
 - [ ] **Poster wording:** the headings, prompts, suggestions and the example posters' lines and names (made up for illustration) need editorial approval.
