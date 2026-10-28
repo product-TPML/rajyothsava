@@ -139,7 +139,9 @@ Define them as CSS custom properties in one place.
 - It opens on today's quote, with no autoplay. A back arrow steps to earlier days and a
   forward arrow returns, with the day ("ಇಂದಿನ ನುಡಿಮುತ್ತು" / "ನವೆಂಬರ್ 2ರ ನುಡಿಮುತ್ತು")
   between them (owner's request).
-- Speaker pictures: the editorial team supplies photos; the owner restyles them in ChatGPT
+- The 30 quotes come in one sheet: date, quote, speaker and a link to the speaker's photo
+  (owner's note).
+- Speaker pictures: from those photo links; the owner restyles them in ChatGPT
   into the silhouette style (black on white, one feature in pure blue, square PNG). We then
   run them through `tools/silhouette-art.py` as the README describes. Don't draw them ourselves.
 
@@ -192,8 +194,12 @@ Define them as CSS custom properties in one place.
   The collection is read only when the list is opened, and with only the fields shown, so the
   home page stays light. If it can't be read, the list offers the collection's page on
   prajavani.net. Lists are `STORY_LISTS` in `js/data.js`; the code is `setupAllStories`.
-- Videos → Prajavani's YouTube channel (prajavani.net has no video page). The addresses are
-  `seeAll…` in `UI` in `js/data.js`.
+- Videos (owner's requests): the home page shows the first 5 YouTube videos and 10 reels.
+  Under each part, an outline button goes to the platform ("ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to
+  Prajavani's YouTube channel, "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to its Instagram). When the
+  CMS list has more than is shown, a yellow "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" beside it opens all of that kind
+  on the same page, 12 to a page with page numbers (`#all/videos`, `#all/reels`). Each goes
+  with its part when that part is left out. The addresses are `seeAll…` in `UI` in `js/data.js`.
 
 ## Footer
 
@@ -221,12 +227,20 @@ Define them as CSS custom properties in one place.
 - The reader adds any photo (selfie, group or scene) and writes one short line under
   "ನನ್ನ ಹೆಮ್ಮೆ" (my pride), "ನನ್ನ ಕನಸು" (my dream for Kannada and Karnataka) or
   "ನನ್ನ ಸಮುದಾಯ" (my community; third tab, owner's request), with
-  tap-to-use suggestions, an optional name and town, and an optional longer story that
-  goes with the poster as the share message, not on the image. Set in `POSTER` in `js/data.js`.
+  tap-to-use suggestions and an optional name and town. There is no longer-story box (owner
+  removed it); sharing sends the poster with a message: the tab and the
+  reader's line, their name and town, then "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್ ನೀವೂ ಮಾಡಿ: <address>" (owner's request). Set in `POSTER` in `js/data.js`.
+- The maker's form runs: the tab ("ಯಾವುದರ ಬಗ್ಗೆ?"), the line, then the photo, because the
+  photo follows the choice (owner's request). Under the tabs, each tab's `about` says what it
+  means for Karunadotsava (owner's request).
 - The poster is 1080×1920 (9:16) for WhatsApp status and Instagram stories. The words
-  keep clear of the top and bottom strips WhatsApp covers. The Karunadotsava mark is
-  large; the Prajavani logo is small, in a dark red "made at prajavani.net/rajyotsava" pill
+  keep clear of the top and bottom strips WhatsApp covers. The Karunadotsava mark sits at
+  the top (136px tall, 20% smaller than before, owner's request) with the date line beside
+  it, one part per line ("ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ" / "ನವೆಂಬರ್ 1, 2026": `eventLine` split at " · ").
+  The Prajavani logo is small, in a dark red "made at prajavani.net/rajyotsava" pill
   (owner's choice: readers write their own words, so the brand is a credit).
+- The reader's line runs to 4 lines (90 characters), set smaller the more lines it takes
+  (`LINE_SIZES` in js/poster.js: 104, 96, 84, 72px for 1 to 4 lines; owner's request).
 - The photo opens filling the poster; the size slider zooms in, or out until the whole photo
   fits (a landscape photo at full width), on deep red, and it can be dragged (owner's request).
 - A disclaimer at the end of the maker's form (`posterDisclaimer`): the tool only makes the
@@ -254,6 +268,8 @@ Define them as CSS custom properties in one place.
 
 ## Tech and structure
 
+- **Opening animation content is confirmed for both editions** (owner, 28 October): the seven
+  personalities and their silhouettes, the closing message and the Karnataka map.
 - **Opening animation (owner's choice):** once a day per reader (India time, remembered in the
   browser's localStorage, so a hard refresh doesn't replay it), and only on the home page: never
   when the page opens on a "See all" list (`#all/…`). To see it again, use the footer's "watch again"

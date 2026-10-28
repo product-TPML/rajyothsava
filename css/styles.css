@@ -337,6 +337,22 @@ button {
   border-color: var(--white);
 }
 
+.button[hidden] {
+  display: none;
+}
+
+/* A quieter button on dark backgrounds, beside a yellow one. */
+.button--ghost {
+  border-color: var(--yellow);
+  background: transparent;
+  color: var(--white);
+}
+
+.button--ghost:hover {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
 .button--outline {
   color: var(--red);
 }
@@ -1460,6 +1476,11 @@ body {
   border: 0;
 }
 
+/* Its display would otherwise win over the hidden attribute (the size slider before a photo). */
+.field[hidden] {
+  display: none;
+}
+
 .field__label {
   padding: 0;
   font-weight: 600;
@@ -1508,11 +1529,6 @@ body {
   background: var(--white);
   font: inherit;
   color: var(--ink);
-}
-
-.field__input--story {
-  padding-block: var(--space-2);
-  resize: vertical;
 }
 
 .field__range {
@@ -1973,10 +1989,12 @@ main[data-view="all"] ~ .poster-cta {
   }
 }
 
-/* "See all": under a section's stories, to the full list. */
+/* "See all": under a section's stories, to the full list (with a second button beside it in videos). */
 .see-all {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: var(--space-3);
   margin-top: var(--space-6);
 }
 
@@ -2283,6 +2301,7 @@ span.pager__step {
   translate: -50% 0;
 }
 
+/* Takes the colour of its section: white on the dark videos band, ink on a "See all" page. */
 .short__link {
   display: inline-flex;
   min-height: 44px;
@@ -2290,12 +2309,16 @@ span.pager__step {
   gap: var(--space-2);
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgb(255 255 255 / 80%);
-  transition: color var(--duration);
+  opacity: 0.8;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: opacity var(--duration), text-decoration-color var(--duration);
 }
 
 .short__link:hover {
-  color: var(--yellow);
+  opacity: 1;
+  text-decoration-color: currentColor;
 }
 
 .short__icon .icon {
@@ -2316,6 +2339,47 @@ span.pager__step {
 
   .video-player__title {
     font-size: 1.75rem;
+  }
+}
+
+/* "See all" pages of videos: wide videos two or three to a row; reels as wide as Instagram's player allows (240px or more). */
+.video-grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.video-card__frame {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #000;
+}
+
+.video-card__title {
+  margin-top: var(--space-3);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+}
+
+.reel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-5);
+}
+
+.reel-grid .short {
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -2399,6 +2463,112 @@ span.pager__step {
 
   .photo-stories__grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- Interesting facts (ಕರುನಾಡ ಕುತೂಹಲ) ---------- */
+
+/*
+ * Numbered fact cards on cream. Phones: a row each, photo beside the number and headline.
+ * Tablet and up: two, then three columns, photo on top. The whole card is a link.
+ */
+.facts {
+  padding-block: var(--space-7);
+  background: var(--cream);
+}
+
+.facts__lead {
+  max-width: 60ch;
+  margin: calc(-1 * var(--space-3)) 0 var(--space-5);
+  color: var(--ink-muted);
+}
+
+.facts__grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.fact {
+  position: relative;
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  align-items: center;
+  gap: var(--space-4);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--yellow);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+/* Phones: the photo fills its column for the card's full height. */
+.fact__media {
+  align-self: stretch;
+  min-height: 112px;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.fact__body {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+}
+
+.fact__number {
+  font-family: var(--font-headline);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--red);
+}
+
+.fact__title {
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  transition: color var(--duration);
+}
+
+.fact:hover .fact__title {
+  color: var(--red);
+}
+
+.fact:hover .media__img {
+  transform: scale(1.04);
+}
+
+@media (min-width: 768px) {
+  .facts__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+  }
+
+  .fact {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 0;
+  }
+
+  .fact__media {
+    aspect-ratio: 3 / 2;
+  }
+
+  .fact__body {
+    padding: var(--space-4) var(--space-5) var(--space-5);
+  }
+
+  .fact__number {
+    font-size: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .facts {
+    padding-block: var(--space-8);
+  }
+
+  .facts__grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

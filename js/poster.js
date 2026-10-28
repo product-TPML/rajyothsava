@@ -1,10 +1,10 @@
 /*
  * Rajyotsava poster maker. The page shows a one-screen teaser with example posters;
  * its button opens the maker full screen. The reader adds a photo, picks "my pride",
- * "my dream" or "my community", writes a line (and optionally their name, town and a longer story),
- * then shares or downloads a tall poster that fits a WhatsApp status. The story and
- * the site's link go with the poster as the share message. Everything is drawn on a
- * canvas in the browser; the photo never leaves the reader's device.
+ * "my dream" or "my community", writes a line (and optionally their name and town),
+ * then shares or downloads a tall poster that fits a WhatsApp status. The site's link
+ * goes with the poster as the share message. Everything is drawn on a canvas in the
+ * browser; the photo never leaves the reader's device.
  */
 (() => {
   "use strict";
@@ -16,7 +16,10 @@
   // with its reply bar, so the words stay between these lines; the photo runs edge to edge.
   const SAFE_TOP = 230;
   const SAFE_BOTTOM = 1790;
-  const MAX_LINES = 3;
+  // The reader's line is set large when short and smaller as it runs onto more lines:
+  // the largest size for 1, 2, 3 and 4 lines. Four lines at most.
+  const LINE_SIZES = [104, 96, 84, 72];
+  const MIN_LINE_SIZE = 52;
   const MOVE_STEP = 24; // canvas pixels per arrow-key press
   const ZOOM_STEP = 0.1;
   const CTA_COMPACT_AFTER_PX = 240; // the floating button keeps its label for the first bit of scrolling
@@ -28,11 +31,10 @@
   const promptGroup = document.getElementById("poster-prompts");
   const lineInput = document.getElementById("poster-line");
   const lineHint = document.getElementById("poster-line-hint");
+  const promptAbout = document.getElementById("poster-prompt-about");
   const lineCount = document.getElementById("poster-line-count");
   const suggestions = document.getElementById("poster-suggestions");
   const nameInput = document.getElementById("poster-name");
-  const storyInput = document.getElementById("poster-story");
-  const storyCount = document.getElementById("poster-story-count");
   const zoomInput = document.getElementById("poster-zoom");
   const photoOnly = [document.getElementById("poster-zoom-field"), document.getElementById("poster-hint")];
   const status = document.getElementById("poster-status");
@@ -136,22 +138,32 @@
     ctx.fillRect(0, 820, WIDTH, HEIGHT - 820);
   }
 
-  /* The Karunadotsava mark, large, at the top on the site's red, with the date line under it. */
+  /*
+   * The Karunadotsava mark at the top on the site's red, and beside it the date line,
+   * one part per line ("ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ" / "ನವೆಂಬರ್ 1, 2026"), centred on the mark.
+   */
   function drawEvent(ctx, mark) {
-    const pad = 24;
-    const markHeight = 170;
+    const pad = 20;
+    const markHeight = 136;
     const markWidth = (mark.width / mark.height) * markHeight;
+    const boxWidth = markWidth + pad * 2;
     const boxHeight = markHeight + pad * 2;
     ctx.fillStyle = token("red");
     ctx.beginPath();
-    ctx.roundRect(MARGIN, SAFE_TOP, markWidth + pad * 2, boxHeight, 16);
+    ctx.roundRect(MARGIN, SAFE_TOP, boxWidth, boxHeight, 16);
     ctx.fill();
     ctx.drawImage(mark, MARGIN + pad, SAFE_TOP + pad, markWidth, markHeight);
+
+    const parts = POSTER.eventLine.split(" · ");
+    const textLeft = MARGIN + boxWidth + 32;
+    const textSize = 36;
+    const lineHeight = textSize * 1.45;
     ctx.textAlign = "left";
-    ctx.textBaseline = "alphabetic";
+    ctx.textBaseline = "middle";
     ctx.fillStyle = token("yellow");
-    ctx.font = font(600, 34, TEXT);
-    ctx.fillText(POSTER.eventLine, MARGIN, SAFE_TOP + boxHeight + 52);
+    ctx.font = font(600, textSize, TEXT);
+    const firstMiddle = SAFE_TOP + boxHeight / 2 - ((parts.length - 1) * lineHeight) / 2;
+    parts.forEach((part, i) => ctx.fillText(part, textLeft, firstMiddle + i * lineHeight, WIDTH - MARGIN - textLeft));
   }
 
   /* Splits text into lines no wider than maxWidth, at spaces. */
@@ -171,17 +183,17 @@
     return lines;
   }
 
-  /* The largest headline size at which the line fits in MAX_LINES lines. */
+  /* The largest size at which the line fits, no larger than LINE_SIZES allows for its number of lines. */
   function fitLine(ctx, text) {
     const maxWidth = WIDTH - MARGIN * 2;
-    let size = 104;
-    let lines;
-    do {
+    const fits = (line) => ctx.measureText(line).width <= maxWidth;
+    for (let size = LINE_SIZES[0]; size > MIN_LINE_SIZE; size -= 4) {
       ctx.font = font(600, size, HEADLINE);
-      lines = wrap(ctx, text, maxWidth);
-      size -= 4;
-    } while ((lines.length > MAX_LINES || lines.some((line) => ctx.measureText(line).width > maxWidth)) && size > 52);
-    return { size: size + 4, lines: lines.slice(0, MAX_LINES) };
+      const lines = wrap(ctx, text, maxWidth);
+      if (lines.length <= LINE_SIZES.length && size <= LINE_SIZES[lines.length - 1] && lines.every(fits)) return { size, lines };
+    }
+    ctx.font = font(600, MIN_LINE_SIZE, HEADLINE);
+    return { size: MIN_LINE_SIZE, lines: wrap(ctx, text, maxWidth).slice(0, LINE_SIZES.length) };
   }
 
   /*
@@ -394,6 +406,7 @@
     const prompt = POSTER.prompts[key];
     state.prompt = key;
     promptGroup.querySelector(`input[value="${key}"]`).checked = true;
+    promptAbout.textContent = prompt.about;
     lineHint.textContent = prompt.hint;
     lineInput.placeholder = prompt.example;
     suggestions.replaceChildren(
@@ -412,10 +425,6 @@
     render();
   }
 
-  function updateStoryCount() {
-    storyCount.textContent = format(UI.posterCount, { n: storyInput.value.length, max: POSTER.storyMax });
-  }
-
   /* ---------- Output ---------- */
 
   function posterFile() {
@@ -431,10 +440,19 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
+  /*
+   * The message sent with the poster: the tab and the reader's line, their name and town,
+   * then the invitation to make one. Parts left empty are skipped.
+   */
+  function shareMessage() {
+    const words = [state.line && `${POSTER.prompts[state.prompt].label}: ${state.line}`, state.name].filter(Boolean);
+    const invite = format(POSTER.shareInvite, { address: POSTER.address });
+    return [words.join("\n"), invite].filter(Boolean).join("\n\n");
+  }
+
   async function share() {
     const file = await posterFile();
-    const story = storyInput.value.trim();
-    const text = format(POSTER.shareText, { story: story ? `${story}\n\n` : "", address: POSTER.address });
+    const text = shareMessage();
     // Closing the share sheet without sharing rejects; that is not an error.
     navigator.share({ files: [file], text }).catch(() => {});
   }
@@ -453,7 +471,6 @@
     ...POSTER.samples.map(() => Object.assign(document.createElement("canvas"), { className: "poster__sample", width: WIDTH / 2, height: HEIGHT / 2 }))
   );
   lineInput.maxLength = POSTER.lineMax;
-  storyInput.maxLength = POSTER.storyMax;
 
   // Sharing files is offered where the browser supports it (mostly phones); elsewhere downloading is the main action.
   const canShareFiles = navigator.canShare?.({ files: [new File([""], "test.jpg", { type: "image/jpeg" })] });
@@ -477,7 +494,6 @@
     state.name = nameInput.value.trim();
     render();
   });
-  storyInput.addEventListener("input", updateStoryCount);
   zoomInput.addEventListener("input", () => setZoom(Number(zoomInput.value)));
   fileInput.addEventListener("change", onFileChosen);
   captureInput.addEventListener("change", onFileChosen);
@@ -510,6 +526,5 @@
   sampleWatcher.observe(samples);
 
   setLine("");
-  updateStoryCount();
   selectPrompt(state.prompt);
 })();

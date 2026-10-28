@@ -51,8 +51,6 @@ const UI = {
   posterSuggestions: "ಸಲಹೆಗಳು",
   posterName: "ಹೆಸರು, ಊರು (ಐಚ್ಛಿಕ)",
   posterNamePlaceholder: "ಉದಾ: ಸುಮಾ, ಮಂಡ್ಯ",
-  posterStory: "ಜೊತೆಗೊಂದು ಕತೆ (ಐಚ್ಛಿಕ)",
-  posterStoryHint: "ಪೋಸ್ಟರ್ ಹಂಚಿಕೊಳ್ಳುವಾಗ ಇದು ಜೊತೆಗೆ ಸಂದೇಶವಾಗಿ ಹೋಗುತ್ತದೆ.",
   posterDisclaimer:
     "ಈ ಸೌಲಭ್ಯ ಪೋಸ್ಟರ್ ತಯಾರಿಸಲು ಮಾತ್ರ. ಪೋಸ್ಟರ್‌ನಲ್ಲಿ ಸೇರಿಸುವ ಫೋಟೊ, ಬರಹ ಹಾಗೂ ಪೋಸ್ಟರ್‌ನ ಬಳಕೆಗೆ ಬಳಕೆದಾರರೇ ಹೊಣೆ. ಅದಕ್ಕೆ ಪ್ರಜಾವಾಣಿ ಜವಾಬ್ದಾರವಲ್ಲ.",
   posterHint: "ಫೋಟೊವನ್ನು ಎಳೆದು ಸರಿಹೊಂದಿಸಿ.",
@@ -72,11 +70,16 @@ const UI = {
   seeAll: "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
   // Where each section's "See all" button goes: #all/<key> opens STORY_LISTS[key] on this page.
   seeAllStories: "#all/top",
-  seeAllVideos: "https://www.youtube.com/prajavani",
+  seeAllYoutube: "https://www.youtube.com/prajavani",
+  seeAllInstagram: "https://www.instagram.com/prajavani/",
+  seeAllOnYoutube: "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+  seeAllOnInstagram: "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
   seeAllPhotoStories: "#all/photo",
+  seeAllFacts: "#all/facts",
   allStoriesBack: "ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ",
   allStoriesLoading: "ಸುದ್ದಿಗಳು ಬರುತ್ತಿವೆ…",
   allStoriesCount: "{count} ಸುದ್ದಿಗಳು · ಪುಟ {page}/{pages}",
+  allVideosCount: "{count} ವಿಡಿಯೊ · ಪುಟ {page}/{pages}",
   allStoriesError: "ಸುದ್ದಿಗಳನ್ನು ಇಲ್ಲಿ ತೆರೆಯಲು ಆಗಲಿಲ್ಲ.",
   allStoriesErrorLink: "ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ನೋಡಿ",
   pagerLabel: "ಪುಟಗಳು",
@@ -89,6 +92,8 @@ const UI = {
   reelTitle: "ಇನ್‌ಸ್ಟಾಗ್ರಾಂ ರೀಲ್",
   reelOnInstagram: "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ನೋಡಿ ↗",
   photoStoriesTitle: "ಫೋಟೊ ಕಥನಗಳು",
+  factsTitle: "ಕರುನಾಡ ಕುತೂಹಲ",
+  factsLead: "ಕರ್ನಾಟಕ ಮತ್ತು ಕನ್ನಡದ ಬಗ್ಗೆ ನಿಮಗೆ ಗೊತ್ತಿರದ ಸಂಗತಿಗಳು",
 
   footerAbout:
     "ಪ್ರಜಾವಾಣಿ ಕನ್ನಡದ ವಿಶ್ವಾಸಾರ್ಹ ದಿನಪತ್ರಿಕೆ. ರಾಜ್ಯೋತ್ಸವದ ಈ ವಿಶೇಷ ತಾಣ ನಾಡಿನ ಹೆಮ್ಮೆಯ ಕಥನಗಳನ್ನು ಓದುಗರಿಗೆ ತಲುಪಿಸುತ್ತದೆ.",
@@ -112,6 +117,7 @@ const PAGE_NAV = [
   { label: "ಮುಖ್ಯಾಂಶಗಳು", short: "ಸುದ್ದಿ", icon: "news", target: "highlights" },
   { label: "ವಿಡಿಯೊ", short: "ವಿಡಿಯೊ", icon: "play", target: "videos" },
   { label: "ಫೋಟೊ ಕಥನಗಳು", target: "photo-stories" },
+  { label: "ಕುತೂಹಲ", target: "facts" },
 ];
 
 /*
@@ -232,12 +238,14 @@ const IMAGES = {
  * top   → its first 10 stories, in the desk's order, are the featured carousel; its
  *         first 20, newest first, are the stories section below.
  * photo → photo stories.
+ * facts → interesting facts about Karnataka and Kannada, at the end of the page.
  */
 const COLLECTIONS = {
   api: "https://www.prajavani.net/api/v1/collections/",
   imageHost: "https://images.prajavani.net/",
   top: "karunadotsava-top",
   photo: "karunadotsava-photo",
+  facts: "karunadothsava-kuthuhala",
 };
 
 /*
@@ -249,6 +257,7 @@ const COLLECTIONS = {
 const STORY_LISTS = {
   top: { collection: COLLECTIONS.top, title: UI.highlightsTitle, fallback: "https://www.prajavani.net/karunadotsava-top" },
   photo: { collection: COLLECTIONS.photo, title: UI.photoStoriesTitle, fallback: "https://www.prajavani.net/karunadotsava-photo" },
+  facts: { collection: COLLECTIONS.facts, title: UI.factsTitle, fallback: "https://www.prajavani.net/karunadothsava-kuthuhala" },
 };
 
 /*
@@ -423,15 +432,17 @@ const HIGHLIGHTS = [
  * wide YouTube videos go in the player and its list (the first in the player); Shorts
  * and Reels in the upright row. YouTube titles are fetched from YouTube. The file to
  * paste there is cms/karunadothsava-json.json. If it can't be read, the section is left out.
+ * The home page shows the first few of each; with more, "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" opens them all,
+ * a page at a time (#all/videos, #all/reels).
  */
 const VIDEO_FEED = "/pages/karunadothsava-json";
 
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of
- * Kannada and Karnataka, what they dream for its future, or about their community. The poster is tall (9:16)
- * so it fits a WhatsApp status; an optional longer story goes with it as the message
- * when shared.
- * prompts  → the choices, one tab each; example is shown faintly until the reader writes,
+ * Kannada and Karnataka, what they dream for its future, or about their community.
+ * The poster is tall (9:16) so it fits a WhatsApp status.
+ * prompts  → the choices, one tab each; about says under the tabs what the choice means
+ *            for Karunadotsava; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
  * samples  → the example posters on the page, with photos from IMAGES.
  *            PLACEHOLDER: the lines and names are made up for illustration.
@@ -444,18 +455,21 @@ const POSTER = {
   prompts: {
     pride: {
       label: "ನನ್ನ ಹೆಮ್ಮೆ",
+      about: "ಕರುನಾಡಿನ ಯಾವ ಸಂಗತಿ ನಿಮ್ಮನ್ನು ಹೆಮ್ಮೆಪಡಿಸುತ್ತದೆ? ನಮ್ಮ ಭಾಷೆ, ಊರು, ಕಲೆ, ಹಬ್ಬ ಅಥವಾ ಸಾಧಕರು. ರಾಜ್ಯೋತ್ಸವದಂದು ಅದನ್ನು ಸಂಭ್ರಮಿಸಿ.",
       hint: "ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಯಾವುದು ನಿಮಗೆ ಹೆಮ್ಮೆ ತರುತ್ತದೆ?",
       example: "ನಮ್ಮೂರ ಕಂಬಳದ ಕೆಸರಿನ ಓಟ",
       suggestions: ["ನನ್ನೂರು", "ನಮ್ಮ ಕನ್ನಡ ಭಾಷೆ", "ನಮ್ಮ ಹಬ್ಬಗಳು", "ನಮ್ಮೂರ ಊಟ", "ನಮ್ಮ ಕಲೆ, ಸಂಗೀತ", "ನನ್ನ ಕುಟುಂಬ"],
     },
     dream: {
       label: "ನನ್ನ ಕನಸು",
+      about: "ಮುಂದಿನ ತಲೆಮಾರಿನ ಕರ್ನಾಟಕ ಹೇಗಿರಬೇಕು? ಕನ್ನಡ ಮತ್ತು ನಾಡಿನ ಭವಿಷ್ಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಆಶಯವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ.",
       hint: "ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಭವಿಷ್ಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಆಶಯ ಏನು?",
       example: "ಪ್ರತಿ ಮಗುವೂ ಕನ್ನಡದಲ್ಲಿ ಓದಿ ಬೆಳೆಯಲಿ",
       suggestions: ["ಕನ್ನಡ ಶಾಲೆಗಳು ಬೆಳಗಲಿ", "ಹಸಿರು ಬೆಂಗಳೂರು ಮರಳಲಿ", "ಊರಲ್ಲೇ ಉದ್ಯೋಗ ಸಿಗಲಿ", "ಕೆರೆಗಳು ತುಂಬಿ ತುಳುಕಲಿ", "ತಂತ್ರಜ್ಞಾನದಲ್ಲೂ ಕನ್ನಡ ಮೆರೆಯಲಿ"],
     },
     community: {
       label: "ನನ್ನ ಸಮುದಾಯ",
+      about: "ನಾಡನ್ನು ಕಟ್ಟುವವರು ನಮ್ಮ ಸುತ್ತಲಿನ ಜನ. ನಿಮ್ಮ ಊರು, ಬಡಾವಣೆ, ಸಂಘ ಅಥವಾ ಬಳಗ ಮಾಡುತ್ತಿರುವ ಒಳ್ಳೆಯ ಕೆಲಸವನ್ನು ನೆನೆಯಿರಿ.",
       hint: "ನಿಮ್ಮ ಊರು, ಬಡಾವಣೆ ಅಥವಾ ಬಳಗದ ಜನರ ಬಗ್ಗೆ ಒಂದು ಮಾತು",
       example: "ಊರ ಕೆರೆಯ ಹೂಳೆತ್ತಿದ ನಮ್ಮ ಯುವಕ ಸಂಘ",
       suggestions: ["ನಮ್ಮ ಕನ್ನಡ ಸಂಘ", "ನಮ್ಮ ಬಡಾವಣೆ", "ನಮ್ಮೂರ ಜನ", "ನಮ್ಮ ಶಾಲೆ", "ನಮ್ಮ ರೈತರು", "ನಮ್ಮ ಯುವಕ ಸಂಘ"],
@@ -466,8 +480,7 @@ const POSTER = {
     { prompt: "community", image: "dollu-kunitha", line: "ಡೊಳ್ಳು ಕುಣಿತ ಉಳಿಸಿರುವ ನಮ್ಮೂರ ಯುವಕರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ" },
     { prompt: "pride", image: "dasara-lights", line: "ದಸರೆಯ ಬೆಳಕಲ್ಲಿ ಮಿನುಗುವ ಮೈಸೂರು", name: "ಸುಮಾ, ಮೈಸೂರು" },
   ],
-  lineMax: 60,
-  storyMax: 300,
+  lineMax: 90,
   camera: "user",
   placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
   eventLine: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
@@ -476,8 +489,8 @@ const POSTER = {
   credit: "{address} ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
   address: "prajavani.net/rajyotsava",
   fileName: "prajavani-rajyotsava-poster.jpg",
-  // Sent with the poster when shared: the reader's story (if any), then the link.
-  shareText: "{story}ನಿಮ್ಮದೂ ಮಾಡಿ: https://{address}",
+  // Ends the message sent with the poster, after the reader's own words.
+  shareInvite: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್ ನೀವೂ ಮಾಡಿ: https://{address}",
 };
 
 /*

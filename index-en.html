@@ -195,6 +195,22 @@
             <figcaption class="studio__hint" id="poster-hint" data-text="posterHint" hidden></figcaption>
           </figure>
           <form class="studio__panel" id="poster-form">
+            <fieldset class="field">
+              <legend class="field__label" data-text="posterPrompt"></legend>
+              <div class="segmented" id="poster-prompts"></div>
+              <p class="field__note" id="poster-prompt-about" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="field">
+              <div class="field__head">
+                <label class="field__label" for="poster-line" data-text="posterLine"></label>
+                <span class="field__count" id="poster-line-count"></span>
+              </div>
+              <p class="field__note" id="poster-line-hint"></p>
+              <input class="field__input" id="poster-line" type="text" autocomplete="off" aria-describedby="poster-line-hint">
+              <div class="chips" id="poster-suggestions" role="group" data-label="posterSuggestions"></div>
+            </div>
+
             <div class="field">
               <p class="field__label" data-text="posterPhoto"></p>
               <div class="field__row">
@@ -215,33 +231,9 @@
               </div>
             </div>
 
-            <fieldset class="field">
-              <legend class="field__label" data-text="posterPrompt"></legend>
-              <div class="segmented" id="poster-prompts"></div>
-            </fieldset>
-
-            <div class="field">
-              <div class="field__head">
-                <label class="field__label" for="poster-line" data-text="posterLine"></label>
-                <span class="field__count" id="poster-line-count"></span>
-              </div>
-              <p class="field__note" id="poster-line-hint"></p>
-              <input class="field__input" id="poster-line" type="text" autocomplete="off" aria-describedby="poster-line-hint">
-              <div class="chips" id="poster-suggestions" role="group" data-label="posterSuggestions"></div>
-            </div>
-
             <div class="field">
               <label class="field__label" for="poster-name" data-text="posterName"></label>
               <input class="field__input" id="poster-name" type="text" maxlength="40" autocomplete="off" data-placeholder="posterNamePlaceholder">
-            </div>
-
-            <div class="field">
-              <div class="field__head">
-                <label class="field__label" for="poster-story" data-text="posterStory"></label>
-                <span class="field__count" id="poster-story-count"></span>
-              </div>
-              <p class="field__note" id="poster-story-hint" data-text="posterStoryHint"></p>
-              <textarea class="field__input field__input--story" id="poster-story" rows="3" aria-describedby="poster-story-hint"></textarea>
             </div>
 
             <p class="field__note studio__disclaimer" data-text="posterDisclaimer"></p>

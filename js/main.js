@@ -11,6 +11,10 @@
   const TOP_STORIES = 20; // read from the top collection, for the stories section
   const CAROUSEL_STORIES = 10; // the first of those, in the desk's order, for the carousel
   const PHOTO_STORIES_SHOWN = 5; // one large and four small fill the grid evenly
+  const FACTS_SHOWN = 6; // fills two or three columns evenly
+  const VIDEOS_SHOWN = 5; // in the player's list; about as tall as the player on desktop
+  const REELS_SHOWN = 10; // each reel is Instagram's whole player, so the row stays short
+  const VIDEOS_PER_PAGE = 12; // on a "See all" page: fills two or three columns evenly
   const ALL_STORIES = 500; // the most a "See all" list is expected to hold, read in one go
   const STORIES_PER_PAGE = 24; // fills two or three columns evenly
   // Only what the page shows, so a collection of 500 stays around 100 KB.
@@ -357,10 +361,52 @@
   }
 
   /*
-   * "See all": while the address is #all/<key>[/<page>], the page shows every story in
-   * STORY_LISTS[key], newest first, a page at a time, in place of the home page. Each
-   * collection is read once, the first time it is opened. Page links change the
-   * address, so the browser's back button steps back through them.
+   * Every list the "See all" view can show: each collection in STORY_LISTS (newest first)
+   * and, on pages with videos, the two kinds from the editors' video list.
+   * read → all the items; render → the cards for one page of them.
+   */
+  function seeAllLists() {
+    const lists = Object.fromEntries(
+      Object.entries(STORY_LISTS).map(([key, { collection, title, fallback }]) => [
+        key,
+        {
+          title,
+          fallback,
+          count: UI.allStoriesCount,
+          perPage: STORIES_PER_PAGE,
+          grid: "card-grid",
+          read: () => collectionStories(collection, ALL_STORIES).then(newestFirst),
+          render: async (stories) => stories.map((story) => storyCard(story)),
+        },
+      ])
+    );
+    if (has("video-list")) {
+      const video = { count: UI.allVideosCount, perPage: VIDEOS_PER_PAGE };
+      lists.videos = {
+        ...video,
+        title: UI.videosTitle,
+        fallback: UI.seeAllYoutube,
+        grid: "video-grid",
+        read: () => videoFeed().then(({ wide }) => wide),
+        render: async (sources) => (await withTitles(sources)).map(videoCard),
+      };
+      lists.reels = {
+        ...video,
+        title: UI.shortsTitle,
+        fallback: UI.seeAllInstagram,
+        grid: "reel-grid",
+        read: () => videoFeed().then(({ upright }) => upright),
+        render: async (sources) => sources.map((source) => shortCard({ source, title: "" })),
+      };
+    }
+    return lists;
+  }
+
+  /*
+   * "See all": while the address is #all/<key>[/<page>], the page shows every item in
+   * that list (seeAllLists), a page at a time, in place of the home page. Each list is
+   * read once, the first time it is opened. Page links change the address, so the
+   * browser's back button steps back through them.
    */
   function setupAllStories() {
     const main = document.getElementById("main");
@@ -369,36 +415,40 @@
     const status = document.getElementById("all-stories-status");
     const list = document.getElementById("all-stories-list");
     const pager = document.getElementById("all-stories-pager");
+    const lists = seeAllLists();
     const read = {};
 
     async function show(key, page) {
-      const { collection, title: listTitle, fallback } = STORY_LISTS[key];
+      const config = lists[key];
       const hash = location.hash;
-      title.textContent = listTitle;
+      title.textContent = config.title;
+      list.className = config.grid;
       list.replaceChildren();
       pager.replaceChildren();
       status.textContent = UI.allStoriesLoading;
       section.scrollIntoView();
 
-      read[key] ??= collectionStories(collection, ALL_STORIES).then(newestFirst);
-      const stories = await read[key].catch(() => []);
+      read[key] ??= config.read();
+      const items = await read[key].catch(() => []);
       if (location.hash !== hash) return; // the reader moved on while it loaded
-      if (!stories.length) {
+      if (!items.length) {
         delete read[key];
-        status.replaceChildren(UI.allStoriesError, " ", el("a", { href: fallback }, UI.allStoriesErrorLink));
+        status.replaceChildren(UI.allStoriesError, " ", el("a", { href: config.fallback }, UI.allStoriesErrorLink));
         return;
       }
 
-      const pages = Math.ceil(stories.length / STORIES_PER_PAGE);
+      const pages = Math.ceil(items.length / config.perPage);
       const current = Math.min(page, pages);
-      status.textContent = format(UI.allStoriesCount, { count: stories.length, page: current, pages });
-      list.append(...stories.slice((current - 1) * STORIES_PER_PAGE, current * STORIES_PER_PAGE).map((story) => storyCard(story)));
+      const cards = await config.render(items.slice((current - 1) * config.perPage, current * config.perPage));
+      if (location.hash !== hash) return;
+      status.textContent = format(config.count, { count: items.length, page: current, pages });
+      list.append(...cards);
       if (pages > 1) pager.append(...pagerLinks(key, current, pages));
     }
 
     function route() {
       const [, key, page] = location.hash.match(/^#all\/(\w+)(?:\/(\d+))?$/) || [];
-      if (Object.hasOwn(STORY_LISTS, key ?? "")) {
+      if (Object.hasOwn(lists, key ?? "")) {
         main.dataset.view = "all";
         show(key, Math.max(1, Number(page) || 1));
       } else if (main.dataset.view) {
@@ -594,48 +644,72 @@
    * tapped; Instagram gives no cover, so Reels show Instagram's own player, loaded
    * as they scroll near.
    */
-  function renderShorts(shorts) {
-    document.getElementById("shorts-list").append(
-      ...shorts.map(({ source, title }) => {
-        if (source.kind === "instagram") {
-          const frame = videoFrame(source, UI.reelTitle);
-          frame.loading = "lazy";
-          frame.setAttribute("scrolling", "no"); // the player is cropped to its video; nothing inside should scroll
-          return el(
-            "li",
-            { class: "short short--instagram" },
-            el("div", { class: "short__frame" }, frame),
-            el("a", { class: "short__link", href: source.link, target: "_blank", rel: "noopener" }, icon("instagram", "short__icon"), UI.reelOnInstagram)
-          );
-        }
-        return el(
-          "li",
-          { class: "short" },
-          el("div", { class: "short__frame" }, videoCover(source, title, "oardefault")),
-          el("p", { class: "short__title" }, title)
-        );
-      })
+  function shortCard({ source, title }) {
+    if (source.kind === "instagram") {
+      const frame = videoFrame(source, UI.reelTitle);
+      frame.loading = "lazy";
+      frame.setAttribute("scrolling", "no"); // the player is cropped to its video; nothing inside should scroll
+      return el(
+        "li",
+        { class: "short short--instagram" },
+        el("div", { class: "short__frame" }, frame),
+        el("a", { class: "short__link", href: source.link, target: "_blank", rel: "noopener" }, icon("instagram", "short__icon"), UI.reelOnInstagram)
+      );
+    }
+    return el(
+      "li",
+      { class: "short" },
+      el("div", { class: "short__frame" }, videoCover(source, title, "oardefault")),
+      el("p", { class: "short__title" }, title)
     );
   }
 
+  function renderShorts(shorts) {
+    document.getElementById("shorts-list").append(...shorts.map(shortCard));
+  }
+
+  /* A wide video on a "See all" page: its cover (it plays in place) and title. */
+  function videoCard({ source, title }) {
+    return el(
+      "li",
+      { class: "video-card" },
+      el("div", { class: "video-card__frame" }, videoCover(source, title, "hqdefault")),
+      el("h3", { class: "video-card__title" }, title)
+    );
+  }
+
+  /* The editors' links, read once and sorted: { wide, upright } (sources from videoSource). */
+  let feed;
+
+  function videoFeed() {
+    feed ??= videoLinks()
+      .catch(() => [])
+      .then((links) => {
+        const sources = links.map((link) => videoSource(String(link).trim())).filter(Boolean);
+        return { wide: sources.filter((source) => !source.upright), upright: sources.filter((source) => source.upright) };
+      });
+    return feed;
+  }
+
+  /* Each source with its title: YouTube's, fetched only for the videos being shown. */
+  const withTitles = (sources) =>
+    Promise.all(sources.map(async (source) => ({ source, title: source.kind === "youtube" ? await youtubeTitle(source) : "" })));
+
   /*
-   * The videos section from the editors' list of links: wide videos in the player,
-   * Shorts and Reels in their row. A part with nothing to show is left out, and so is
-   * the whole section if the list can't be read.
+   * The videos section from the editors' list of links: the first wide videos in the
+   * player, the first Reels in their row, and "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to the rest when there are
+   * more. A part with nothing to show is left out, and so is the whole section if the
+   * list can't be read.
    */
   async function setupVideoSection() {
-    const links = await videoLinks().catch(() => []);
-    const sources = links.map((link) => videoSource(String(link).trim())).filter(Boolean);
-    const videos = await Promise.all(
-      sources.map(async (source) => ({ source, title: source.kind === "youtube" ? await youtubeTitle(source) : "" }))
-    );
-    const wide = videos.filter((video) => !video.source.upright);
-    const upright = videos.filter((video) => video.source.upright);
-    if (!videos.length) return removeSection("videos");
-    if (wide.length) setupVideos(wide);
-    else document.querySelector(".video-gallery").remove();
-    if (upright.length) renderShorts(upright);
+    const { wide, upright } = await videoFeed();
+    if (!wide.length && !upright.length) return removeSection("videos");
+    if (wide.length) setupVideos(await withTitles(wide.slice(0, VIDEOS_SHOWN)));
+    else document.getElementById("video-wide").remove();
+    if (upright.length) renderShorts(upright.slice(0, REELS_SHOWN).map((source) => ({ source, title: "" })));
     else document.getElementById("shorts-row").remove();
+    document.getElementById("videos-more").hidden = wide.length <= VIDEOS_SHOWN;
+    document.getElementById("reels-more").hidden = upright.length <= REELS_SHOWN;
   }
 
   /* The first photo stories in their collection, each opening on prajavani.net; the first is shown large. */
@@ -650,6 +724,25 @@
             { class: "photo-stories__item", href: story.href },
             photo(story.image, { sizes: i === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 50vw" }),
             el("span", { class: "photo-stories__caption" }, story.title)
+          )
+        )
+      )
+    );
+  }
+
+  /* Interesting facts, numbered, each opening its story on prajavani.net. */
+  function renderFacts(stories) {
+    document.getElementById("facts-list").append(
+      ...stories.map((story, i) =>
+        el(
+          "li",
+          { class: "fact" },
+          el("div", { class: "fact__media" }, photo(story.image, { sizes: "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 112px" })),
+          el(
+            "div",
+            { class: "fact__body" },
+            el("span", { class: "fact__number", "aria-hidden": "true" }, String(i + 1).padStart(2, "0")),
+            el("h3", { class: "fact__title" }, el("a", { class: "card__link", href: story.href }, story.title))
           )
         )
       )
@@ -868,5 +961,11 @@
     collectionStories(COLLECTIONS.photo, PHOTO_STORIES_SHOWN)
       .catch(() => [])
       .then((stories) => (stories.length ? renderPhotoStories(stories) : removeSection("photo-stories")));
+  }
+  if (has("facts-list")) {
+    // Left out when its collection can't be read.
+    collectionStories(COLLECTIONS.facts, FACTS_SHOWN)
+      .catch(() => [])
+      .then((stories) => (stories.length ? renderFacts(stories) : removeSection("facts")));
   }
 })();

@@ -228,6 +228,22 @@
             <figcaption class="studio__hint" id="poster-hint" data-text="posterHint" hidden></figcaption>
           </figure>
           <form class="studio__panel" id="poster-form">
+            <fieldset class="field">
+              <legend class="field__label" data-text="posterPrompt"></legend>
+              <div class="segmented" id="poster-prompts"></div>
+              <p class="field__note" id="poster-prompt-about" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="field">
+              <div class="field__head">
+                <label class="field__label" for="poster-line" data-text="posterLine"></label>
+                <span class="field__count" id="poster-line-count"></span>
+              </div>
+              <p class="field__note" id="poster-line-hint"></p>
+              <input class="field__input" id="poster-line" type="text" autocomplete="off" aria-describedby="poster-line-hint">
+              <div class="chips" id="poster-suggestions" role="group" data-label="posterSuggestions"></div>
+            </div>
+
             <div class="field">
               <p class="field__label" data-text="posterPhoto"></p>
               <div class="field__row">
@@ -248,33 +264,9 @@
               </div>
             </div>
 
-            <fieldset class="field">
-              <legend class="field__label" data-text="posterPrompt"></legend>
-              <div class="segmented" id="poster-prompts"></div>
-            </fieldset>
-
-            <div class="field">
-              <div class="field__head">
-                <label class="field__label" for="poster-line" data-text="posterLine"></label>
-                <span class="field__count" id="poster-line-count"></span>
-              </div>
-              <p class="field__note" id="poster-line-hint"></p>
-              <input class="field__input" id="poster-line" type="text" autocomplete="off" aria-describedby="poster-line-hint">
-              <div class="chips" id="poster-suggestions" role="group" data-label="posterSuggestions"></div>
-            </div>
-
             <div class="field">
               <label class="field__label" for="poster-name" data-text="posterName"></label>
               <input class="field__input" id="poster-name" type="text" maxlength="40" autocomplete="off" data-placeholder="posterNamePlaceholder">
-            </div>
-
-            <div class="field">
-              <div class="field__head">
-                <label class="field__label" for="poster-story" data-text="posterStory"></label>
-                <span class="field__count" id="poster-story-count"></span>
-              </div>
-              <p class="field__note" id="poster-story-hint" data-text="posterStoryHint"></p>
-              <textarea class="field__input field__input--story" id="poster-story" rows="3" aria-describedby="poster-story-hint"></textarea>
             </div>
 
             <p class="field__note studio__disclaimer" data-text="posterDisclaimer"></p>
@@ -307,19 +299,33 @@
     <section class="videos" id="videos" aria-labelledby="videos-title">
       <div class="container">
         <h2 class="section-title" id="videos-title" data-text="videosTitle"></h2>
-        <div class="video-gallery">
-          <div class="video-player">
-            <div class="video-player__frame" id="video-player"></div>
-            <h3 class="video-player__title" id="video-title"></h3>
+        <!-- YouTube videos and Instagram Reels, each with its own "see all" on its own site. -->
+        <div class="video-wide" id="video-wide">
+          <div class="video-gallery">
+            <div class="video-player">
+              <div class="video-player__frame" id="video-player"></div>
+              <h3 class="video-player__title" id="video-title"></h3>
+            </div>
+            <ul class="video-list" id="video-list"></ul>
           </div>
-          <ul class="video-list" id="video-list"></ul>
+          <div class="see-all">
+            <a class="button button--accent" id="videos-more" href="#all/videos" data-text="seeAll" hidden></a>
+            <a class="button button--ghost" data-href="seeAllYoutube" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg>
+              <span data-text="seeAllOnYoutube"></span>
+            </a>
+          </div>
         </div>
         <div class="shorts-row" id="shorts-row">
           <h3 class="shorts__title" data-text="shortsTitle"></h3>
           <ul class="shorts" id="shorts-list"></ul>
-        </div>
-        <div class="see-all">
-          <a class="button button--accent" data-text="seeAll" data-href="seeAllVideos"></a>
+          <div class="see-all">
+            <a class="button button--accent" id="reels-more" href="#all/reels" data-text="seeAll" hidden></a>
+            <a class="button button--ghost" data-href="seeAllInstagram" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+              <span data-text="seeAllOnInstagram"></span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -330,6 +336,18 @@
         <ul class="photo-stories__grid" id="photo-stories-list"></ul>
         <div class="see-all">
           <a class="button button--outline" data-text="seeAll" data-href="seeAllPhotoStories"></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interesting facts about Karnataka and Kannada, from their collection; left out if it can't be read. -->
+    <section class="facts" id="facts" aria-labelledby="facts-title">
+      <div class="container">
+        <h2 class="section-title" id="facts-title" data-text="factsTitle"></h2>
+        <p class="facts__lead" data-text="factsLead"></p>
+        <ol class="facts__grid" id="facts-list"></ol>
+        <div class="see-all">
+          <a class="button button--outline" data-text="seeAll" data-href="seeAllFacts"></a>
         </div>
       </div>
     </section>

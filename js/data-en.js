@@ -39,8 +39,6 @@ const UI = {
   posterSuggestions: "Suggestions",
   posterName: "Name, town (optional)",
   posterNamePlaceholder: "e.g. Suma, Mandya",
-  posterStory: "Add a story (optional)",
-  posterStoryHint: "This goes with the poster as a message when you share it.",
   posterDisclaimer:
     "This tool is only for creating a poster. You are responsible for the photo and words you add and for how the poster is used. Deccan Herald is not responsible for it.",
   posterHint: "Drag the photo to adjust it.",
@@ -405,10 +403,10 @@ const ARCHIVE = [
 
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of
- * Kannada and Karnataka, what they dream for its future, or about their community. The poster is tall (9:16)
- * so it fits a WhatsApp status; an optional longer story goes with it as the message
- * when shared.
- * prompts  → the choices, one tab each; example is shown faintly until the reader writes,
+ * Kannada and Karnataka, what they dream for its future, or about their community.
+ * The poster is tall (9:16) so it fits a WhatsApp status.
+ * prompts  → the choices, one tab each; about says under the tabs what the choice means
+ *            for Karunadothsava; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
  * samples  → the example posters on the page, with photos from IMAGES.
  *            PLACEHOLDER: the lines and names are made up for illustration.
@@ -421,18 +419,21 @@ const POSTER = {
   prompts: {
     pride: {
       label: "My pride",
+      about: "What about Karnataka makes you proud? Our language, your hometown, its art, festivals or achievers. Celebrate it this Rajyotsava.",
       hint: "What about Kannada and Karnataka makes you proud?",
       example: "The muddy sprint of our village Kambala",
       suggestions: ["My hometown", "Our Kannada language", "Our festivals", "Our food", "Our art and music", "My family"],
     },
     dream: {
       label: "My dream",
+      about: "What should Karnataka be like for the next generation? Share your wish for the future of Kannada and the state.",
       hint: "What do you wish for the future of Kannada and Karnataka?",
       example: "Every child grows up reading Kannada",
       suggestions: ["Kannada schools thrive", "A green Bengaluru again", "Jobs close to home", "Lakes full once more", "Kannada leads in technology"],
     },
     community: {
       label: "My community",
+      about: "The state is built by the people around us. Honour the good work of your town, neighbourhood, association or circle.",
       hint: "A word about the people of your town, neighbourhood or circle.",
       example: "Our youth club that cleaned the village lake",
       suggestions: ["Our Kannada sangha", "My neighbourhood", "My village folk", "Our school", "Our farmers", "Our youth club"],
@@ -443,8 +444,7 @@ const POSTER = {
     { prompt: "community", image: "dollu-kunitha", line: "Our village youth keeping the dollu alive", name: "Ramesh, Shivamogga" },
     { prompt: "pride", image: "dasara-lights", line: "Mysuru glowing in the Dasara lights", name: "Suma, Mysuru" },
   ],
-  lineMax: 60,
-  storyMax: 300,
+  lineMax: 90,
   camera: "user",
   placeholder: "Your photo",
   eventLine: "Rajyotsava · 1 November 2026",
@@ -453,8 +453,8 @@ const POSTER = {
   credit: "Made at {address}",
   address: "deccanherald.com/rajyotsava",
   fileName: "dh-rajyotsava-poster.jpg",
-  // Sent with the poster when shared: the reader's story (if any), then the link.
-  shareText: "{story}Make yours: https://{address}",
+  // Ends the message sent with the poster, after the reader's own words.
+  shareInvite: "Make your own Rajyotsava poster at https://{address}",
 };
 
 /*
