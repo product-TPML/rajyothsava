@@ -199,7 +199,7 @@ Define them as CSS custom properties in one place.
 
 ## "See all" buttons
 
-- Every section with more stories than it shows ends with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" button (owner's
+- Every section with more stories than it shows ends with a "see all" button (owner's
   request). Stories and photo stories open the full list **on the same page**: the address
   becomes `#all/top` or `#all/photo` and the home content is swapped for every story in that
   collection (up to 500), newest first, 24 to a page with numbered page links (owner's request).
@@ -207,9 +207,9 @@ Define them as CSS custom properties in one place.
   home page stays light. If it can't be read, the list offers the collection's page on
   prajavani.net. Lists are `STORY_LISTS` in `js/data.js`; the code is `setupAllStories`.
 - Videos (owner's requests): the home page shows the first 5 YouTube videos and 10 reels.
-  Under each part, an outline button goes to the platform ("ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to
-  Prajavani's YouTube channel, "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to its Instagram). When the
-  CMS list has more than is shown, a yellow "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" beside it opens all of that kind
+  Under each part, an outline button goes to the platform ("ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಇನ್ನಷ್ಟು ವಿಡಿಯೊಗಳು" to
+  Prajavani's YouTube channel, "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಇನ್ನಷ್ಟು ರೀಲ್ಸ್" to its Instagram). When the
+  CMS list has more than is shown, a yellow "ಇನ್ನಷ್ಟು ವಿಡಿಯೊಗಳು" beside it opens all of that kind
   on the same page, 12 to a page with page numbers (`#all/videos`, `#all/reels`). Each goes
   with its part when that part is left out. The addresses are `seeAll…` in `UI` in `js/data.js`.
 
@@ -238,7 +238,7 @@ Define them as CSS custom properties in one place.
   choices in a white panel, the save buttons fixed at the bottom.
 - The reader adds any photo (selfie, group or scene) and writes one short line under
   "ನನ್ನ ಹೆಮ್ಮೆ" (my pride), "ನನ್ನ ಕನಸು" (my dream for Kannada and Karnataka) or
-  "ನನ್ನ ಸಮುದಾಯ" (my community; third tab, owner's request), with
+  "ನಮ್ಮ ಸಮುದಾಯ" (our community; third tab, owner's request, worded by the desk), with
   tap-to-use suggestions and an optional name and town. There is no longer-story box (owner
   removed it); sharing sends the poster with a message: the tab and the
   reader's line, their name and town, then "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್ ನೀವೂ ಮಾಡಿ: <address>" (owner's request). Set in `POSTER` in `js/data.js`.
@@ -258,7 +258,12 @@ Define them as CSS custom properties in one place.
 - A disclaimer at the end of the maker's form (`posterDisclaimer`): the tool only makes the
   poster; readers are responsible for the photo, words and how the poster is used, not the
   newspaper (owner's request).
-- The section heading names all three tabs ("ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು, ನಿಮ್ಮ ಸಮುದಾಯ").
+- The section heading names all three tabs ("ನನ್ನ ಹೆಮ್ಮೆ, ನನ್ನ ಕನಸು, ನಮ್ಮ ಸಮುದಾಯ"). The heading,
+  tabs, suggestions and disclaimer follow the PV desk's wording (28 October).
+- On the Kannada page the "see all" buttons follow the desk too: ಇನ್ನಷ್ಟು ಲೇಖನಗಳು (stories),
+  ಇನ್ನಷ್ಟು ವಿಡಿಯೊಗಳು (videos and reels), ಇನ್ನಷ್ಟು ಚಿತ್ರಗಳು (photo stories), ಇನ್ನಷ್ಟು ಲೇಖನಗಳು
+  (facts); the platform buttons read "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಇನ್ನಷ್ಟು ವಿಡಿಯೊಗಳು" and
+  "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಇನ್ನಷ್ಟು ರೀಲ್ಸ್" (owner's choice).
 - The floating "make your poster" button copies the Dasara site's greeting button (owner's
   reference, `FE Experiments/Dasara`): a gold pill with a passing shine, a soft pulse and a
   nudge of the icon; it shrinks to the icon after a little scrolling and fades out over the

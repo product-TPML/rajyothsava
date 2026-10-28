@@ -685,7 +685,7 @@
 
   /*
    * The videos section from the editors' list of links: the first wide videos in the
-   * player, the first Reels in their row, and "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" to the rest when there are
+   * player, the first Reels in their row, and "see all" (seeMoreVideos) to the rest when there are
    * more. A part with nothing to show is left out, and so is the whole section if the
    * list can't be read.
    */

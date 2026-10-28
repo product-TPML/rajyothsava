@@ -40,7 +40,7 @@ const UI = {
   contestsQrAlt: "ಪ್ರಜಾವಾಣಿ ಫೇಸ್‌ಬುಕ್ ಪುಟ ತೆರೆಯುವ ಕ್ಯೂಆರ್ ಕೋಡ್",
 
   posterEyebrow: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್",
-  posterTitle: "ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು, ನಿಮ್ಮ ಸಮುದಾಯ",
+  posterTitle: "ನನ್ನ ಹೆಮ್ಮೆ, ನನ್ನ ಕನಸು, ನಮ್ಮ ಸಮುದಾಯ",
   posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಸೇರಿಸಿ, ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಬಗ್ಗೆ ನಿಮ್ಮ ಹೆಮ್ಮೆ, ಕನಸು ಅಥವಾ ನಿಮ್ಮ ಸಮುದಾಯದ ಬಗ್ಗೆ ಬರೆಯಿರಿ. ವಾಟ್ಸ್‌ಆ್ಯಪ್ ಸ್ಟೇಟಸ್‌ಗೆ ಹೊಂದುವ ಪೋಸ್ಟರ್ ಸಿದ್ಧ.",
   posterStart: "ಪೋಸ್ಟರ್ ಮಾಡಿ",
   posterPrivacy: "ನಿಮ್ಮ ಫೋಟೊವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ, ಸಂಗ್ರಹಿಸುವುದೂ ಇಲ್ಲ. ಪೋಸ್ಟರ್ ನಿಮ್ಮ ಸಾಧನದಲ್ಲೇ ತಯಾರಾಗುತ್ತದೆ.",
@@ -55,7 +55,7 @@ const UI = {
   posterName: "ಹೆಸರು, ಊರು (ಐಚ್ಛಿಕ)",
   posterNamePlaceholder: "ಉದಾ: ಸುಮಾ, ಮಂಡ್ಯ",
   posterDisclaimer:
-    "ಈ ಸೌಲಭ್ಯ ಪೋಸ್ಟರ್ ತಯಾರಿಸಲು ಮಾತ್ರ. ಪೋಸ್ಟರ್‌ನಲ್ಲಿ ಸೇರಿಸುವ ಫೋಟೊ, ಬರಹ ಹಾಗೂ ಪೋಸ್ಟರ್‌ನ ಬಳಕೆಗೆ ಬಳಕೆದಾರರೇ ಹೊಣೆ. ಅದಕ್ಕೆ ಪ್ರಜಾವಾಣಿ ಜವಾಬ್ದಾರವಲ್ಲ.",
+    "ಈ ಸೌಲಭ್ಯ ಪೋಸ್ಟರ್ ತಯಾರಿಸಲು ಮಾತ್ರ. ಪೋಸ್ಟರ್‌ನಲ್ಲಿ ಸೇರಿಸುವ ಫೋಟೊ, ಬರಹ ಹಾಗೂ ಪೋಸ್ಟರ್‌ನ ಬಳಕೆಗೆ ಬಳಕೆದಾರರೇ ಹೊಣೆ. ಅದಕ್ಕೆ ಪ್ರಜಾವಾಣಿ ಜವಾಬ್ದಾರಿಯಲ್ಲ.",
   posterHint: "ಫೋಟೊವನ್ನು ಎಳೆದು ಸರಿಹೊಂದಿಸಿ.",
   posterDownload: "ಡೌನ್‌ಲೋಡ್",
   posterShare: "ಹಂಚಿಕೊಳ್ಳಿ",
@@ -70,13 +70,16 @@ const UI = {
   cameraClose: "ಮುಚ್ಚಿ",
 
   highlightsTitle: "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು",
-  seeAll: "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+  // The "see all" buttons as the desk worded them, by what they open.
+  seeMoreStories: "ಇನ್ನಷ್ಟು ಲೇಖನಗಳು",
+  seeMoreVideos: "ಇನ್ನಷ್ಟು ವಿಡಿಯೊಗಳು",
+  seeMorePhotos: "ಇನ್ನಷ್ಟು ಚಿತ್ರಗಳು",
   // Where each section's "See all" button goes: #all/<key> opens STORY_LISTS[key] on this page.
   seeAllStories: "#all/top",
   seeAllYoutube: "https://www.youtube.com/prajavani",
   seeAllInstagram: "https://www.instagram.com/prajavani/",
-  seeAllOnYoutube: "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
-  seeAllOnInstagram: "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+  seeAllOnYoutube: "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ಇನ್ನಷ್ಟು ವಿಡಿಯೊಗಳು",
+  seeAllOnInstagram: "ಇನ್‌ಸ್ಟಾಗ್ರಾಂನಲ್ಲಿ ಇನ್ನಷ್ಟು ರೀಲ್ಸ್",
   seeAllPhotoStories: "#all/photo",
   seeAllFacts: "#all/facts",
   emptyStories: "ಸುದ್ದಿಗಳು ಶೀಘ್ರದಲ್ಲೇ ಇಲ್ಲಿ ಬರಲಿವೆ.",
@@ -187,7 +190,7 @@ const EVENT = {
  * wide YouTube videos go in the player and its list (the first in the player); Shorts
  * and Reels in the upright row. YouTube titles are fetched from YouTube. The file to
  * paste there is cms/karunadothsava-json.json. If it can't be read, the section is left out.
- * The home page shows the first few of each; with more, "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" opens them all,
+ * The home page shows the first few of each; with more, "ಇನ್ನಷ್ಟು ವಿಡಿಯೊಗಳು" opens them all,
  * a page at a time (#all/videos, #all/reels).
  */
 const VIDEO_FEED = "/pages/karunadothsava-json";
@@ -215,17 +218,17 @@ const POSTER = {
       about: "ಕರುನಾಡಿನ ಯಾವ ಸಂಗತಿ ನಿಮ್ಮನ್ನು ಹೆಮ್ಮೆಪಡಿಸುತ್ತದೆ? ನಮ್ಮ ಭಾಷೆ, ಊರು, ಕಲೆ, ಹಬ್ಬ ಅಥವಾ ಸಾಧಕರು. ರಾಜ್ಯೋತ್ಸವದಂದು ಅದನ್ನು ಸಂಭ್ರಮಿಸಿ.",
       hint: "ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಯಾವುದು ನಿಮಗೆ ಹೆಮ್ಮೆ ತರುತ್ತದೆ?",
       example: "ನಮ್ಮೂರ ಕಂಬಳದ ಕೆಸರಿನ ಓಟ",
-      suggestions: ["ನನ್ನೂರು", "ನಮ್ಮ ಕನ್ನಡ ಭಾಷೆ", "ನಮ್ಮ ಹಬ್ಬಗಳು", "ನಮ್ಮೂರ ಊಟ", "ನಮ್ಮ ಕಲೆ, ಸಂಗೀತ", "ನನ್ನ ಕುಟುಂಬ"],
+      suggestions: ["ನಮ್ಮೂರು", "ನಮ್ಮ ಕನ್ನಡ ಭಾಷೆ", "ನಮ್ಮ ಹಬ್ಬಗಳು", "ನಮ್ಮೂರ ಊಟ", "ನಮ್ಮ ಹಾಡು", "ನಮ್ಮ ಮನೆ"],
     },
     dream: {
       label: "ನನ್ನ ಕನಸು",
       about: "ಮುಂದಿನ ತಲೆಮಾರಿನ ಕರ್ನಾಟಕ ಹೇಗಿರಬೇಕು? ಕನ್ನಡ ಮತ್ತು ನಾಡಿನ ಭವಿಷ್ಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಆಶಯವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ.",
       hint: "ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಭವಿಷ್ಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಆಶಯ ಏನು?",
       example: "ಪ್ರತಿ ಮಗುವೂ ಕನ್ನಡದಲ್ಲಿ ಓದಿ ಬೆಳೆಯಲಿ",
-      suggestions: ["ಕನ್ನಡ ಶಾಲೆಗಳು ಬೆಳಗಲಿ", "ಹಸಿರು ಬೆಂಗಳೂರು ಮರಳಲಿ", "ಊರಲ್ಲೇ ಉದ್ಯೋಗ ಸಿಗಲಿ", "ಕೆರೆಗಳು ತುಂಬಿ ತುಳುಕಲಿ", "ತಂತ್ರಜ್ಞಾನದಲ್ಲೂ ಕನ್ನಡ ಮೆರೆಯಲಿ"],
+      suggestions: ["ಕನ್ನಡ ಶಾಲೆಗಳು ಬೆಳಗಲಿ", "ಹಸಿರು ಬೆಂಗಳೂರು ಮರಳಲಿ", "ಊರಲ್ಲೇ ಉದ್ಯೋಗ ಸಿಗಲಿ", "ಕೆರೆಗಳು ತುಂಬಿ ಹರಿಯಲಿ", "ತಂತ್ರಜ್ಞಾನದಲ್ಲೂ ಕನ್ನಡ ಮೆರೆಯಲಿ"],
     },
     community: {
-      label: "ನನ್ನ ಸಮುದಾಯ",
+      label: "ನಮ್ಮ ಸಮುದಾಯ",
       about: "ನಾಡನ್ನು ಕಟ್ಟುವವರು ನಮ್ಮ ಸುತ್ತಲಿನ ಜನ. ನಿಮ್ಮ ಊರು, ಬಡಾವಣೆ, ಸಂಘ ಅಥವಾ ಬಳಗ ಮಾಡುತ್ತಿರುವ ಒಳ್ಳೆಯ ಕೆಲಸವನ್ನು ನೆನೆಯಿರಿ.",
       hint: "ನಿಮ್ಮ ಊರು, ಬಡಾವಣೆ ಅಥವಾ ಬಳಗದ ಜನರ ಬಗ್ಗೆ ಒಂದು ಮಾತು",
       example: "ಊರ ಕೆರೆಯ ಹೂಳೆತ್ತಿದ ನಮ್ಮ ಯುವಕ ಸಂಘ",
