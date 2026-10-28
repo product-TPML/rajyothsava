@@ -1,6 +1,6 @@
 /*
  * All content for the English edition (Deccan Herald, index-en.html) lives here.
- * It mirrors js/data.js, without the quotes, videos and photo gallery, and adds
+ * It mirrors js/data.js, without the quotes, videos and photo stories, and adds
  * ARCHIVE. Edit this file to change text, menu sections, stories, the poster maker
  * or the opening animation. No other file needs to change.
  */
@@ -9,10 +9,9 @@
 const UI = {
   skipLink: "Skip to main content",
   headerAction: "DH home",
-  searchLabel: "Search stories",
-  searchPlaceholder: "Story, section or writer",
-  searchResults: "Results: {n}",
-  searchNoResults: "No results found",
+  searchLabel: "Search Deccan Herald",
+  searchPlaceholder: "Search Deccan Herald",
+  searchUrl: "https://www.deccanherald.com/search",
   byline: "By {author}",
   headerActionUrl: "https://www.deccanherald.com/",
   navLabel: "Main sections",
@@ -27,7 +26,7 @@ const UI = {
 
   posterEyebrow: "Your Rajyotsava poster",
   posterTitle: "Your pride, your dream",
-  posterLead: "Add your photo and write what makes you proud of Kannada and Karnataka, or your dream for its future. Your poster is ready for WhatsApp status.",
+  posterLead: "Add your photo and write what makes you proud of Kannada and Karnataka, your dream for its future, or about your community. Your poster is ready for WhatsApp status.",
   posterStart: "Make a poster",
   posterPrivacy: "Your photo is never uploaded or stored. The poster is made on your device.",
   posterPhoto: "Photo",
@@ -391,10 +390,10 @@ const ARCHIVE = [
 
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of
- * Kannada and Karnataka, or what they dream for its future. The poster is tall (9:16)
+ * Kannada and Karnataka, what they dream for its future, or about their community. The poster is tall (9:16)
  * so it fits a WhatsApp status; an optional longer story goes with it as the message
  * when shared.
- * prompts  → the two choices; example is shown faintly until the reader writes,
+ * prompts  → the choices, one tab each; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
  * samples  → the example posters on the page, with photos from IMAGES.
  *            PLACEHOLDER: the lines and names are made up for illustration.
@@ -417,10 +416,16 @@ const POSTER = {
       example: "Every child grows up reading Kannada",
       suggestions: ["Kannada schools thrive", "A green Bengaluru again", "Jobs close to home", "Lakes full once more", "Kannada leads in technology"],
     },
+    community: {
+      label: "My community",
+      hint: "A word about the people of your town, neighbourhood or circle.",
+      example: "Our youth club that cleaned the village lake",
+      suggestions: ["Our Kannada sangha", "My neighbourhood", "My village folk", "Our school", "Our farmers", "Our youth club"],
+    },
   },
   samples: [
     { prompt: "dream", image: "kudremukh", line: "May the Western Ghats stay green forever", name: "Anita, Chikkamagaluru" },
-    { prompt: "pride", image: "dollu-kunitha", line: "My village dances to the dollu's beat", name: "Ramesh, Shivamogga" },
+    { prompt: "community", image: "dollu-kunitha", line: "Our village youth keeping the dollu alive", name: "Ramesh, Shivamogga" },
     { prompt: "pride", image: "dasara-lights", line: "Mysuru glowing in the Dasara lights", name: "Suma, Mysuru" },
   ],
   lineMax: 60,

@@ -69,7 +69,7 @@
           <img class="brand__mark" src="assets/hero/karunadotsava-dh-720.webp" alt="Deccan Herald Karunadothsava" width="720" height="232">
         </a>
       </h1>
-      <a class="button button--accent masthead__action" data-text="headerAction" data-href="headerActionUrl"></a>
+      <a class="masthead__action" data-text="headerAction" data-href="headerActionUrl"></a>
       <button class="icon-button masthead__menu" type="button" aria-haspopup="dialog" aria-controls="menu-panel" data-label="menuTitle">
         <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -94,17 +94,13 @@
           <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
       </div>
-      <!-- Phones keep the search here; js/main.js moves it into the masthead on wider screens. -->
+      <!-- Sends the query to the main site's search page. Phones keep it here; js/main.js moves it into the masthead on wider screens. -->
       <div class="search">
-        <form class="search__form" id="search-form" role="search">
+        <form class="search__form" role="search" method="get" data-action="searchUrl">
           <label class="visually-hidden" for="search-input" data-text="searchLabel"></label>
           <div class="search__field">
             <svg class="icon search__icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
-            <input class="search__input" id="search-input" type="search" autocomplete="off" data-placeholder="searchPlaceholder">
-          </div>
-          <div class="search__results" id="search-results" hidden>
-            <p class="search__status" id="search-status" aria-live="polite"></p>
-            <ul class="search__list" id="search-list"></ul>
+            <input class="search__input" id="search-input" name="q" type="search" required data-placeholder="searchPlaceholder">
           </div>
         </form>
       </div>

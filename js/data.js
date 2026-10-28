@@ -7,10 +7,9 @@
 const UI = {
   skipLink: "ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ತೆರಳಿ",
   headerAction: "ಪ್ರಜಾವಾಣಿ ಮುಖಪುಟ",
-  searchLabel: "ಕಥನಗಳನ್ನು ಹುಡುಕಿ",
-  searchPlaceholder: "ಕಥನ, ವಿಭಾಗ ಅಥವಾ ಲೇಖಕರ ಹೆಸರು",
-  searchResults: "ಫಲಿತಾಂಶಗಳು: {n}",
-  searchNoResults: "ಯಾವುದೇ ಫಲಿತಾಂಶ ಸಿಗಲಿಲ್ಲ",
+  searchLabel: "ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ಹುಡುಕಿ",
+  searchPlaceholder: "ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ಹುಡುಕಿ",
+  searchUrl: "https://www.prajavani.net/search",
   byline: "ಬರಹ: {author}",
   headerActionUrl: "https://www.prajavani.net/",
   navLabel: "ಮುಖ್ಯ ವಿಭಾಗಗಳು",
@@ -24,6 +23,10 @@ const UI = {
   slideOf: "{n} / {total}",
 
   quotesLabel: "ನುಡಿಮುತ್ತುಗಳು",
+  quotesPrev: "ಹಿಂದಿನ ದಿನದ ನುಡಿಮುತ್ತು",
+  quotesNext: "ಮುಂದಿನ ದಿನದ ನುಡಿಮುತ್ತು",
+  quotesToday: "ಇಂದಿನ ನುಡಿಮುತ್ತು",
+  quotesDay: "{month} {day}ರ ನುಡಿಮುತ್ತು",
   introText:
     "ನಾಡು, ನುಡಿ, ಕಲೆ ಮತ್ತು ಪರಂಪರೆಯ ಸಂಭ್ರಮಕ್ಕೆ ಪ್ರಜಾವಾಣಿಯ ಈ ವಿಶೇಷ ಸಂಚಿಕೆ ಮೀಸಲು. " +
     "ಕರ್ನಾಟಕದ ಮೂಲೆಮೂಲೆಗಳ ಕಥನಗಳು, ಚಿತ್ರಗಳು ಮತ್ತು ಅಭಿಪ್ರಾಯಗಳನ್ನು ಒಂದೇ ಕಡೆ ಓದಿ.",
@@ -31,7 +34,7 @@ const UI = {
 
   posterEyebrow: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್",
   posterTitle: "ನಿಮ್ಮ ಹೆಮ್ಮೆ, ನಿಮ್ಮ ಕನಸು",
-  posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಸೇರಿಸಿ, ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಬಗ್ಗೆ ನಿಮ್ಮ ಹೆಮ್ಮೆ ಅಥವಾ ಕನಸನ್ನು ಬರೆಯಿರಿ. ವಾಟ್ಸ್‌ಆ್ಯಪ್ ಸ್ಟೇಟಸ್‌ಗೆ ಹೊಂದುವ ಪೋಸ್ಟರ್ ಸಿದ್ಧ.",
+  posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಸೇರಿಸಿ, ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಬಗ್ಗೆ ನಿಮ್ಮ ಹೆಮ್ಮೆ, ಕನಸು ಅಥವಾ ನಿಮ್ಮ ಸಮುದಾಯದ ಬಗ್ಗೆ ಬರೆಯಿರಿ. ವಾಟ್ಸ್‌ಆ್ಯಪ್ ಸ್ಟೇಟಸ್‌ಗೆ ಹೊಂದುವ ಪೋಸ್ಟರ್ ಸಿದ್ಧ.",
   posterStart: "ಪೋಸ್ಟರ್ ಮಾಡಿ",
   posterPrivacy: "ನಿಮ್ಮ ಫೋಟೊವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ, ಸಂಗ್ರಹಿಸುವುದೂ ಇಲ್ಲ. ಪೋಸ್ಟರ್ ನಿಮ್ಮ ಸಾಧನದಲ್ಲೇ ತಯಾರಾಗುತ್ತದೆ.",
   posterPhoto: "ಫೋಟೊ",
@@ -60,15 +63,15 @@ const UI = {
   cameraClose: "ಮುಚ್ಚಿ",
 
   highlightsTitle: "ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು",
+  seeAll: "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+  // Where each section's "See all" button goes.
+  seeAllStories: "https://www.prajavani.net/karunadotsava-top",
+  seeAllVideos: "https://www.youtube.com/prajavani",
+  seeAllPhotoStories: "https://www.prajavani.net/karunadotsava-photo",
   videosTitle: "ವಿಡಿಯೊ",
-  videoCredit: "ವಿಡಿಯೊ: {author}",
-  galleryTitle: "ಫೋಟೊ ಗ್ಯಾಲರಿ",
-  photoCredit: "ಚಿತ್ರ: {author}",
-  galleryOpen: "ದೊಡ್ಡದಾಗಿ ನೋಡಿ: {caption}",
-  lightboxLabel: "ಫೋಟೊ ಗ್ಯಾಲರಿ",
-  lightboxPrev: "ಹಿಂದಿನ ಚಿತ್ರ",
-  lightboxNext: "ಮುಂದಿನ ಚಿತ್ರ",
-  lightboxClose: "ಮುಚ್ಚಿ",
+  videoPlay: "ವಿಡಿಯೊ ನೋಡಿ: {title}",
+  shortsTitle: "ಶಾರ್ಟ್ಸ್ ಮತ್ತು ರೀಲ್ಸ್",
+  photoStoriesTitle: "ಫೋಟೊ ಕಥನಗಳು",
   sectionsTitle: "ಎಲ್ಲ ವಿಭಾಗಗಳು",
   comingSoon: "ಪುಟ ಶೀಘ್ರದಲ್ಲೇ",
 
@@ -190,43 +193,29 @@ const IMAGES = {
     alt: "ಡೊಳ್ಳು ಬಾರಿಸುತ್ತಾ ಕುಣಿಯುತ್ತಿರುವ ಡೊಳ್ಳು ಕುಣಿತದ ಕಲಾವಿದರು",
     credit: { author: "Navaneeth Krishnan S", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Dollu_Kunitha_01.jpg" },
   },
-  "kambala-race": {
-    alt: "ಕಂಬಳದ ಕೆಸರುಗದ್ದೆಯಲ್ಲಿ ಕೋಣದೊಂದಿಗೆ ಓಡುತ್ತಿರುವ ಓಟಗಾರ",
-    credit: { author: "Naveen Kumar Manne", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Kambala_panning.jpg" },
-  },
   "dasara-lights": {
     alt: "ದಸರಾ ದೀಪಾಲಂಕಾರದಲ್ಲಿ ಬೆಳಗುತ್ತಿರುವ ಮೈಸೂರು ಅರಮನೆ",
     credit: { author: "Ananth BS", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Dasara_Navaratri_Festival_Lights_Mysore_Palace_India.jpg" },
   },
-  murudeshwar: {
-    alt: "ಮುರುಡೇಶ್ವರದ ಬೃಹತ್ ಶಿವನ ಪ್ರತಿಮೆ",
-    credit: { author: "Prasannabanwat", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Murudeshwar-Shiva-Statue.jpg" },
-  },
-  virupaksha: {
-    alt: "ಹಂಪಿಯ ವಿರೂಪಾಕ್ಷ ದೇವಾಲಯದ ಗೋಪುರದಲ್ಲಿ ಕುದುರೆಯ ಕೆತ್ತನೆ",
-    credit: { author: "Ingo Mehling", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Virupaksha_-_Gopuram_-_Carvings_-_1.jpg" },
-  },
-  "abbey-falls": {
-    alt: "ಮಡಿಕೇರಿ ಬಳಿಯ ಅಬ್ಬಿ ಜಲಪಾತ",
-    credit: { author: "Shanmugamp7", license: "CC BY-SA 3.0", source: "https://commons.wikimedia.org/wiki/File:Abbey_falls_-_Madikeri.jpg" },
-  },
-  hoysaleswara: {
-    alt: "ಹಳೇಬೀಡಿನ ಹೊಯ್ಸಳೇಶ್ವರ ದೇವಾಲಯ",
-    credit: { author: "Rohit Sharma", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Hoysaleswara_Temple_at_Halebidu.jpg" },
-  },
-  chitradurga: {
-    alt: "ಚಿತ್ರದುರ್ಗದ ಕಲ್ಲಿನ ಕೋಟೆ ಮತ್ತು ಬಂಡೆಗಳು",
-    credit: { author: "Ramjaiswal75", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Chitradurga_Fort_or_Chitradoorg_from_the_Ancient_times.jpg" },
-  },
-  "coorg-hills": {
-    alt: "ಮಡಿಕೇರಿಯ ರಾಜಾ ಸೀಟ್‌ನಿಂದ ಕಾಣುವ ಬೆಟ್ಟಗಳ ನೋಟ",
-    credit: { author: "Sharithab", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:RAJA_SEAT-_MADIKERI.jpg" },
-  },
 };
 
 /*
- * Articles. Featured carousel: exactly 10 slides. section = an id from SECTIONS.
- * Author names are PLACEHOLDERS. Replace them with the real bylines.
+ * Collections on prajavani.net, read each time the page opens. The desk picks the
+ * stories and their order there.
+ * top   → its first 10 stories, in the desk's order, are the featured carousel; its
+ *         first 20, newest first, are the stories section below.
+ * photo → photo stories.
+ */
+const COLLECTIONS = {
+  api: "https://www.prajavani.net/api/v1/collections/",
+  imageHost: "https://images.prajavani.net/",
+  top: "karunadotsava-top",
+  photo: "karunadotsava-photo",
+};
+
+/*
+ * Articles. SLIDES (carousel) and HIGHLIGHTS (stories section) are shown when the top
+ * collection can't be read. section = an id from SECTIONS. Author names are PLACEHOLDERS.
  */
 const SLIDES = [
   {
@@ -391,72 +380,46 @@ const HIGHLIGHTS = [
 ];
 
 /*
- * Video gallery. Each key matches assets/videos/<key>.mp4 and <key>-poster.webp.
- * The first video is shown in the player when the page loads.
- * All are from Wikimedia Commons; the credited author is the person who filmed it.
+ * Videos. Paste each link as copied from YouTube or Instagram.
+ * VIDEOS → wide YouTube videos, in the player and the list beside it; the first one
+ *          is in the player when the page loads. section = an id from SECTIONS.
+ * SHORTS → upright videos in their own row: YouTube Shorts and Instagram Reels.
+ * PLACEHOLDER: picked from Prajavani's channels to try the layout.
  */
 const VIDEOS = [
   {
-    file: "yakshagana",
-    section: "culture",
-    duration: "1:00",
-    title: "ಯಕ್ಷಗಾನ: ರಂಗಸ್ಥಳದಲ್ಲಿ ಚಂಡೆಯ ಅಬ್ಬರ",
-    summary: "ಕರಾವಳಿಯ ಯಕ್ಷಗಾನ ಪ್ರದರ್ಶನದ ಒಂದು ನೋಟ.",
-    credit: { author: "Ninja Agriculturists", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Yakshagana,_Karnataka_%26_Kerala.webm" },
+    link: "https://www.youtube.com/watch?v=v8bZBvSFPwM",
+    section: "lifestyle",
+    title: "ಸುಲಭವಾಗಿ ಮಾಡುವ ರುಚಿಕರ ಅವರೆಕಾಳು ಉಪ್ಪಿಟ್ಟು",
+    summary: "ಕರುನಾಡ ಸವಿಯೂಟ ಸರಣಿಯಲ್ಲಿ ಅವರೆಕಾಳು ಉಪ್ಪಿಟ್ಟು ಮಾಡುವ ವಿಧಾನ.",
   },
   {
-    file: "kambala",
-    section: "sports",
-    duration: "0:26",
-    title: "ಕಂಬಳ: ಕೆಸರುಗದ್ದೆಯ ಓಟದ ರೋಚಕತೆ",
-    summary: "ಬೆಂಗಳೂರಿನಲ್ಲಿ ನಡೆದ ಕಂಬಳದಲ್ಲಿ ಕೋಣಗಳ ಓಟ.",
-    credit: { author: "Gpkp", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Bangalore_Kambala,_November_2023_(06).ogg" },
+    link: "https://www.youtube.com/watch?v=awF_8sI_jJA",
+    section: "business",
+    title: "ವರ್ಷಕ್ಕೆ ₹40 ಲಕ್ಷ ಆದಾಯ; ಬದುಕನ್ನೇ ಬದಲಿಸಿದ ರೇಷ್ಮೆ",
+    summary: "ರೇಷ್ಮೆ ಕೃಷಿಯಿಂದ ಬದುಕು ಕಟ್ಟಿಕೊಂಡ ರೈತನ ಕಥೆ.",
   },
   {
-    file: "huttari",
-    section: "culture",
-    duration: "0:54",
-    title: "ಕೊಡಗಿನ ಹುತ್ತರಿ ಹಬ್ಬದ ಸಾಂಪ್ರದಾಯಿಕ ನೃತ್ಯ",
-    summary: "ಸುಗ್ಗಿಯ ಹಬ್ಬ ಹುತ್ತರಿಯಲ್ಲಿ ಕೊಡವರ ಸಾಮೂಹಿಕ ನೃತ್ಯ.",
-    credit: { author: "Krishnaiah S A", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Coorg_Huttari_Dance_Dudikottu.webm" },
-  },
-  {
-    file: "doggaya",
-    section: "culture",
-    duration: "1:00",
-    title: "ಜಾನಪದ ಕುಣಿತ: ಹೊಲದಲ್ಲಿ ಕಲಾವಿದರ ಸಂಭ್ರಮ",
-    summary: "ಬಣ್ಣಬಣ್ಣದ ವೇಷದಲ್ಲಿ ಜಾನಪದ ಕಲಾವಿದರ ಪ್ರದರ್ಶನ.",
-    credit: { author: "Santhosh Notagar99", license: "CC0", source: "https://commons.wikimedia.org/wiki/File:Karnataka_Doggaya_dance.webm" },
-  },
-  {
-    file: "lalbagh",
-    section: "travel",
-    duration: "0:31",
-    title: "ಲಾಲ್‌ಬಾಗ್ ಫಲಪುಷ್ಪ ಪ್ರದರ್ಶನದ ಸೊಬಗು",
-    summary: "ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆಯ ಅಂಗವಾಗಿ ನಡೆದ 216ನೇ ಫಲಪುಷ್ಪ ಪ್ರದರ್ಶನ.",
-    credit: { author: "Gpkp", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Indian_Independence_day_celebration_216th_flower_show_2024,_Lalbagh,_Bangalore_06.ogg" },
+    link: "https://www.youtube.com/watch?v=W2ab8_lGlpY",
+    section: "lifestyle",
+    title: "ಮಂಗಳೂರು ಸೌತೆಕಾಯಿ ಹುಳಿ: ಅನ್ನದ ಜೊತೆ ಸವಿದರೆ ಸೂಪರ್ ರುಚಿ",
+    summary: "ಕರಾವಳಿಯ ಅಡುಗೆಮನೆಯ ಜನಪ್ರಿಯ ಸಾಂಬಾರ್.",
   },
 ];
 
-/* Photo gallery: keys from IMAGES. Captions and credits come from IMAGES too. The first photo is shown large. */
-const GALLERY = [
-  "dollu-kunitha",
-  "kambala-race",
-  "dasara-lights",
-  "murudeshwar",
-  "virupaksha",
-  "abbey-falls",
-  "hoysaleswara",
-  "chitradurga",
-  "coorg-hills",
+const SHORTS = [
+  { link: "https://www.youtube.com/shorts/YlaXtECjb7k", title: "ದಸರಾ ಅಂಬಾರಿ ಹೊತ್ತ ಅಭಿಮನ್ಯು ಆನೆಗೆ ಬೀಳ್ಕೊಡುಗೆ" },
+  { link: "https://www.instagram.com/reel/De_UypSgE5f/", title: "ಆಂಧ್ರಪ್ರದೇಶದಲ್ಲಿ ‘ಒರ್ನಾಬ್’ ಚಂಡಮಾರುತದ ಅಬ್ಬರ" },
+  { link: "https://www.youtube.com/shorts/NvOLvtVUBlw", title: "ಪ್ರಜಾವಾಣಿ ಸಿನಿ ಸಮ್ಮಾನಕ್ಕೆ ಕಿಚ್ಚ ಸುದೀಪ್ ಎಂಟ್ರಿ" },
+  { link: "https://www.youtube.com/shorts/ak5vM6PFRcY", title: "ವಿಧಾನಸೌಧದಲ್ಲಿ ಸ್ವಾತಂತ್ರ್ಯ ದಿನ ಸಂಭ್ರಮ" },
 ];
 
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of
- * Kannada and Karnataka, or what they dream for its future. The poster is tall (9:16)
+ * Kannada and Karnataka, what they dream for its future, or about their community. The poster is tall (9:16)
  * so it fits a WhatsApp status; an optional longer story goes with it as the message
  * when shared.
- * prompts  → the two choices; example is shown faintly until the reader writes,
+ * prompts  → the choices, one tab each; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
  * samples  → the example posters on the page, with photos from IMAGES.
  *            PLACEHOLDER: the lines and names are made up for illustration.
@@ -479,10 +442,16 @@ const POSTER = {
       example: "ಪ್ರತಿ ಮಗುವೂ ಕನ್ನಡದಲ್ಲಿ ಓದಿ ಬೆಳೆಯಲಿ",
       suggestions: ["ಕನ್ನಡ ಶಾಲೆಗಳು ಬೆಳಗಲಿ", "ಹಸಿರು ಬೆಂಗಳೂರು ಮರಳಲಿ", "ಊರಲ್ಲೇ ಉದ್ಯೋಗ ಸಿಗಲಿ", "ಕೆರೆಗಳು ತುಂಬಿ ತುಳುಕಲಿ", "ತಂತ್ರಜ್ಞಾನದಲ್ಲೂ ಕನ್ನಡ ಮೆರೆಯಲಿ"],
     },
+    community: {
+      label: "ನನ್ನ ಸಮುದಾಯ",
+      hint: "ನಿಮ್ಮ ಊರು, ಬಡಾವಣೆ ಅಥವಾ ಬಳಗದ ಜನರ ಬಗ್ಗೆ ಒಂದು ಮಾತು",
+      example: "ಊರ ಕೆರೆಯ ಹೂಳೆತ್ತಿದ ನಮ್ಮ ಯುವಕ ಸಂಘ",
+      suggestions: ["ನಮ್ಮ ಕನ್ನಡ ಸಂಘ", "ನಮ್ಮ ಬಡಾವಣೆ", "ನಮ್ಮೂರ ಜನ", "ನಮ್ಮ ಶಾಲೆ", "ನಮ್ಮ ರೈತರು", "ನಮ್ಮ ಯುವಕ ಸಂಘ"],
+    },
   },
   samples: [
     { prompt: "dream", image: "kudremukh", line: "ಪಶ್ಚಿಮ ಘಟ್ಟಗಳು ಎಂದೆಂದೂ ಹಸಿರಾಗಿರಲಿ", name: "ಅನಿತಾ, ಚಿಕ್ಕಮಗಳೂರು" },
-    { prompt: "pride", image: "dollu-kunitha", line: "ಡೊಳ್ಳಿನ ಸದ್ದಿಗೆ ಕುಣಿಯುವ ನಮ್ಮೂರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ" },
+    { prompt: "community", image: "dollu-kunitha", line: "ಡೊಳ್ಳು ಕುಣಿತ ಉಳಿಸಿರುವ ನಮ್ಮೂರ ಯುವಕರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ" },
     { prompt: "pride", image: "dasara-lights", line: "ದಸರೆಯ ಬೆಳಕಲ್ಲಿ ಮಿನುಗುವ ಮೈಸೂರು", name: "ಸುಮಾ, ಮೈಸೂರು" },
   ],
   lineMax: 60,
@@ -500,15 +469,17 @@ const POSTER = {
 };
 
 /*
- * Quotes in the red banner, shown one at a time and changing by themselves.
+ * Quotes in the red banner, one a day. date → the day it runs (India time). The
+ * banner opens on today's quote; the back arrow steps through earlier days. Quotes
+ * whose day hasn't come stay hidden, and until the first date the banner is left out.
  * art names the speaker's silhouette in js/silhouette-art.js (see OPENING below).
- * PLACEHOLDER: wording and attribution need editorial checking.
+ * PLACEHOLDER: the editorial team will send all 30 quotes; these four hold the place.
  */
 const QUOTES = [
-  { text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗು ನೀ ಕನ್ನಡವಾಗಿರು", by: "ಕುವೆಂಪು", art: "kuvempu" },
-  { text: "ದಯವಿಲ್ಲದ ಧರ್ಮವದೇವುದಯ್ಯಾ? ದಯವೇ ಬೇಕು ಸಕಲ ಪ್ರಾಣಿಗಳೆಲ್ಲರಲ್ಲಿ", by: "ಬಸವಣ್ಣ", art: "basavanna" },
-  { text: "ಕೈಗಾರಿಕೀಕರಣ ಇಲ್ಲವೇ ವಿನಾಶ", by: "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ", art: "visvesvaraya" },
-  { text: "ಅಭಿಮಾನಿಗಳೇ ನಮ್ಮನೆ ದೇವರು", by: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
+  { date: "2026-11-01", text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗು ನೀ ಕನ್ನಡವಾಗಿರು", by: "ಕುವೆಂಪು", art: "kuvempu" },
+  { date: "2026-11-02", text: "ದಯವಿಲ್ಲದ ಧರ್ಮವದೇವುದಯ್ಯಾ? ದಯವೇ ಬೇಕು ಸಕಲ ಪ್ರಾಣಿಗಳೆಲ್ಲರಲ್ಲಿ", by: "ಬಸವಣ್ಣ", art: "basavanna" },
+  { date: "2026-11-03", text: "ಕೈಗಾರಿಕೀಕರಣ ಇಲ್ಲವೇ ವಿನಾಶ", by: "ಸರ್ ಎಂ. ವಿಶ್ವೇಶ್ವರಯ್ಯ", art: "visvesvaraya" },
+  { date: "2026-11-04", text: "ಅಭಿಮಾನಿಗಳೇ ನಮ್ಮನೆ ದೇವರು", by: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
 ];
 
 /*

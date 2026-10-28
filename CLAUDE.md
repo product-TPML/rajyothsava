@@ -37,7 +37,7 @@ from their published links (the same ones the Dasara site uses).
 | Prajavani logo | `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg` | White ಪ್ರಜಾವಾಣಿ wordmark with Nandi and tagline (SVG, 1327×319). Linked, not downloaded (owner's choice). |
 | Deccan Herald logo | `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg` | White DH letters, Nandi and "DECCAN HERALD", stacked (SVG, 78×68). Used by the English edition. |
 | Karunadotsava mark | `assets/hero/karunadotsava-pv-720.webp`, `assets/hero/karunadotsava-dh-720.webp` | The final event logo from `assets/Karunadothsava Fin logo PV-DH.ai` (supplied by the owner; page 1 DH, page 2 PV): Gandaberunda, newspaper logo and title in gold/white, exported from the .ai without its gold border and gradient plaque, on a transparent background (owner's choice), 720px wide. The header sits it on the site's own red (`--red`); the poster gives it a red box. Used in the masthead (as the whole home link), the opening's top bar and the top of the poster. Re-export from the .ai if the artwork changes; never redraw it. There is no separate hero section; the carousel follows the nav bar. |
-| Photos and videos | `assets/images/`, `assets/videos/` | Freely licensed Wikimedia Commons media, credited in `js/data.js` and the footer. Videos are compressed MP4 (H.264, ≤854px wide, ≤1 min) with a WebP poster. Keep new videos small; they load only when played. |
+| Photos | `assets/images/` | Freely licensed Wikimedia Commons photos, credited in `js/data.js` and the footer. |
 | Headline font | `assets/fonts/PvHeadlineSemibold3.woff2` | Prajavani headline face, weight 600. Use for headlines, section titles and the carousel. |
 | Body font | `assets/fonts/PrajavaniTextRegular.woff2` | Weight 400. Use for body text, descriptions and menus. |
 | Body semibold | `assets/fonts/PrajavaniTextSemibold.woff2` | Weight 600. Use for category labels, buttons and emphasis. |
@@ -88,6 +88,18 @@ Define them as CSS custom properties in one place.
 - The 18-section menu opens on phone as a full-screen or slide-in panel, with
   sections in a tidy 2-column list. On desktop, show the key sections in the bar and
   put the rest under "ಇನ್ನಷ್ಟು" (More).
+- Featured carousel stories come from the **"karunadotsava-top" collection** on
+  prajavani.net (`COLLECTIONS.top` in `js/data.js`), read live each time the page opens: headline,
+  subheadline, byline, section, hero image (via images.prajavani.net) and link to the story.
+  The summary line is the desk's **subheadline only**, never the story's opening paragraph
+  (owner's choice); stories without one show no summary, and if no carousel story has one,
+  the line under the carousel is left out.
+  The same collection feeds both: the carousel takes its **first 10 stories in the desk's
+  order**; the stories section below ("ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು") takes its **first 20, sorted
+  newest first by publish time**, ignoring the collection order (owner's choice). If the
+  collection can't be read, they show `SLIDES` and `HIGHLIGHTS` instead. Reading it only works when the site is served from
+  www.prajavani.net (the browser blocks it from other addresses). The English page has
+  no collection yet and uses its `SLIDES`.
 - Featured carousel uses a **stacked-card ("fanned") design**, modelled on the top
   carousel of thehindu.com and chosen by the owner. The current story is a tall
   portrait card in front, and neighbouring stories fan out behind it, smaller and dimmer.
@@ -96,6 +108,53 @@ Define them as CSS custom properties in one place.
   look is borrowed: no code or assets from The Hindu.
 - Cards: one column on phone, two on tablet, three or four on desktop.
 - Test at 360px, 390px, 768px, 1024px and 1440px widths.
+
+## Header search and home link
+
+- The search box doesn't search this site. It sends the term to the main site's own
+  search page and runs it there: `https://www.prajavani.net/search?q=…` for the Kannada page,
+  `https://www.deccanherald.com/search?q=…` for the English one (owner's choice). It is a
+  plain HTML form (`method="get"`, input `name="q"`); the address is `UI.searchUrl`
+  in each data file.
+- The link back to the newspaper's home page (`UI.headerAction`) is a quiet
+  white text link in the masthead, not a button (owner's choice).
+
+## Quotes (Kannada page)
+
+- One quote runs per day. The editorial team will send all 30 together (owner's note).
+- Each quote in `QUOTES` has a `date` (India time). The banner shows only the quotes
+  that have run so far by that date, and is left out before the first date. Filtering
+  happens in the browser (`quotesRunSoFar` in `js/main.js`), so no one needs to update
+  the site each day.
+- It opens on today's quote, with no autoplay. A back arrow steps to earlier days and a
+  forward arrow returns, with the day ("ಇಂದಿನ ನುಡಿಮುತ್ತು" / "ನವೆಂಬರ್ 2ರ ನುಡಿಮುತ್ತು")
+  between them (owner's request).
+- Speaker pictures: the editorial team supplies photos; the owner restyles them in ChatGPT
+  into the silhouette style (black on white, one feature in pure blue, square PNG). We then
+  run them through `tools/silhouette-art.py` as the README describes. Don't draw them ourselves.
+
+## Videos (Kannada page)
+
+- YouTube and Instagram embeds; the owner pastes the links by hand into `VIDEOS` (wide
+  YouTube videos: big player plus list) and `SHORTS` (YouTube Shorts and Instagram Reels,
+  in their own sideways-scrolling row, because they are upright). `videoSource` in
+  `js/main.js` reads the id from any pasted link.
+- YouTube shows its cover and loads the player (youtube-nocookie.com) only when tapped.
+  Instagram gives no cover, so Reels show Instagram's own frame (owner is fine with it);
+  cards are 326px wide, the narrowest Instagram's player allows.
+
+## Photo stories (Kannada page)
+
+- From the **"karunadotsava-photo"** collection (`COLLECTIONS.photo`), same reading as the
+  carousel. The first 5 show (one large, four small fill the grid evenly), each opening the
+  story on prajavani.net. If the collection can't be read, the section is left out.
+
+## "See all" buttons
+
+- Every section with more stories than it shows ends with a "ಎಲ್ಲವನ್ನೂ ನೋಡಿ" button to the
+  full page (owner's request): stories → prajavani.net/karunadotsava-top, photo stories →
+  prajavani.net/karunadotsava-photo, videos → Prajavani's YouTube channel (prajavani.net has
+  no video page). The addresses are `seeAll…` in `UI` in `js/data.js`.
 
 ## Exhibition
 
@@ -114,7 +173,8 @@ Define them as CSS custom properties in one place.
   The button opens the maker full screen: the poster on a deep red "stage", the
   choices in a white panel, the save buttons fixed at the bottom.
 - The reader adds any photo (selfie, group or scene) and writes one short line under
-  "ನನ್ನ ಹೆಮ್ಮೆ" (my pride) or "ನನ್ನ ಕನಸು" (my dream for Kannada and Karnataka), with
+  "ನನ್ನ ಹೆಮ್ಮೆ" (my pride), "ನನ್ನ ಕನಸು" (my dream for Kannada and Karnataka) or
+  "ನನ್ನ ಸಮುದಾಯ" (my community; third tab, owner's request), with
   tap-to-use suggestions, an optional name and town, and an optional longer story that
   goes with the poster as the share message, not on the image. Set in `POSTER` in `js/data.js`.
 - The poster is 1080×1920 (9:16) for WhatsApp status and Instagram stories. The words
@@ -130,7 +190,7 @@ Define them as CSS custom properties in one place.
 - `index-en.html` + `js/data-en.js`: the same site in English for Deccan Herald (DH),
   requested by the owner. It uses the DH Karunadotsava mark and DH logo (see Brand assets)
   in place of Prajavani's, spells the title "Karunadothsava" to match the mark, and DH's typefaces through `data-brand="dh"` on `<html>`.
-- Owner's choices: no quotes banner, no videos, no photo gallery, no section list at
+- Owner's choices: no quotes banner, no videos, no photo stories, no section list at
   the end of the page; adds "From the archives" (`ARCHIVE`).
 - It shares `css/styles.css` and every script with the Kannada page. `js/main.js` runs
   each block only if the page has it. Never fork a script or stylesheet per edition;
@@ -150,6 +210,10 @@ Define them as CSS custom properties in one place.
   README.md
   ```
 - Keep all content in `js/data.js`, never hard-coded across the HTML.
+- To test with the live collections, use `python tools/preview-server.py`
+  (http://localhost:8123/). It forwards collection requests to prajavani.net and points
+  only the copy of `js/data.js` it serves at itself. It's for testing only; the site's
+  own files stay pointed at prajavani.net.
 - Follow every functional, accessibility and image-performance requirement in
   `website_build_handover.md` (10 slides, 18 sections, keyboard access,
   reduced motion, lazy loading, no layout shift, no dead links).

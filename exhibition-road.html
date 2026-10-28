@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="kn">
+<head>
+<meta charset="utf-8">
+<title>ಕರುನಾಡಿನ ಹಾದಿ | ಪ್ರಜಾವಾಣಿ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#A80F22">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/PvHeadlineSemibold3.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/PrajavaniTextRegular.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Fonts and colour tokens come from the main site's stylesheet. -->
+<link rel="stylesheet" href="css/styles.css">
+<style>
+/* Layout: one fixed phone screen. Road scene fills it; header on top, story sheet and map dock at the bottom. */
+:root {
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --dock-h: 60px;
+  --peek-h: 56px;
+  --sheet-h: 70vh;
+  --info-bottom: 116px;
+  --leaf: #2f6a32; /* mango leaves on the decade arches */
+}
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+body {
+  background: var(--cream);
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Header: the site's red masthead and Karunadotsava mark, fixed on top of the scene. */
+.bar {
+  position: fixed; inset: 0 0 auto; z-index: 30;
+  display: flex; align-items: center; gap: 12px;
+  padding: calc(env(safe-area-inset-top, 0px) + 4px) var(--gutter-r) 4px var(--gutter-l);
+}
+.bar .brand { margin-right: auto; }
+.year {
+  font-family: var(--font-headline);
+  font-size: 26px; font-weight: 600; line-height: 1;
+  font-variant-numeric: tabular-nums; letter-spacing: .02em;
+}
+.year::after {
+  content: ""; display: block; height: 3px; margin-top: 4px;
+  background: var(--yellow); border-radius: 2px;
+}
+.bar .icon-button, .viewer .icon-button {
+  flex: none; border: 1px solid rgb(255 255 255 / 45%); font-size: 18px; line-height: 1;
+}
+
+/* Scene */
+.stage { position: fixed; inset: 0; z-index: 0; touch-action: none; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.world { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+
+.paper {
+  position: absolute; left: 0; top: 0;
+  width: 400px; height: 640px; box-sizing: border-box;
+  transform-origin: 0 0;
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 16px 18px; overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, var(--paper-edge) 100%),
+    var(--paper);
+  color: var(--paper-ink);
+  font-family: var(--font-headline);
+  box-shadow: 0 14px 30px rgba(40, 25, 10, .28);
+}
+.mast {
+  text-align: center; font-size: 42px; font-weight: 600; line-height: 1.3;
+  border-bottom: 3px double var(--paper-ink); padding-bottom: 2px;
+}
+.dateline {
+  display: flex; justify-content: space-between;
+  font: 600 12px/1.6 var(--font-text);
+  border-bottom: 1px solid var(--paper-ink); padding-bottom: 4px;
+}
+.banner { margin: 2px 0; font-size: 34px; font-weight: 600; line-height: 1.3; text-wrap: balance; }
+.cols {
+  flex: 1; min-height: 0;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto 1fr; gap: 10px;
+}
+.photo {
+  grid-column: 1 / 3; aspect-ratio: 4 / 3;
+  display: grid; place-items: center;
+  background:
+    repeating-linear-gradient(45deg, var(--paper-line) 0 2px, transparent 2px 7px),
+    var(--paper-photo);
+  font: 600 14px var(--font-text);
+}
+.photo span { background: var(--paper); padding: 2px 10px; }
+.lines {
+  min-height: 0;
+  background: repeating-linear-gradient(to bottom, var(--paper-line) 0 3px, transparent 3px 9px);
+}
+.cols > .lines { grid-column: 3; grid-row: 1 / 3; }
+.sub { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+.sub b { font-size: 17px; line-height: 1.3; }
+.sub .lines { flex: 1; }
+.stamp {
+  position: absolute; right: 14px; bottom: 16px;
+  padding: 2px 10px; border: 2px solid var(--red); color: var(--red);
+  font: 600 15px/1.5 var(--font-text); transform: rotate(-7deg);
+  background: var(--paper);
+}
+
+.stone {
+  position: absolute; left: 0; top: 0;
+  width: 90px; height: 120px; box-sizing: border-box;
+  transform-origin: 0 0;
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px;
+  border-radius: 45px 45px 6px 6px;
+  background: linear-gradient(var(--yellow) 0 40%, var(--white) 40%);
+  box-shadow: inset 0 -8px 0 rgba(0, 0, 0, .1), 0 4px 8px rgba(0, 0, 0, .22);
+  color: var(--ink); font: 600 25px/1 var(--font-text); font-variant-numeric: tabular-nums;
+}
+/* Decade arch over the road, like a town's welcome arch, with a mango-leaf thorana under the board. */
+.arch {
+  position: absolute; left: 0; top: 0;
+  width: 560px; height: 800px;
+  transform-origin: 0 0;
+}
+/* Pages and stones get their own layer only while travelling, so they are redrawn sharp on arrival.
+   Arches never do: they are read while moving, and a cached layer would blur as it grows. */
+.moving .paper, .moving .stone { will-change: transform, opacity; }
+.arch-post {
+  position: absolute; top: 150px; bottom: 0; width: 40px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(90deg, var(--red-deep), var(--red-dark) 50%, var(--red-deep));
+}
+.arch-post:first-child { left: 24px; }
+.arch-post:nth-child(2) { right: 24px; }
+.arch-board {
+  position: absolute; inset: 0 0 auto; height: 200px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 8px solid var(--yellow); border-radius: 10px;
+  background: var(--red); color: var(--white); text-align: center;
+  box-shadow: 0 12px 28px rgb(0 0 0 / 28%);
+}
+.arch-decade { font: 600 78px/1.2 var(--font-headline); }
+.arch-line { font: 400 34px/1.4 var(--font-text); color: var(--yellow-soft); }
+.arch-leaves {
+  position: absolute; left: 64px; right: 64px; top: 200px; height: 40px;
+  background: conic-gradient(from 315deg at 50% 100%, var(--leaf) 90deg, transparent 0) 0 0 / 40px 40px repeat-x;
+}
+
+.hint {
+  position: fixed; left: 50%; z-index: 15; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 999px;
+  background: rgba(27, 21, 18, .86); color: var(--white);
+  font-size: 15px; font-weight: 600; white-space: nowrap; pointer-events: none;
+}
+.hint-arrow { display: inline-block; animation: nudge 1.2s ease-in-out infinite; }
+[data-swipe="down"] .hint-arrow { --dir: 1; }
+@keyframes nudge { 50% { transform: translateY(calc(var(--dir, -1) * 6px)); } }
+
+/* Date and headline under the page (layout A) */
+.info {
+  position: fixed; left: 0; right: 0; bottom: var(--info-bottom); z-index: 20;
+  padding: 10px var(--gutter-r) 8px var(--gutter-l);
+  background: var(--cream); border-top: 1px solid var(--line);
+}
+[data-layout="b"] .info { display: none; }
+.info-date, .peek-date { color: var(--red); font-weight: 600; font-size: 14px; line-height: 1.5; }
+.info-head {
+  margin: 0; font-size: 20px; font-weight: 600; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* Story sheet */
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 22;
+  height: var(--sheet-h);
+  display: flex; flex-direction: column;
+  background: var(--white); border-radius: 16px 16px 0 0;
+  box-shadow: 0 -6px 24px rgba(40, 20, 10, .18);
+  transform: translateY(calc(var(--sheet-h) - var(--peek-h)));
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+}
+.sheet.open { transform: none; }
+.peek {
+  position: relative; flex: none;
+  display: flex; align-items: center; gap: 12px; text-align: left;
+  min-height: 56px; box-sizing: border-box;
+  padding: 14px var(--gutter-r) 8px var(--gutter-l);
+  border: 0; background: transparent; touch-action: none;
+}
+.peek::before {
+  content: ""; position: absolute; top: 6px; left: 50%; width: 40px; height: 4px;
+  margin-left: -20px; border-radius: 2px; background: var(--line);
+}
+.peek-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.peek-a { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.peek-head {
+  font-family: var(--font-headline);
+  font-size: 17px; font-weight: 600; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+[data-layout="a"] .peek-b, [data-layout="b"] .peek-a { display: none; }
+.chev {
+  flex: none; width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--cream); color: var(--red);
+  font-size: 16px; transition: transform .3s;
+}
+.sheet.open .chev { transform: rotate(180deg); }
+.moving .info > *, .moving .peek-b { opacity: .35; transition: opacity .2s; }
+
+.sheet-body {
+  flex: 1; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y;
+  padding: 0 var(--gutter-r) 24px var(--gutter-l);
+}
+.sheet-body > * { max-width: 62ch; }
+.story-date { margin: 8px 0 0; color: var(--red); font-weight: 600; font-size: 14px; }
+.story-head { margin: 2px 0 12px; font-size: 24px; font-weight: 600; line-height: 1.3; text-wrap: balance; }
+.story-body p { margin: 0 0 14px; font-size: 17px; line-height: 1.7; }
+.credit { margin: 4px 0 18px; color: var(--ink-muted); font-size: 13px; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 10px; }
+.next-stop {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  min-height: 52px; padding: 0 16px; box-sizing: border-box;
+  border: 0; border-radius: 10px; background: var(--red); color: var(--white);
+  font-size: 16px; font-weight: 600;
+}
+.next-stop:focus-visible { outline-color: var(--yellow); }
+
+/* Map dock */
+.dock {
+  position: fixed; inset: auto 0 0; z-index: 25;
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px var(--gutter-r) calc(6px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  background: var(--cream); border-top: 1px solid var(--line);
+}
+.nav-btn {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: var(--red); color: var(--white); font-size: 22px; line-height: 1;
+}
+.nav-btn:disabled { background: var(--line); color: var(--ink-muted); cursor: default; }
+.map { position: relative; flex: 1; height: 48px; margin: 0 10px; }
+.map::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 18px; height: 2px; background: var(--line);
+}
+.map-fill { position: absolute; left: 0; top: 18px; height: 2px; background: var(--red); }
+.dot {
+  position: absolute; top: 0; width: 24px; height: 38px; margin-left: -12px;
+  border: 0; background: transparent; padding: 0;
+}
+.dot::before {
+  content: ""; position: absolute; left: 50%; top: 19px; width: 10px; height: 10px;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  background: var(--cream); border: 2px solid var(--red); box-sizing: border-box;
+}
+.dot[aria-current="true"]::before {
+  width: 18px; height: 18px; background: var(--red); border: 3px solid var(--yellow);
+}
+.map-end { position: absolute; bottom: 0; font-size: 11px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.map-end.end { right: 0; }
+
+/* Test options */
+.tests {
+  position: fixed; z-index: 40;
+  top: calc(env(safe-area-inset-top, 0px) + 62px); right: var(--gutter-r);
+  width: min(320px, calc(100% - 32px)); box-sizing: border-box;
+  padding: 14px 16px; border-radius: 12px;
+  background: var(--white); box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+}
+.tests h2 { margin: 0 0 4px; font-size: 16px; }
+.tests p { margin: 0 0 10px; color: var(--ink-muted); font-size: 13px; line-height: 1.5; }
+.tests fieldset { margin: 0 0 12px; padding: 0; border: 0; }
+.tests legend { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+.tests label { display: flex; align-items: center; gap: 8px; min-height: 40px; font-size: 15px; }
+.tests input { width: 20px; height: 20px; accent-color: var(--red); }
+.tests .done { width: 100%; min-height: 44px; border: 0; border-radius: 8px; background: var(--red); color: var(--white); font-weight: 600; }
+
+/* Full-screen page viewer */
+.viewer {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; flex-direction: column;
+  background: var(--night); color: var(--white);
+}
+.viewer-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: calc(env(safe-area-inset-top, 0px) + 6px) var(--gutter-r) 6px var(--gutter-l);
+}
+.viewer-bar span { flex: 1; font-weight: 600; }
+.viewer :focus-visible { outline-color: var(--yellow); }
+.viewer-scroll { flex: 1; overflow: auto; touch-action: pan-x pan-y; padding: 8px 16px 24px; }
+.viewer-page { position: relative; margin: 0 auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .chev { transition: none; }
+  .hint-arrow { animation: none; }
+}
+</style>
+</head>
+<body>
+<header class="masthead bar">
+  <h1 class="brand">
+    <a class="brand__link" href="index.html">
+      <img class="brand__mark" src="assets/hero/karunadotsava-pv-720.webp" alt="ಪ್ರಜಾವಾಣಿ ಕರುನಾಡೋತ್ಸವ: ಮುಖಪುಟಕ್ಕೆ" width="720" height="236">
+    </a>
+  </h1>
+  <div class="year" id="year" aria-live="polite">1956</div>
+  <button class="icon-button" id="testsBtn" type="button" aria-label="Test options" aria-expanded="false">⚙</button>
+</header>
+
+<div class="stage" id="stage">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="world" id="world" aria-hidden="true"></div>
+</div>
+
+<div class="hint" id="hint"><span class="hint-arrow" id="hintArrow">↑</span><span id="hintText">ಮುಂದೆ ಸಾಗಲು ಮೇಲಕ್ಕೆ ಸರಿಸಿ</span></div>
+
+<div class="info" id="info">
+  <div class="info-date" id="infoDate"></div>
+  <h2 class="info-head" id="infoHead"></h2>
+</div>
+
+<section class="sheet" id="sheet" aria-label="ಕಥೆ">
+  <button class="peek" id="peek" type="button" aria-expanded="false" aria-controls="sheetBody">
+    <span class="peek-text">
+      <span class="peek-a">ಕಥೆ ಓದಿ</span>
+      <span class="peek-b peek-date" id="peekDate"></span>
+      <span class="peek-b peek-head" id="peekHead"></span>
+    </span>
+    <span class="chev" aria-hidden="true">▲</span>
+  </button>
+  <div class="sheet-body" id="sheetBody">
+    <p class="story-date" id="storyDate"></p>
+    <h2 class="story-head" id="storyHead"></h2>
+    <div class="story-body" id="storyBody"></div>
+    <p class="credit" id="credit"></p>
+    <button class="next-stop" id="nextStop" type="button"></button>
+  </div>
+</section>
+
+<nav class="dock" id="dock" aria-label="ಕಾಲರೇಖೆ">
+  <button class="nav-btn" id="prevBtn" type="button" aria-label="ಹಿಂದಿನ ಪುಟ">‹</button>
+  <div class="map" id="map">
+    <div class="map-fill" id="mapFill"></div>
+  </div>
+  <button class="nav-btn" id="nextBtn" type="button" aria-label="ಮುಂದಿನ ಪುಟ">›</button>
+</nav>
+
+<div class="tests" id="tests" hidden>
+  <h2>Test options</h2>
+  <p>Swipe to travel, tap the page to open it, pull up the story. Switch these to compare.</p>
+  <fieldset>
+    <legend>Layout</legend>
+    <label><input type="radio" name="layout" id="layoutA" value="a"> A · date and headline under the page</label>
+    <label><input type="radio" name="layout" id="layoutB" value="b"> B · date and headline in the story bar</label>
+  </fieldset>
+  <fieldset>
+    <legend>Swipe to move ahead</legend>
+    <label><input type="radio" name="swipe" id="swipeUp" value="up"> Swipe up</label>
+    <label><input type="radio" name="swipe" id="swipeDown" value="down"> Swipe down</label>
+  </fieldset>
+  <button class="done" id="testsDone" type="button">Done</button>
+</div>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="ಪುಟ">
+  <div class="viewer-bar">
+    <span id="viewerTitle"></span>
+    <button class="icon-button" id="zoomOut" type="button" aria-label="ಚಿಕ್ಕದು">−</button>
+    <button class="icon-button" id="zoomIn" type="button" aria-label="ದೊಡ್ಡದು">+</button>
+    <button class="icon-button" id="viewerClose" type="button" aria-label="ಮುಚ್ಚಿ">✕</button>
+  </div>
+  <div class="viewer-scroll" id="viewerScroll"><div class="viewer-page" id="viewerPage"></div></div>
+</div>
+
+<script>
+// Sample entries. Real page scans and write-ups replace these.
+const ENTRIES = [
+  {
+    year: 1956, weekday: "ಗುರುವಾರ", date: "1 ನವೆಂಬರ್ 1956",
+    headline: "ವಿಶಾಲ ಮೈಸೂರು ರಾಜ್ಯ ಉದಯ",
+    paras: [
+      "1956ರ ನವೆಂಬರ್ 1ರಂದು ಬಾಂಬೆ, ಮದ್ರಾಸ್ ಮತ್ತು ಹೈದರಾಬಾದ್ ಪ್ರಾಂತ್ಯಗಳಲ್ಲಿ ಹಾಗೂ ಕೊಡಗಿನಲ್ಲಿ ಹಂಚಿಹೋಗಿದ್ದ ಕನ್ನಡ ಮಾತನಾಡುವ ಪ್ರದೇಶಗಳು ಮೈಸೂರು ರಾಜ್ಯದೊಂದಿಗೆ ಒಂದಾದವು.",
+      "ದಶಕಗಳ ಏಕೀಕರಣ ಚಳವಳಿಯ ಕನಸು ಅಂದು ನನಸಾಯಿತು. ಊರೂರುಗಳಲ್ಲಿ ಹಬ್ಬದ ವಾತಾವರಣ ಮನೆಮಾಡಿತ್ತು.",
+      "ಇದು ಮಾದರಿ ಬರಹ. ಸಂಪಾದಕೀಯ ತಂಡ ಈ ಪುಟದ ನಿಜವಾದ ಕಥೆಯನ್ನು ಇಲ್ಲಿ ಸೇರಿಸಲಿದೆ."
+    ]
+  },
+  {
+    year: 1973, weekday: "ಗುರುವಾರ", date: "1 ನವೆಂಬರ್ 1973",
+    headline: "ಮೈಸೂರು ಇನ್ನು ಕರ್ನಾಟಕ",
+    paras: [
+      "1973ರ ನವೆಂಬರ್ 1ರಂದು ಮೈಸೂರು ರಾಜ್ಯಕ್ಕೆ ‘ಕರ್ನಾಟಕ’ ಎಂದು ಮರುನಾಮಕರಣ ಮಾಡಲಾಯಿತು. ಆಗ ಡಿ. ದೇವರಾಜ ಅರಸು ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿದ್ದರು.",
+      "ಹೊಸ ಹೆಸರು ನಾಡಿನ ಎಲ್ಲ ಭಾಗಗಳನ್ನೂ ಒಳಗೊಳ್ಳುವ ಗುರುತಾಯಿತು.",
+      "ಇದು ಮಾದರಿ ಬರಹ. ಸಂಪಾದಕೀಯ ತಂಡ ಈ ಪುಟದ ನಿಜವಾದ ಕಥೆಯನ್ನು ಇಲ್ಲಿ ಸೇರಿಸಲಿದೆ."
+    ]
+  },
+  {
+    year: 2008, weekday: "ಶುಕ್ರವಾರ", date: "31 ಅಕ್ಟೋಬರ್ 2008",
+    headline: "ಕನ್ನಡಕ್ಕೆ ಶಾಸ್ತ್ರೀಯ ಭಾಷೆಯ ಸ್ಥಾನಮಾನ",
+    paras: [
+      "2008ರ ಅಕ್ಟೋಬರ್ 31ರಂದು ಕೇಂದ್ರ ಸರ್ಕಾರ ಕನ್ನಡಕ್ಕೆ ಶಾಸ್ತ್ರೀಯ ಭಾಷೆಯ ಸ್ಥಾನಮಾನ ಘೋಷಿಸಿತು. ರಾಜ್ಯೋತ್ಸವಕ್ಕೆ ಒಂದು ದಿನ ಮುಂಚೆ ಬಂದ ಸುದ್ದಿ ಸಂಭ್ರಮವನ್ನು ಇಮ್ಮಡಿಗೊಳಿಸಿತು.",
+      "ಸುದೀರ್ಘ ಇತಿಹಾಸವಿರುವ ಭಾಷೆಗೆ ಸಿಕ್ಕ ಈ ಮನ್ನಣೆ ಸಂಶೋಧನೆ ಮತ್ತು ಅಧ್ಯಯನಕ್ಕೆ ಹೊಸ ದಾರಿ ತೆರೆಯಿತು.",
+      "ಇದು ಮಾದರಿ ಬರಹ. ಸಂಪಾದಕೀಯ ತಂಡ ಈ ಪುಟದ ನಿಜವಾದ ಕಥೆಯನ್ನು ಇಲ್ಲಿ ಸೇರಿಸಲಿದೆ."
+    ]
+  },
+  {
+    year: 2014, weekday: "ಶನಿವಾರ", date: "1 ನವೆಂಬರ್ 2014",
+    headline: "ಬೆಂಗಳೂರು: ಹೆಸರು ಈಗ ಅಧಿಕೃತ",
+    paras: [
+      "2014ರ ನವೆಂಬರ್ 1ರಿಂದ ಬ್ಯಾಂಗಲೋರ್ ಅಧಿಕೃತವಾಗಿ ‘ಬೆಂಗಳೂರು’ ಆಯಿತು. ಮೈಸೂರು, ಮಂಗಳೂರು, ಬೆಳಗಾವಿ ಸೇರಿದಂತೆ ಇನ್ನೂ ಹಲವು ನಗರಗಳ ಹೆಸರುಗಳೂ ಕನ್ನಡದ ಉಚ್ಚಾರಕ್ಕೆ ಮರಳಿದವು.",
+      "ಇದು ಮಾದರಿ ಬರಹ. ಸಂಪಾದಕೀಯ ತಂಡ ಈ ಪುಟದ ನಿಜವಾದ ಕಥೆಯನ್ನು ಇಲ್ಲಿ ಸೇರಿಸಲಿದೆ."
+    ]
+  },
+  {
+    year: 2026, weekday: "ಭಾನುವಾರ", date: "1 ನವೆಂಬರ್ 2026",
+    headline: "ಕರುನಾಡಿಗೆ ಎಪ್ಪತ್ತು",
+    paras: [
+      "2026ರ ನವೆಂಬರ್ 1ಕ್ಕೆ ಕರ್ನಾಟಕ ರಾಜ್ಯ ಉದಯವಾಗಿ ಎಪ್ಪತ್ತು ವರ್ಷ.",
+      "ಈ ಹಾದಿಯ ಪುಟಗಳನ್ನು ನವೆಂಬರ್ 19ರಂದು ರಂಗೋಲಿ ಮೆಟ್ರೋ ಆರ್ಟ್ ಸೆಂಟರ್‌ನಲ್ಲಿ ನೇರವಾಗಿ ನೋಡಬಹುದು.",
+      "ಇದು ಮಾದರಿ ಬರಹ. ಸಂಪಾದಕೀಯ ತಂಡ ಈ ಪುಟದ ನಿಜವಾದ ಕಥೆಯನ್ನು ಇಲ್ಲಿ ಸೇರಿಸಲಿದೆ."
+    ]
+  }
+];
+const CREDIT = "ಮಾದರಿ ಪುಟ. ನಿಜವಾದ ಪತ್ರಿಕೆಯ ಸ್ಕ್ಯಾನ್ ಇಲ್ಲಿ ಬರಲಿದೆ.";
+// One arch per decade. Sample lines; the editorial team will write the real ones.
+const DECADES = [
+  { year: 1960, line: "ಹೊಸ ರಾಜ್ಯ ಕಟ್ಟುವ ಕಾಲ" },
+  { year: 1970, line: "ಕರ್ನಾಟಕ ಎಂಬ ಹೆಸರು" },
+  { year: 1980, line: "ಗೋಕಾಕ್ ಚಳವಳಿ" },
+  { year: 1990, line: "ಮಾಹಿತಿ ತಂತ್ರಜ್ಞಾನದ ಉದಯ" },
+  { year: 2000, line: "ಶಾಸ್ತ್ರೀಯ ಭಾಷೆಯ ಮನ್ನಣೆ" },
+  { year: 2010, line: "ನಗರಗಳಿಗೆ ಕನ್ನಡದ ಹೆಸರು" },
+  { year: 2020, line: "ಎಪ್ಪತ್ತರ ಹೊಸ್ತಿಲು" }
+];
+
+// World units: a page is 1 wide and R tall; one year of road is S long.
+const S = 2.6, D = 3, R = 1.6;
+const ROAD_HALF = 0.42, DASH = 1.2;
+// Sizes in world units; base is the CSS width each element is drawn at.
+const STONE = { x: 0.47, w: 0.18, h: 0.24, base: 90 };
+const ARCH = { w: 1.4, h: 2, base: 560 };
+const PAPER_W = 400;
+const Y0 = ENTRIES[0].year, Y1 = ENTRIES[ENTRIES.length - 1].year;
+const zOf = y => (y - Y0) * S;
+const roadX = z => 1.1 * Math.sin(z / 13) + 0.5 * Math.sin(z / 31);
+const ageOf = y => (y - Y0) / (Y1 - Y0);
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+// Colours that age with the year: [oldest, newest].
+const TONES = {
+  skyTop: ["#E9DABB", "#F4EFE4"], haze: ["#F3E5C8", "#FFFAF0"],
+  hill: ["#A7A273", "#7FA05A"], ridge: ["#9C9A83", "#7A9189"],
+  road: ["#6E6153", "#4A4644"], edge: ["#E8DCC4", "#EEEAE2"],
+  paper: ["#E6D3A8", "#FBFAF6"], ink: ["#2E261C", "#1F1F1F"], photo: ["#CDB78E", "#D9D6CF"]
+};
+// Flag colours for the centre line, read from the site's tokens.
+const tokens = getComputedStyle(document.documentElement);
+const RED = tokens.getPropertyValue("--red").trim(), YELLOW = tokens.getPropertyValue("--yellow").trim();
+
+const $ = id => document.getElementById(id);
+const canvas = $("scene"), ctx = canvas.getContext("2d");
+const world = $("world");
+
+let settings = { layout: "b", swipe: "up" };
+try { Object.assign(settings, JSON.parse(localStorage.getItem("road-test") || "{}")); } catch (e) {}
+
+let view = { W: 0, H: 0, F: 1, h0: 1, horizon: 0, groundBottom: 0 };
+let camZ = zOf(Y0) - D, pull = 0, cur = 0, moving = false, lastArrive = 0, zoom = 1;
+
+function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+const css = (c, alpha = 1) => `rgba(${c.map(Math.round).join(",")},${alpha})`;
+const toneRgb = (name, t) => mix(...TONES[name].map(hexToRgb), t);
+const tone = (name, t, alpha = 1) => css(toneRgb(name, t), alpha);
+
+function paperHTML(e) {
+  return `<div class="mast">ಮಾದರಿ ಪತ್ರಿಕೆ</div>
+    <div class="dateline"><span>${e.weekday}, ${e.date}</span><span>ಬೆಂಗಳೂರು</span></div>
+    <div class="banner">${e.headline}</div>
+    <div class="cols">
+      <div class="photo"><span>ಚಿತ್ರ</span></div>
+      <div class="lines"></div>
+      <div class="sub"><b>ಊರೂರಲ್ಲಿ ಸಂಭ್ರಮ</b><div class="lines"></div></div>
+      <div class="sub"><b>ಸಂಪಾದಕೀಯ</b><div class="lines"></div></div>
+    </div>
+    <span class="stamp">ಮಾದರಿ ಪುಟ</span>`;
+}
+function paintPaper(el, e) {
+  const t = ageOf(e.year);
+  el.style.setProperty("--paper", tone("paper", t));
+  el.style.setProperty("--paper-ink", tone("ink", t));
+  el.style.setProperty("--paper-line", tone("ink", t, .26));
+  el.style.setProperty("--paper-photo", tone("photo", t));
+  el.style.setProperty("--paper-edge", `rgba(120,80,30,${(.35 * (1 - t)).toFixed(2)})`);
+}
+
+// Build pages, one milestone per year and one arch per decade.
+const pages = ENTRIES.map(e => {
+  const el = document.createElement("article");
+  el.className = "paper";
+  el.innerHTML = paperHTML(e);
+  paintPaper(el, e);
+  world.appendChild(el);
+  return { el, z: zOf(e.year) };
+});
+const stones = [];
+for (let y = Y0; y <= Y1; y++) {
+  const el = document.createElement("div");
+  el.className = "stone";
+  el.textContent = y;
+  world.appendChild(el);
+  stones.push({ el, z: zOf(y) - 0.1 });
+}
+const arches = DECADES.map(d => {
+  const el = document.createElement("div");
+  el.className = "arch";
+  el.innerHTML = `<div class="arch-post"></div><div class="arch-post"></div>
+    <div class="arch-board"><span class="arch-decade">${d.year}ರ ದಶಕ</span><span class="arch-line">${d.line}</span></div>
+    <div class="arch-leaves"></div>`;
+  world.appendChild(el);
+  // Stand just before the decade's first stone, but never between the viewer and an arrived page.
+  let z = zOf(d.year) - 0.3;
+  const nextPage = pages.find(p => p.z >= z);
+  if (nextPage) z = Math.min(z, nextPage.z - D - 0.6);
+  return { el, z };
+});
+
+// Timeline map dots.
+const map = $("map");
+const dots = ENTRIES.map((e, i) => {
+  const b = document.createElement("button");
+  b.className = "dot"; b.type = "button";
+  b.style.left = `${ageOf(e.year) * 100}%`;
+  b.setAttribute("aria-label", `${e.year}: ${e.headline}`);
+  b.addEventListener("click", () => go(i));
+  map.appendChild(b);
+  return b;
+});
+map.insertAdjacentHTML("beforeend", `<span class="map-end">${Y0}</span><span class="map-end end">${Y1}</span>`);
+
+function camera() {
+  return { z: camZ, x: roadX(camZ + D), f: view.F * (1 - 0.4 * pull), h: view.h0 + 0.7 * pull };
+}
+function project(c, x, y, z) {
+  const dz = z - c.z, s = c.f / dz;
+  return { x: view.W / 2 + (x - c.x) * s, y: view.horizon + (c.h - y) * s, s, dz };
+}
+// Far objects fade into haze; the page you pass fades as you go through it.
+function visibility(dz) {
+  if (dz < 0.35 || dz > 70) return 0;
+  return Math.min(clamp(1 - (dz - D) / 50, 0, 1), clamp((dz - 0.35 * D) / (0.55 * D), 0, 1));
+}
+
+function layout() {
+  const W = innerWidth, H = innerHeight, dpr = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const headerBottom = document.querySelector(".bar").getBoundingClientRect().bottom;
+  const dockH = $("dock").offsetHeight, peekH = $("peek").offsetHeight;
+  const infoH = settings.layout === "a" ? $("info").offsetHeight : 0;
+  const root = document.documentElement.style;
+  root.setProperty("--dock-h", `${dockH}px`);
+  root.setProperty("--peek-h", `${peekH}px`);
+  root.setProperty("--sheet-h", `${H - headerBottom - dockH}px`);
+  root.setProperty("--info-bottom", `${dockH + peekH}px`);
+
+  // The arrived page stands on the road, as large as the free space allows.
+  const top = headerBottom + 12, bottom = H - dockH - peekH - infoH - 40;
+  const widthShare = settings.layout === "a" ? 0.72 : 0.84;
+  const pw = Math.max(120, Math.min(widthShare * W, (bottom - top) / R));
+  const h0 = 0.58 * R;
+  // groundBottom: lowest point of the road not hidden by the bars at the bottom.
+  view = { W, H, F: pw * D, h0, horizon: bottom - pw * h0, groundBottom: bottom + 40 };
+  $("hint").style.top = `${bottom - 64}px`;
+  render();
+}
+
+// Land height: flat beside the road, rising into rolling hills further out.
+function groundHeight(x, z) {
+  const ramp = clamp((Math.abs(x - roadX(z)) - 1.3) / 3.5, 0, 1);
+  if (!ramp) return 0;
+  const rolling = 0.55 + 0.3 * Math.sin(x * 0.45 + z * 0.13) + 0.25 * Math.sin(z * 0.29 - x * 0.8);
+  return ramp * ramp * (3 - 2 * ramp) * rolling * 2.2;
+}
+
+// Two hazy ridges on the horizon, like the Western Ghats; they drift slowly as the road turns.
+function drawRidges(c, t) {
+  const { W, horizon } = view, scale = view.F / (3 * 300);
+  [{ amp: 64, drift: 9, wave: 90, fade: .55 }, { amp: 38, drift: 16, wave: 52, fade: .3 }].forEach((r, i) => {
+    ctx.fillStyle = css(mix(toneRgb("ridge", t), toneRgb("haze", t), r.fade));
+    ctx.beginPath(); ctx.moveTo(0, horizon + 2);
+    for (let x = 0; x <= W; x += 8) {
+      const u = x + c.x * r.drift * 10 + c.z * r.drift * .2;
+      const h = .55 + .25 * Math.sin(u / r.wave + i) + .2 * Math.sin(u / (r.wave * .41) + 2 * i);
+      ctx.lineTo(x, horizon - r.amp * scale * h);
+    }
+    ctx.lineTo(W, horizon + 2); ctx.closePath(); ctx.fill();
+  });
+}
+
+// Land drawn as slices across the view, far to near, each covering the ones behind it.
+// Slices sit on a fixed world grid, so the field bands move past as you travel.
+function drawTerrain(c, t) {
+  const { W, H } = view, hill = toneRgb("hill", t), haze = toneRgb("haze", t);
+  const STEP = 1;
+  for (let k = Math.floor((c.z + 70) / STEP); k * STEP > c.z + 0.4; k--) {
+    const z = k * STEP, dz = z - c.z, s = c.f / dz, half = W / 2 / s + 0.5;
+    const band = k % 4 < 2 ? 1 : .95;
+    ctx.fillStyle = css(mix(hill.map(v => v * band), haze, clamp((dz - 4) / 60, 0, 1)));
+    ctx.beginPath();
+    for (let i = 0; i <= 32; i++) {
+      const x = c.x - half + 2 * half * i / 32, p = project(c, x, groundHeight(x, z), z);
+      i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y);
+    }
+    ctx.lineTo(W + 10, H); ctx.lineTo(-10, H); ctx.closePath(); ctx.fill();
+  }
+}
+
+function drawScene(c, t) {
+  const { W, H, horizon } = view;
+  ctx.clearRect(0, 0, W, H);
+  let g = ctx.createLinearGradient(0, 0, 0, horizon);
+  g.addColorStop(0, tone("skyTop", t)); g.addColorStop(1, tone("haze", t));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, horizon);
+  ctx.fillStyle = tone("haze", t); ctx.fillRect(0, horizon, W, H - horizon);
+  drawRidges(c, t);
+  drawTerrain(c, t);
+
+  // Road surface and edges, sampled closer together near the viewer.
+  const near = c.z + 0.3, far = c.z + 90, left = [], right = [];
+  for (let i = 0; i <= 70; i++) {
+    const u = i / 70, z = near + (far - near) * u * u, x = roadX(z);
+    left.push(project(c, x - ROAD_HALF, 0, z));
+    right.push(project(c, x + ROAD_HALF, 0, z));
+  }
+  ctx.beginPath();
+  left.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+  for (let i = right.length - 1; i >= 0; i--) ctx.lineTo(right[i].x, right[i].y);
+  ctx.closePath();
+  // The far end of the road fades into the haze, like the land around it.
+  g = ctx.createLinearGradient(0, horizon, 0, horizon + 60);
+  g.addColorStop(0, tone("haze", t)); g.addColorStop(1, tone("road", t));
+  ctx.fillStyle = g; ctx.fill();
+  ctx.strokeStyle = tone("edge", t); ctx.lineWidth = 1.5;
+  [left, right].forEach(side => {
+    ctx.beginPath();
+    side.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+    ctx.stroke();
+  });
+
+  // Centre line: alternating yellow and red dashes, the flag colours.
+  for (let k = Math.ceil(near / DASH); k * DASH < c.z + 60; k++) {
+    const z0 = k * DASH, z1 = z0 + DASH / 2;
+    const a = project(c, roadX(z0) - .03, 0, z0), b = project(c, roadX(z0) + .03, 0, z0);
+    const d = project(c, roadX(z1) + .03, 0, z1), e = project(c, roadX(z1) - .03, 0, z1);
+    ctx.globalAlpha = clamp(1 - (z0 - c.z) / 60, 0, 1);
+    ctx.fillStyle = k % 2 ? RED : YELLOW;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(d.x, d.y); ctx.lineTo(e.x, e.y); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // Soft shadows under the pages.
+  pages.forEach(p => {
+    const o = visibility(p.z - c.z);
+    if (!o) return;
+    const q = project(c, roadX(p.z), 0, p.z);
+    ctx.fillStyle = `rgba(30,20,10,${.28 * o})`;
+    ctx.beginPath(); ctx.ellipse(q.x, q.y, .56 * q.s, .05 * q.s, 0, 0, Math.PI * 2); ctx.fill();
+  });
+}
+
+function place(item, c, xOffset, worldW, worldH, baseW) {
+  const o = visibility(item.z - c.z);
+  item.el.style.visibility = o ? "visible" : "hidden";
+  if (!o) return;
+  const q = project(c, roadX(item.z) + xOffset, worldH, item.z);
+  const w = worldW * q.s;
+  item.el.style.transform = `translate(${(q.x - w / 2).toFixed(1)}px,${q.y.toFixed(1)}px) scale(${(w / baseW).toFixed(4)})`;
+  item.el.style.opacity = o.toFixed(3);
+  item.el.style.zIndex = Math.round(10000 - q.dz * 100);
+}
+
+function render() {
+  const c = camera();
+  // While moving, the counter shows the nearest stone still on screen (the next one ahead).
+  const nearestSeen = c.h * c.f / (view.groundBottom - view.horizon);
+  const lookYear = clamp(Y0 + (c.z + Math.max(D, nearestSeen)) / S, Y0, Y1);
+  drawScene(c, ageOf(lookYear));
+  pages.forEach(p => place(p, c, 0, 1, R, PAPER_W));
+  stones.forEach(s => place(s, c, STONE.x, STONE.w, STONE.h, STONE.base));
+  arches.forEach(a => place(a, c, 0, ARCH.w, ARCH.h, ARCH.base));
+  $("year").textContent = moving ? Math.ceil(lookYear - 1e-6) : ENTRIES[cur].year;
+}
+
+// Trip timing: pulls away from a page quickly and settles gently onto the next one.
+// rampUp / rampDown: share of the trip spent speeding up and slowing down.
+const TRIP = { rampUp: 0.12, rampDown: 0.4 };
+const ease = (() => {
+  const v = t => t < TRIP.rampUp ? Math.sin(Math.PI / 2 * t / TRIP.rampUp) ** 2
+    : t > 1 - TRIP.rampDown ? Math.sin(Math.PI / 2 * (1 - t) / TRIP.rampDown) ** 2 : 1;
+  const N = 200, acc = [0];
+  for (let i = 1; i <= N; i++) acc.push(acc[i - 1] + v((i - .5) / N));
+  return t => {
+    const x = clamp(t, 0, 1) * N, i = Math.min(N - 1, Math.floor(x));
+    return (acc[i] + (acc[i + 1] - acc[i]) * (x - i)) / acc[N];
+  };
+})();
+
+// The trip glides almost to a stop before every arch it passes, so each board can be read.
+// at: distance ahead of the arch where it is slowest; reach: how far before and after the
+// slow-down spreads; minSpeed: share of normal speed at the slowest point; extraMs: time added per arch.
+const ARCH_SLOW = { at: 5, reach: 3, minSpeed: 0.06, extraMs: 1200 };
+const slowPoint = a => a.z - ARCH_SLOW.at;
+// Speed along the road (1 = normal), dipping smoothly (a cosine curve) around each arch.
+const speedAt = z => arches.reduce((v, a) => {
+  const d = Math.abs(z - slowPoint(a)) / ARCH_SLOW.reach;
+  return d < 1 ? Math.min(v, 1 - (1 - ARCH_SLOW.minSpeed) * (1 + Math.cos(Math.PI * d)) / 2) : v;
+}, 1);
+// Spread the road between two stops over time by slowness, so slow stretches take longer.
+// Returns a function from eased progress (0–1) to camera position.
+function travelPath(from, to) {
+  const N = 240, acc = [0];
+  for (let i = 1; i <= N; i++) {
+    const z = from + (to - from) * (i - .5) / N;
+    acc.push(acc[i - 1] + 1 / speedAt(z));
+  }
+  return f => {
+    const target = f * acc[N];
+    let i = 1;
+    while (i < N && acc[i] < target) i++;
+    const part = (target - acc[i - 1]) / (acc[i] - acc[i - 1] || 1);
+    return from + (to - from) * (i - 1 + part) / N;
+  };
+}
+
+function go(j) {
+  if (j < 0 || j >= ENTRIES.length || j === cur || moving) return;
+  setSheet(false);
+  $("hint").hidden = true;
+  const gap = Math.abs(ENTRIES[j].year - ENTRIES[cur].year);
+  const from = camZ, to = zOf(ENTRIES[j].year) - D;
+  const reduce = reduceMotion.matches;
+  const passed = arches.filter(a => slowPoint(a) > Math.min(from, to) && slowPoint(a) < Math.max(from, to)).length;
+  const duration = reduce ? 0 : clamp(500 + 25 * gap, 500, 1400) + ARCH_SLOW.extraMs * passed;
+  const lift = reduce ? 0 : Math.min(1, gap / 8);
+  const path = travelPath(from, to);
+  cur = j; moving = true;
+  document.body.classList.add("moving");
+  const start = performance.now();
+  (function frame(now) {
+    const t = duration ? clamp((now - start) / duration, 0, 1) : 1;
+    camZ = path(ease(t));
+    pull = lift * Math.sin(Math.PI * t);
+    if (t < 1) { render(); requestAnimationFrame(frame); return; }
+    camZ = to; pull = 0; moving = false; lastArrive = performance.now();
+    document.body.classList.remove("moving");
+    fillText(); render();
+    try { navigator.vibrate && navigator.vibrate(8); } catch (e) {}
+  })(start);
+}
+const step = d => go(cur + d);
+
+function fillText() {
+  const e = ENTRIES[cur], next = ENTRIES[cur + 1];
+  $("infoDate").textContent = $("peekDate").textContent = $("storyDate").textContent = e.date;
+  $("infoHead").textContent = $("peekHead").textContent = $("storyHead").textContent = e.headline;
+  $("storyBody").innerHTML = e.paras.map(p => `<p>${p}</p>`).join("");
+  $("credit").textContent = CREDIT;
+  $("nextStop").innerHTML = next
+    ? `<span>ಮುಂದಿನ ನಿಲ್ದಾಣ: ${next.year}</span><span aria-hidden="true">→</span>`
+    : `<span>ಮೊದಲಿನಿಂದ ಮತ್ತೆ ಆರಂಭಿಸಿ</span><span aria-hidden="true">↺</span>`;
+  $("prevBtn").disabled = cur === 0;
+  $("nextBtn").disabled = cur === ENTRIES.length - 1;
+  dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
+  $("mapFill").style.width = `${ageOf(e.year) * 100}%`;
+}
+
+// Story sheet: tap the bar, or swipe it up and down.
+const sheet = $("sheet"), peek = $("peek");
+function setSheet(open) {
+  sheet.classList.toggle("open", open);
+  peek.setAttribute("aria-expanded", open);
+}
+let peekStart = null, peekSwiped = false;
+peek.addEventListener("pointerdown", e => { peekStart = e.clientY; peekSwiped = false; });
+peek.addEventListener("pointerup", e => {
+  if (peekStart === null) return;
+  const dy = e.clientY - peekStart; peekStart = null;
+  if (Math.abs(dy) > 24) { peekSwiped = true; setSheet(dy < 0); }
+});
+peek.addEventListener("click", () => {
+  if (peekSwiped) { peekSwiped = false; return; }
+  setSheet(!sheet.classList.contains("open"));
+});
+$("nextStop").addEventListener("click", () => go(cur + 1 < ENTRIES.length ? cur + 1 : 0));
+
+// Travelling: swipe on the scene, arrows, mouse wheel or keyboard.
+const stage = $("stage");
+let touch = null;
+stage.addEventListener("pointerdown", e => {
+  touch = { x: e.clientX, y: e.clientY };
+  stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener("pointercancel", () => { touch = null; });
+stage.addEventListener("pointerup", e => {
+  if (!touch) return;
+  const dx = e.clientX - touch.x, dy = e.clientY - touch.y;
+  touch = null;
+  if (Math.abs(dy) > 36 && Math.abs(dy) > Math.abs(dx)) {
+    const up = dy < 0;
+    step((settings.swipe === "up") === up ? 1 : -1);
+  } else if (Math.hypot(dx, dy) < 10 && !moving) {
+    const r = pages[cur].el.getBoundingClientRect();
+    if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) openViewer();
+  }
+});
+stage.addEventListener("wheel", e => {
+  e.preventDefault();
+  if (moving || performance.now() - lastArrive < 450 || Math.abs(e.deltaY) < 12) return;
+  step(e.deltaY > 0 ? 1 : -1);
+}, { passive: false });
+$("prevBtn").addEventListener("click", () => step(-1));
+$("nextBtn").addEventListener("click", () => step(1));
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeViewer(); setSheet(false); toggleTests(false); return; }
+  if (!$("viewer").hidden || e.target.closest(".tests, .sheet-body, .map")) return;
+  if (["ArrowDown", "PageDown", "ArrowRight"].includes(e.key)) { e.preventDefault(); step(1); }
+  if (["ArrowUp", "PageUp", "ArrowLeft"].includes(e.key)) { e.preventDefault(); step(-1); }
+});
+
+// Full-screen page with zoom.
+function sizeViewer() {
+  const w = (innerWidth - 32) * zoom;
+  const holder = $("viewerPage");
+  holder.style.width = `${w}px`; holder.style.height = `${w * R}px`;
+  holder.firstChild.style.transform = `scale(${w / PAPER_W})`;
+  $("zoomOut").disabled = zoom === 1; $("zoomIn").disabled = zoom === 3;
+}
+function openViewer() {
+  const e = ENTRIES[cur], el = document.createElement("article");
+  el.className = "paper"; el.innerHTML = paperHTML(e); paintPaper(el, e);
+  $("viewerPage").replaceChildren(el);
+  $("viewerTitle").textContent = e.date;
+  zoom = 1; $("viewer").hidden = false; sizeViewer();
+  $("viewerClose").focus();
+}
+function closeViewer() { $("viewer").hidden = true; }
+$("viewerClose").addEventListener("click", closeViewer);
+$("zoomIn").addEventListener("click", () => { zoom = Math.min(3, zoom + 1); sizeViewer(); });
+$("zoomOut").addEventListener("click", () => { zoom = Math.max(1, zoom - 1); sizeViewer(); });
+
+// Test options.
+function applySettings() {
+  document.body.dataset.layout = settings.layout;
+  document.body.dataset.swipe = settings.swipe;
+  $("layout" + settings.layout.toUpperCase()).checked = true;
+  $(settings.swipe === "up" ? "swipeUp" : "swipeDown").checked = true;
+  $("hintArrow").textContent = settings.swipe === "up" ? "↑" : "↓";
+  $("hintText").textContent = settings.swipe === "up" ? "ಮುಂದೆ ಸಾಗಲು ಮೇಲಕ್ಕೆ ಸರಿಸಿ" : "ಮುಂದೆ ಸಾಗಲು ಕೆಳಕ್ಕೆ ಸರಿಸಿ";
+  try { localStorage.setItem("road-test", JSON.stringify(settings)); } catch (e) {}
+  layout();
+}
+function toggleTests(open) {
+  $("tests").hidden = !open;
+  $("testsBtn").setAttribute("aria-expanded", open);
+}
+$("testsBtn").addEventListener("click", () => toggleTests($("tests").hidden));
+$("testsDone").addEventListener("click", () => toggleTests(false));
+document.querySelectorAll(".tests input").forEach(input =>
+  input.addEventListener("change", () => { settings[input.name] = input.value; applySettings(); }));
+
+addEventListener("resize", () => { layout(); if (!$("viewer").hidden) sizeViewer(); });
+fillText();
+applySettings();
+document.fonts && document.fonts.ready.then(layout);
+</script>
+</body>
+</html>

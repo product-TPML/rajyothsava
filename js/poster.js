@@ -1,7 +1,7 @@
 /*
  * Rajyotsava poster maker. The page shows a one-screen teaser with example posters;
- * its button opens the maker full screen. The reader adds a photo, picks "my pride"
- * or "my dream", writes a line (and optionally their name, town and a longer story),
+ * its button opens the maker full screen. The reader adds a photo, picks "my pride",
+ * "my dream" or "my community", writes a line (and optionally their name, town and a longer story),
  * then shares or downloads a tall poster that fits a WhatsApp status. The story and
  * the site's link go with the poster as the share message. Everything is drawn on a
  * canvas in the browser; the photo never leaves the reader's device.

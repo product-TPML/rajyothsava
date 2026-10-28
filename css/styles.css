@@ -274,10 +274,15 @@ button {
   transition: background-color var(--duration), color var(--duration), border-color var(--duration);
 }
 
-.round-button:hover {
+.round-button:hover:enabled {
   background: var(--red);
   border-color: var(--red);
   color: var(--white);
+}
+
+.round-button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .button {
@@ -395,12 +400,9 @@ button {
 
 /* ---------- Masthead ---------- */
 
-/* Site red, so the gold Karunadotsava mark sits on it directly. Sits above the
-   sticky nav so the search results can drop over it. */
+/* Site red, so the gold Karunadotsava mark sits on it directly. */
 .masthead {
   --focus-ring: var(--yellow);
-  position: relative;
-  z-index: 30;
   background: var(--red);
   color: var(--white);
 }
@@ -431,8 +433,24 @@ button {
   height: 52px;
 }
 
+/* A quiet text link back to the newspaper's home page. */
 .masthead__action {
   display: none;
+  flex: none;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.875rem;
+  color: var(--white);
+  opacity: 0.85;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: opacity var(--duration), text-decoration-color var(--duration);
+}
+
+.masthead__action:hover {
+  opacity: 1;
+  text-decoration-color: currentColor;
 }
 
 /* Phones open the menu panel from here; wider screens from the nav bar. */
@@ -451,19 +469,15 @@ button {
   }
 
   .masthead__inner {
-    padding-block: var(--space-4);
+    padding-block: var(--space-2);
   }
 
   .brand__mark {
-    height: 64px;
+    height: 60px;
   }
 }
 
 @media (min-width: 1024px) {
-  .brand__mark {
-    height: 80px;
-  }
-
   .masthead__action {
     display: inline-flex;
   }
@@ -471,7 +485,7 @@ button {
 
 /* ---------- Search ---------- */
 
-/* Phones: at the top of the menu panel, with results listed below the field. */
+/* Phones: at the top of the menu panel. */
 .search {
   padding: var(--space-4) var(--space-5) 0;
 }
@@ -509,44 +523,7 @@ button {
   outline-offset: -1px;
 }
 
-.search__results {
-  max-height: min(60vh, 420px);
-  margin-top: var(--space-3);
-  overflow-y: auto;
-  background: var(--white);
-}
-
-.search__status {
-  padding: 0 var(--space-2) var(--space-2);
-  font-size: 0.8125rem;
-  color: var(--ink-muted);
-}
-
-.search__result {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: var(--space-3) var(--space-2);
-  border-top: 1px solid var(--line);
-  transition: background-color var(--duration);
-}
-
-.search__result:hover {
-  background: var(--paper);
-}
-
-.search__result-title {
-  font-family: var(--font-headline);
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.search__result-meta {
-  font-size: 0.8125rem;
-  color: var(--ink-muted);
-}
-
-/* Tablet and up: in the masthead; results drop down under the field. */
+/* Tablet and up: in the masthead. */
 @media (min-width: 768px) {
   .search {
     display: flex;
@@ -556,20 +533,7 @@ button {
   }
 
   .search__form {
-    position: relative;
     width: min(100%, 380px);
-  }
-
-  .search__results {
-    position: absolute;
-    top: calc(100% + var(--space-2));
-    left: 0;
-    right: 0;
-    margin-top: 0;
-    padding: var(--space-3) var(--space-2) var(--space-2);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    box-shadow: var(--shadow-raised);
   }
 }
 
@@ -865,10 +829,15 @@ button {
 }
 
 /* Summary of the front story; reserves its lines so the page doesn't jump. */
+/* Always three lines high, so the page doesn't move as the stories change. */
 .carousel__caption {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   max-width: 52ch;
-  min-height: 3lh;
+  height: 3lh;
   margin: var(--space-5) auto 0;
+  overflow: hidden;
   text-align: center;
   color: var(--ink-muted);
 }
@@ -1102,6 +1071,20 @@ button {
 .quote__by {
   margin-top: var(--space-2);
   font-size: 0.9375rem;
+}
+
+/* Back to earlier days, the day shown between the arrows. */
+.quotes__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.quotes__day {
+  min-width: 10em;
+  font-size: 0.875rem;
+  text-align: center;
 }
 
 .intro__body {
@@ -1410,9 +1393,11 @@ button {
 }
 
 /* Two options in a pill-shaped track; the chosen one fills red. */
+/* One equal column per choice. */
 .segmented {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
   padding: 4px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -1661,8 +1646,12 @@ button {
   inset: 0;
 }
 
+/* Up to three lines: collection summaries can run to a paragraph. */
 .card__summary {
   display: none;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
   font-size: 0.9375rem;
   color: var(--ink-muted);
 }
@@ -1688,7 +1677,7 @@ button {
 }
 
 .card--lead .card__summary {
-  display: block;
+  display: -webkit-box;
 }
 
 @media (min-width: 768px) {
@@ -1709,7 +1698,7 @@ button {
   }
 
   .card__summary {
-    display: block;
+    display: -webkit-box;
   }
 
   .card--lead {
@@ -1741,7 +1730,14 @@ button {
   }
 }
 
-/* ---------- Video gallery ---------- */
+/* "See all": under a section's stories, to the full list. */
+.see-all {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+/* ---------- Videos ---------- */
 
 .videos {
   --focus-ring: var(--yellow);
@@ -1752,10 +1748,6 @@ button {
 
 .videos .tag {
   color: var(--yellow);
-}
-
-.videos .byline {
-  color: rgb(255 255 255 / 65%);
 }
 
 .video-gallery {
@@ -1770,11 +1762,57 @@ button {
   background: #000;
 }
 
-.video-player__video {
+/* YouTube's or Instagram's player, filling its frame. */
+.video-frame {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  border: 0;
+}
+
+/* The video's cover with a play button, until the reader taps it. */
+.video-cover {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  cursor: pointer;
+}
+
+.video-cover .media__img {
+  position: absolute;
+  inset: 0;
+}
+
+.video-cover__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 60%);
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 85%);
+  translate: -50% -50%;
+  transition: background-color var(--duration);
+}
+
+/* The play triangle, nudged right so it looks centred. */
+.video-cover__play::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  border-block: 12px solid transparent;
+  border-left: 20px solid var(--white);
+  translate: -50% -50%;
+}
+
+.video-cover:hover .video-cover__play {
+  background: var(--red);
 }
 
 .video-player__info {
@@ -1823,36 +1861,57 @@ button {
 }
 
 .video-list__thumb {
-  position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: var(--radius);
   background: #000;
 }
 
-.video-list__duration {
-  position: absolute;
-  right: var(--space-1);
-  bottom: var(--space-1);
-  padding-inline: 6px;
-  border-radius: 3px;
-  background: rgb(0 0 0 / 75%);
-  font-size: 0.75rem;
-  line-height: 1.6;
-  font-variant-numeric: tabular-nums;
-}
-
-.video-list__text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.video-list__title {
+.video-list__title,
+.short__title {
   font-family: var(--font-headline);
   font-weight: 600;
   font-size: 0.9375rem;
   line-height: 1.4;
+}
+
+/* Shorts and Reels: one row that scrolls sideways, each card as wide as Instagram's player needs. */
+.shorts__title {
+  margin-block: var(--space-7) var(--space-4);
+  font-size: 1.25rem;
+}
+
+.shorts {
+  display: flex;
+  gap: var(--space-4);
+  padding-bottom: var(--space-3);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+}
+
+.short {
+  flex: none;
+  width: 326px;
+  scroll-snap-align: start;
+}
+
+.short__frame {
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #000;
+}
+
+.short__title {
+  margin-top: var(--space-2);
+}
+
+/* Instagram's player brings its own white frame and caption; at this height none of it scrolls. */
+.short--instagram .video-frame {
+  height: 620px;
+  border-radius: var(--radius);
+  background: var(--white);
 }
 
 @media (min-width: 1024px) {
@@ -1871,201 +1930,86 @@ button {
   }
 }
 
-/* ---------- Photo gallery ---------- */
+/* ---------- Photo stories ---------- */
 
-.gallery {
+.photo-stories {
   padding-block: var(--space-7);
 }
 
-/* Phones: lead photo full width, then two columns of squares. */
-.gallery__grid {
+/* Phones: lead story full width, then two columns of squares. */
+.photo-stories__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-2);
 }
 
-.gallery__cell--lead {
+.photo-stories__cell--lead {
   grid-column: 1 / -1;
 }
 
-.gallery__item {
+.photo-stories__item {
   position: relative;
   display: block;
-  width: 100%;
   height: 100%;
   aspect-ratio: 1;
-  padding: 0;
-  border: 0;
   overflow: hidden;
   border-radius: var(--radius);
   background: var(--paper);
-  cursor: zoom-in;
 }
 
-.gallery__cell--lead .gallery__item {
+.photo-stories__cell--lead .photo-stories__item {
   aspect-ratio: 4 / 3;
 }
 
-.gallery__item .media__img {
+.photo-stories__item .media__img {
   position: absolute;
   inset: 0;
 }
 
-.gallery__item:hover .media__img {
+.photo-stories__item:hover .media__img {
   transform: scale(1.04);
 }
 
-/* Caption fades in on hover/focus; the lead photo always shows it. */
-.gallery__caption {
+.photo-stories__caption {
   position: absolute;
   inset: auto 0 0;
   padding: var(--space-6) var(--space-3) var(--space-2);
   background: linear-gradient(transparent, rgb(20 6 9 / 85%));
-  color: var(--white);
-  font-size: 0.8125rem;
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 0.875rem;
   line-height: 1.4;
-  text-align: left;
-  opacity: 0;
-  transition: opacity var(--duration);
-}
-
-.gallery__item:hover .gallery__caption,
-.gallery__item:focus-visible .gallery__caption,
-.gallery__cell--lead .gallery__caption {
-  opacity: 1;
+  color: var(--white);
 }
 
 @media (min-width: 768px) {
-  .gallery__grid {
+  .photo-stories__grid {
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-3);
   }
 
-  .gallery__cell--lead {
+  .photo-stories__cell--lead {
     grid-column: span 2;
     grid-row: span 2;
   }
 
-  .gallery__cell--lead .gallery__item {
+  .photo-stories__cell--lead .photo-stories__item {
     aspect-ratio: auto;
   }
 
-  .gallery__cell--lead .gallery__caption {
+  .photo-stories__cell--lead .photo-stories__caption {
     padding: var(--space-7) var(--space-5) var(--space-4);
-    font-family: var(--font-headline);
     font-size: 1.25rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .gallery {
+  .photo-stories {
     padding-block: var(--space-8);
   }
 
-  .gallery__grid {
+  .photo-stories__grid {
     grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* ---------- Photo viewer (lightbox) ---------- */
-
-.lightbox {
-  --focus-ring: var(--yellow);
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: var(--night);
-  color: var(--white);
-}
-
-.lightbox[open] {
-  animation: fade-in var(--duration-slow) var(--ease);
-}
-
-.lightbox::backdrop {
-  background: transparent;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
-.lightbox__inner {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: var(--space-3) var(--gutter) var(--space-5);
-}
-
-.lightbox__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  color: rgb(255 255 255 / 75%);
-  font-variant-numeric: tabular-nums;
-}
-
-.lightbox__figure {
-  display: grid;
-  flex: 1;
-  grid-template-rows: minmax(0, 1fr) auto;
-  justify-items: center;
-  gap: var(--space-3);
-  min-height: 0;
-  margin: var(--space-3) 0 0;
-  touch-action: pan-y pinch-zoom;
-}
-
-.lightbox__img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-.lightbox__caption {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  max-width: 60ch;
-  text-align: center;
-}
-
-.lightbox .byline {
-  color: rgb(255 255 255 / 65%);
-}
-
-.lightbox__arrow {
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
-}
-
-.lightbox__arrow--prev {
-  left: var(--space-2);
-}
-
-.lightbox__arrow--next {
-  right: var(--space-2);
-}
-
-@media (min-width: 1024px) {
-  .lightbox__arrow--prev {
-    left: var(--space-6);
-  }
-
-  .lightbox__arrow--next {
-    right: var(--space-6);
   }
 }
 
