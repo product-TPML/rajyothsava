@@ -52,6 +52,8 @@ top of `css/styles.css`; no font files are kept in the project.
 - Preload the headline font, because it appears above the fold.
 - The linked logos are the white versions, so use them only on dark or red backgrounds
   (footer, poster credit). Never stretch or crop any logo.
+- Favicons: `assets/icons/favicon-pv.svg` and `favicon-dh.svg`, the Dasara site's white PV
+  and DH logos on the site's yellow-and-red flag square (owner's request).
 - The header and the opening's top bar are site red (`--red`, owner's choice) with the
   Karunadotsava mark placed directly on them; the nav bar below is `--red-dark`.
 - These are Prajavani's own assets, used for Prajavani's own site. Don't use
