@@ -9,9 +9,9 @@ Open `index.html` in a browser. There's no build step.
 
 ## Hosting
 
-- **The live pages are in the CMS.** Paste `cms/index.cms.html` into the prajavani.net CMS page and `cms/index-en.cms.html` into the deccanherald.com one. They're made by `python tools/build-cms.py`; run it again after any change to `index.html`, `index-en.html` or `cms/hosting.json`, and paste again.
-- **Cloudflare Pages** serves the scripts and stylesheet: connect this GitHub repository, with no build command and the repository root as the output. It's connected at **https://rajyothsava.pages.dev/** (`scripts` in `cms/hosting.json`); every push updates it.
-- **Images** go in the CMS media gallery: upload each file listed under `media` in `cms/hosting.json`, paste its gallery address next to it, and run the build tool. Until then the CMS pages take them from Cloudflare.
+- **The live pages are in the CMS.** Paste `index.html` into the prajavani.net CMS page and `index-en.html` into the deccanherald.com one, as they are (the exhibition road test: `exhibition-road.html` into its PV page). Paste again after any change to a page. They link the stylesheet, scripts and images by their full hosted addresses, so they work on the CMS.
+- **Cloudflare Pages** serves the scripts and stylesheet: connect this GitHub repository, with no build command and the repository root as the output. It's connected at **https://rajyothsava.pages.dev/**; every push updates it.
+- **Images** go in the CMS media gallery: upload the file, then replace its `https://rajyothsava.pages.dev/assets/…` address in the page with the gallery address, and paste the page again. Until then the pages take it from Cloudflare.
 - **Fonts** load from the files prajavani.net and deccanherald.com use themselves.
 - **Vercel** is for a test copy with live data: import this GitHub repository (no build). `vercel.json` passes the collection and video-list requests on to prajavani.net and deccanherald.com, so both pages work fully at the Vercel address.
 
@@ -99,7 +99,7 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Story collection:** "karunadotsava-top" has 5 stories; it can feed 10 to the carousel and 20 to the stories section. The line under the carousel and on the cards shows only a story's subheadline, so each story the desk adds needs one.
 - [ ] **Photo stories:** "karunadotsava-photo" needs its final picks (the section shows the first 5).
 - [ ] **Draft note:** the footer says "ಇದು ಮಾದರಿ ಕರಡು. ಪ್ರಕಟಣೆಗೆ ಮುನ್ನ ಪರಿಶೀಲನೆ ಅಗತ್ಯ." (`footerDraftNote`); remove it at launch.
-- [ ] **Images to the CMS media gallery:** all current images are uploaded (marks, favicons, Facebook QR code). Any new or changed image (such as the poster example photos) needs uploading too: add its gallery address in `cms/hosting.json`, run `python tools/build-cms.py` and paste the CMS pages again. Any new or changed image (such as the poster example photos) needs uploading too: add its gallery address in `cms/hosting.json`, run `python tools/build-cms.py` and paste the CMS pages again. Any new image (such as the poster example photos) needs uploading too: add its gallery address in `cms/hosting.json`, run `python tools/build-cms.py` and paste the CMS pages again.
+- [ ] **Images to the CMS media gallery:** the marks, favicons and Facebook QR code are uploaded. Still on Cloudflare: the exhibition road's gate artwork and paywall icons (`assets/Gate.svg`, `assets/paywall/`). Any new or changed image (such as the poster example photos) needs uploading too: put its gallery address in the page in place of the Cloudflare one, and paste the page again.
 - [ ] **Poster example photos:** the three example posters on the page have no photo (the Wikimedia photos were removed with their credits). Add three Prajavani-owned photos to `assets/` and set each sample's `photo` in `POSTER.samples` (`js/data.js`, `js/data-en.js`).
 - [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
 - [ ] **DH logo:** loaded from `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg`. The page needs an internet connection to show it; if that link is ever removed, the logo disappears.

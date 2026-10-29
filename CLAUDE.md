@@ -30,7 +30,7 @@ file adds the owner's decisions on top of it. If the two disagree, this file win
 ## Brand assets (taken from prajavani.net)
 
 Images in `assets/` for development; **at launch every image is uploaded to the CMS media
-gallery** and its address put in `cms/hosting.json` (owner's decision; see Hosting). The two
+gallery** and the pages link its gallery address (owner's decision; see Hosting). The two
 brand logos already load from their published links (the same ones the Dasara site uses),
 and the fonts from the live sites.
 
@@ -306,23 +306,22 @@ Define them as CSS custom properties in one place.
   when the page opens on a "See all" list (`#all/…`). To see it again, use the footer's "watch again"
   link (`?intro`); there is no replay-on-refresh switch.
 - **Hosting (owner's setup), as on the Dasara site:**
-  - The pages live in the CMS: `cms/index.cms.html` in the prajavani.net CMS and
-    `cms/index-en.cms.html` in the deccanherald.com CMS. They are `index.html` and
-    `index-en.html` with their `css/`, `js/` and `assets/` links rewritten by
-    `python tools/build-cms.py` following `cms/hosting.json`. Regenerate them after any
-    change to either page or to `hosting.json`; never edit them by hand.
-  - The exhibition road test has its own: `cms/exhibition-road.cms.html`, for a PV CMS page
-    (first tried on dev.prajavani.net/pages/test1). **Never paste `exhibition-road.html`
-    itself**: its relative links break on a CMS page. The build rewrites every
-    `css/`, `js/`, `assets/` path, also in CSS `url()` and script strings, so write image
-    paths out in full (no paths assembled from pieces).
+  - **One copy of each page, pasted as it is** (owner's rule: no second copies in `cms/`):
+    `index.html` → the prajavani.net CMS page, `index-en.html` → the deccanherald.com one,
+    `exhibition-road.html` → a PV CMS page (first tried on dev.prajavani.net/pages/test1).
+    So the pages never use relative `css/`, `js/` or `assets/` links (on a CMS page they
+    point nowhere): they name each file by its hosted address, written out in full,
+    including in CSS `url()` and script strings.
   - `css/` and `js/` are served by **Cloudflare Pages** from this repository, at
     https://rajyothsava.pages.dev/ (`_headers` lets the CMS pages load them cross-site;
-    every push to `main` redeploys). `hosting.json` `scripts` is its address.
-  - **Every image goes in the CMS media gallery** (owner's decision); `hosting.json` `media`
-    maps each `assets/` image to its gallery address. Until an image is uploaded, the CMS
-    page takes it from Cloudflare. Scripts use no local image paths: the poster draws the
-    mark the page's header shows.
+    every push to `main` redeploys). The pages link them there.
+  - **Every image goes in the CMS media gallery** (owner's decision): once uploaded, the pages
+    link its gallery address (images.assettype.com). Until then they link it on Cloudflare
+    (`https://rajyothsava.pages.dev/assets/…`); searching for that lists what is still to
+    upload. Scripts use no local image paths: the poster draws the mark the page's header shows.
+  - `python tools/preview-server.py` swaps the Cloudflare address for its own as it serves a
+    page, so local edits to `css/` and `js/` show; opened straight from disk or on Vercel, a
+    page uses the pushed files on Cloudflare.
   - **Vercel** hosts a test copy from the same repository: `vercel.json` passes
     `/api/v1/collections/…` (DH's two slugs to deccanherald.com, the rest to prajavani.net)
     and `/pages/karunadothsava-json` on to the live sites, so the test site reads live data.
@@ -384,9 +383,8 @@ The owner explicitly asked for clean code and no patchwork. Treat this as a hard
   desktop sizes. Then tell the owner in plain words what was tested and what
   wasn't.
 - **Always tell the owner when a CMS page changes** (owner's rule). Whenever a change alters
-  `cms/index.cms.html` or `cms/index-en.cms.html` (any change to `index.html`,
-  `index-en.html` or `cms/hosting.json`, then `python tools/build-cms.py`), say plainly
-  which one changed and that it must be pasted again into the CMS: `cms/index.cms.html`
-  → the prajavani.net page, `cms/index-en.cms.html` → the deccanherald.com page. Changes
-  only to `css/` or `js/` reach the live pages through Cloudflare on push and need no
-  re-paste; say that too. Check with `git diff --stat cms/` before reporting.
+  `index.html`, `index-en.html` or `exhibition-road.html`, say plainly which one changed and
+  that it must be pasted again into the CMS: `index.html` → the prajavani.net page,
+  `index-en.html` → the deccanherald.com page, `exhibition-road.html` → its PV test page.
+  Changes only to `css/` or `js/` reach the live pages through Cloudflare on push and need no
+  re-paste; say that too. Check with `git diff --stat -- '*.html'` before reporting.

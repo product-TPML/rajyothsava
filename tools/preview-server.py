@@ -10,6 +10,10 @@ does the same on the test site.
 The video list (VIDEO_FEED, /pages/karunadothsava-json) comes from the CMS page on
 prajavani.net once it has links in it; until then, from cms/karunadothsava-json.json.
 
+The pages name css/, js/ and images not yet in the media gallery by their Cloudflare Pages
+address (CLOUDFLARE), so they can be pasted into the CMS as they are. This server swaps that
+address for its own as it sends a page, so local edits to css/ and js/ show straight away.
+
 For testing only; the live site needs no server of its own.
 
 Run from the project folder, then open http://localhost:8123/ (Kannada) or
@@ -31,6 +35,7 @@ DH = "https://www.deccanherald.com"
 COLLECTIONS_PATH = "/api/v1/collections/"
 VIDEO_FEED_PATH = "/pages/karunadothsava-json"
 VIDEO_FEED_FILE = ROOT / "cms" / "karunadothsava-json.json"
+CLOUDFLARE = "https://rajyothsava.pages.dev/"
 
 
 def dh_slugs():
@@ -49,6 +54,8 @@ class PreviewHandler(http.server.SimpleHTTPRequestHandler):
             self.proxy((DH if slug in dh_slugs() else PV) + self.path)
         elif path == VIDEO_FEED_PATH:
             self.send_video_feed()
+        elif path == "/" or path.endswith(".html"):
+            self.send_page(path)
         else:
             super().do_GET()
 
@@ -72,6 +79,14 @@ class PreviewHandler(http.server.SimpleHTTPRequestHandler):
         if b'"videos"' not in body:  # the CMS page is still empty
             body = VIDEO_FEED_FILE.read_bytes()
         self.send_body(200, body, "application/json")
+
+    def send_page(self, path):
+        file = (ROOT / (path.lstrip("/") or "index.html")).resolve()
+        if ROOT not in file.parents or not file.is_file():
+            self.send_error(404)
+            return
+        html = file.read_text(encoding="utf-8").replace(CLOUDFLARE, "/")
+        self.send_body(200, html.encode("utf-8"), "text/html; charset=utf-8")
 
     def send_body(self, status, body, content_type):
         self.send_response(status)
