@@ -227,6 +227,15 @@ Define them as CSS custom properties in one place.
   Rangoli Metro Art Center, MG Road). Owner's request.
 - "Add to Google Calendar" is a plain Google Calendar link built in `js/main.js`
   (`calendarUrl`) from `EVENT`; no accounts, scripts or tracking.
+- **Subscriber wall on the exhibition road** (`exhibition-road.html`, owner's request): the first
+  `FREE_STOPS` (5) pages are free, then non-subscribers get the wall (owner's choice: a free
+  sample, then the wall). Login appears **only on the wall**, never in the site's menus (owner's
+  choice). The check is the newspapers' own (SSO cookies + AccessType), in `js/subscription.js`,
+  as in `api docs/LOGIN_AND_SUBSCRIBE_HANDOVER.md`; it runs on the live sites and the PV/DH
+  sandboxes (`SITES`: sandboxes use the test login web-dev.tpml.in and their own keys), and
+  elsewhere the ⚙ test options pick the state. The wall **matches the
+  design of prajavani.net's own paywall** (Github PV `molecules/paywall`: colours, layout, icons
+  in `assets/paywall`) but **never reuses its words** (owner's rule); our wording is `WALL`.
 
 ## Poster maker
 
