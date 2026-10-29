@@ -651,7 +651,7 @@ const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 // Colours that age with the year: [oldest, newest].
 const TONES = {
   skyTop: ["#E9DABB", "#F4EFE4"], haze: ["#F3E5C8", "#FFFAF0"],
-  hill: ["#A7A273", "#7FA05A"], ridge: ["#9C9A83", "#7A9189"],
+  hill: ["#A7A273", "#7FA05A"], crop: ["#BFA668", "#AFB062"], ridge: ["#9C9A83", "#7A9189"],
   road: ["#6E6153", "#4A4644"], edge: ["#E8DCC4", "#EEEAE2"],
   paper: ["#E6D3A8", "#FBFAF6"], ink: ["#2E261C", "#1F1F1F"], photo: ["#CDB78E", "#D9D6CF"]
 };
@@ -849,22 +849,116 @@ function drawRidges(c, t) {
   });
 }
 
+// Fixed pseudo-random number in 0..1 for n, so trees keep their places on every visit.
+const hash = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
 // Land drawn as slices across the view, far to near, each covering the ones behind it.
-// Slices sit on a fixed world grid, so the field bands move past as you travel.
+// Slices sit on a fixed world grid, so the fields move past as you travel. Each slice's
+// fields and trees are drawn with it, so nearer hills hide what is behind them.
 function drawTerrain(c, t) {
   const { W, H } = view, hill = toneRgb("hill", t), haze = toneRgb("haze", t);
   const STEP = 1;
   for (let k = Math.floor((c.z + 70) / STEP); k * STEP > c.z + 0.4; k--) {
     const z = k * STEP, dz = z - c.z, s = c.f / dz, half = W / 2 / s + 0.5;
-    const band = k % 4 < 2 ? 1 : .95;
-    ctx.fillStyle = css(mix(hill.map(v => v * band), haze, clamp((dz - 4) / 60, 0, 1)));
+    ctx.fillStyle = css(mix(hill, haze, clamp((dz - 4) / 60, 0, 1)));
     ctx.beginPath();
     for (let i = 0; i <= 32; i++) {
       const x = c.x - half + 2 * half * i / 32, p = project(c, x, groundHeight(x, z), z);
       i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y);
     }
     ctx.lineTo(W + 10, H); ctx.lineTo(-10, H); ctx.closePath(); ctx.fill();
+    drawFields(c, z, half, hill, haze, t);
+    drawTrees(c, z, hill, haze);
   }
+}
+
+// Fields laid over the land near the road, so it reads as farmland. Rows of fields run
+// `rows` slices deep; within a row, field edges sit at uneven spacing around `width` and
+// wander as they run back (sway), so no edge is straight and no two rows line up. Each field
+// takes a shade below; half stay plain. The fields fade out between fadeStart and fadeEnd,
+// where the land is one colour.
+const FIELDS = { width: 2.4, rows: 3, jitter: .3, sway: .2, swayWave: .3, fadeStart: 16, fadeEnd: 30 };
+const FIELD_SHADES = [[1, 0], [1, 0], [1, 0], [.97, 0], [1.03, 0], [1, .2], [.98, .3]];   // [brightness, share of crop tone]
+function drawFields(c, z, half, hill, haze, t) {
+  const dz = z - c.z, vary = clamp((FIELDS.fadeEnd - dz) / (FIELDS.fadeEnd - FIELDS.fadeStart), 0, 1);
+  if (!vary) return;
+  const { width: w } = FIELDS, crop = toneRgb("crop", t), hazed = clamp((dz - 4) / 60, 0, 1);
+  const row = Math.floor(z / FIELDS.rows), shift = hash(row + .7) * w;
+  const left = c.x - half, right = c.x + half, step = 2 * half / 32, nearZ = Math.max(z - 1, c.z + 0.3);
+  // Where the edge between field i - 1 and field i crosses the land at distance gz.
+  const edgeX = (i, gz) => shift + w * (i + FIELDS.jitter * (hash(row * 17 + i) - .5) * 2
+    + FIELDS.sway * Math.sin(gz * FIELDS.swayWave + 6 * hash(row * 5 + i)));
+  const ground = (x, gz) => project(c, x, groundHeight(x, gz), gz);
+  for (let i = Math.floor((left - shift) / w) - 1; edgeX(i, z) < right; i++) {
+    const [bright, cropShare] = FIELD_SHADES[Math.floor(hash(row * 131 + i) * FIELD_SHADES.length)];
+    if (bright === 1 && !cropShare) continue;
+    const x0 = Math.max(left, edgeX(i, z)), x1 = Math.min(right, edgeX(i + 1, z));
+    if (x1 <= x0) continue;
+    const field = mix(hill, crop, cropShare * vary).map(v => v * (1 + (bright - 1) * vary));
+    ctx.fillStyle = css(mix(field, haze, hazed));
+    // The strip of ground from this slice's edge to the next nearer one; the nearer slice
+    // covers everything below that.
+    const a = ground(edgeX(i, nearZ), nearZ), b = ground(edgeX(i + 1, nearZ), nearZ);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y);
+    for (let x = x0; x < x1; x += step) { const p = ground(x, z); ctx.lineTo(p.x, p.y); }
+    const e = ground(x1, z);
+    ctx.lineTo(e.x, e.y); ctx.lineTo(b.x, b.y); ctx.closePath(); ctx.fill();
+  }
+}
+
+// Trees beside the road, at fixed spots on the strip of land just in front of slice z:
+// round shade trees and coconut palms, darker than the land and fading into the haze.
+// perStrip: tries per strip; chance: share that grow; near / spread: closest distance from
+// the road and how far beyond it they scatter (bunched towards the road); height: world
+// units; minPx: smaller trees are skipped. Each stands on a soft shadow, like the pages.
+const TREES = { perStrip: 3, chance: .3, near: 1, spread: 6, height: [.45, .9], palms: .3, minPx: 2 };
+function drawTrees(c, z, hill, haze) {
+  for (let j = 0; j < TREES.perStrip; j++) {
+    const n = z * TREES.perStrip + j;
+    if (hash(n) > TREES.chance) continue;
+    const tz = z - hash(n + .1), dz = tz - c.z;
+    if (dz < 1) continue;
+    const side = hash(n + .2) < .5 ? -1 : 1;
+    const x = roadX(tz) + side * (TREES.near + TREES.spread * hash(n + .3) ** 2);
+    const base = project(c, x, groundHeight(x, tz), tz);
+    const h = (TREES.height[0] + (TREES.height[1] - TREES.height[0]) * hash(n + .4)) * base.s;
+    if (h < TREES.minPx || base.x < -h || base.x > view.W + h) continue;
+    const hazed = clamp((dz - 4) / 60, 0, 1);
+    const leaf = css(mix(hill.map(v => v * .62), haze, hazed)), trunk = css(mix([96, 74, 52], haze, hazed));
+    ctx.fillStyle = `rgba(30,20,10,${.22 * (1 - hazed)})`;
+    ctx.beginPath(); ctx.ellipse(base.x, base.y, .3 * h, .05 * h, 0, 0, Math.PI * 2); ctx.fill();
+    const palm = hash(n + .5) < TREES.palms;
+    (palm ? drawPalm : drawRoundTree)(base, palm ? 1.3 * h : h, leaf, trunk, hash(n + .6));
+  }
+}
+function drawRoundTree({ x, y }, h, leaf, trunk, r) {
+  ctx.fillStyle = trunk;
+  ctx.fillRect(x - .04 * h, y - .5 * h, .08 * h, .5 * h);
+  ctx.fillStyle = leaf;
+  ctx.beginPath();
+  [[0, .68, .3], [-.2, .5, .22 + .06 * r], [.2, .52, .24 - .05 * r], [.05 * r, .4, .2]].forEach(([dx, dy, rad]) => {
+    ctx.moveTo(x + dx * h + rad * h, y - dy * h);
+    ctx.arc(x + dx * h, y - dy * h, rad * h, 0, Math.PI * 2);
+  });
+  ctx.fill();
+}
+// Palm fronds: angles above the horizontal (0 = right); sideways fronds droop the most.
+const FRONDS = [.15, .55, 1.1, 1.57, 2.05, 2.6, 3];
+function drawPalm({ x, y }, h, leaf, trunk, r) {
+  const lean = (r - .5) * .4 * h, top = { x: x + lean, y: y - h }, len = .34 * h;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = trunk; ctx.lineWidth = .04 * h;
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x, y - .6 * h, top.x, top.y); ctx.stroke();
+  ctx.strokeStyle = leaf; ctx.lineWidth = .035 * h;
+  ctx.beginPath();
+  FRONDS.forEach(a => {
+    const cos = Math.cos(a + (r - .5) * .3), sin = Math.sin(a), droop = Math.abs(cos);
+    ctx.moveTo(top.x, top.y);
+    ctx.quadraticCurveTo(top.x + .6 * cos * len, top.y - .6 * sin * len,
+      top.x + cos * len, top.y - (sin - 1.1 * droop) * .5 * len);
+  });
+  ctx.stroke();
+  ctx.lineCap = "butt";
 }
 
 function drawScene(c, t) {
