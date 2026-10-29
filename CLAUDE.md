@@ -232,8 +232,10 @@ Define them as CSS custom properties in one place.
   sample, then the wall). Login appears **only on the wall**, never in the site's menus (owner's
   choice). The check is the newspapers' own (SSO cookies + AccessType), in `js/subscription.js`,
   as in `api docs/LOGIN_AND_SUBSCRIBE_HANDOVER.md`; it runs on the live sites and the PV/DH
-  sandboxes (`SITES`: sandboxes use the test login web-dev.tpml.in and their own keys), and
-  elsewhere the ⚙ test options pick the state. The wall **matches the
+  sandboxes (`SITES`: sandboxes use the test login web-dev.tpml.in and their own keys; switched
+  off on dev.prajavani.net for now with `check: false`, owner's request), and
+  elsewhere the ⚙ test options pick the state, and the wall's Subscribe switches them to
+  subscriber and travels on (owner's request; `testSubscribe`). The wall **matches the
   design of prajavani.net's own paywall** (Github PV `molecules/paywall`: colours, layout, icons
   in `assets/paywall`) but **never reuses its words** (owner's rule); our wording is `WALL`.
 

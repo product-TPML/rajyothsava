@@ -958,12 +958,13 @@ function drawFields(c, z, half, hill, haze, t) {
 // shade trees of three shapes, in a deeper green than the land and fading into the haze.
 // perStrip: tries per strip; chance: share that grow; near / spread: closest distance from
 // the road and how far beyond it they scatter (bunched towards the road); height: world
-// units; minPx: smaller trees are skipped. Each stands on a soft shadow, like the pages.
-// Trees at least detailPx tall are lit from the upper left (a darker underside, a lighter
-// crown); smaller, distant ones are one flat green, where the shading can't be seen.
+// units; minPx: smaller trees are skipped. Trees at least detailPx tall are lit from the
+// upper left (a darker underside, a lighter crown); smaller, distant ones are one flat green,
+// where the shading can't be seen. Each casts a soft shadow, as wide as its crown, falling
+// a little to the right, away from the sun.
 const TREES = { perStrip: 3, chance: .3, near: 1, spread: 6, height: [.45, .9], minPx: 2, detailPx: 24 };
-// [draw, height scale]; a kind listed twice grows twice as often.
-const TREE_KINDS = [[drawDome, 1], [drawDome, 1], [drawUmbrella, .9], [drawUmbrella, .9], [drawColumn, 1.15]];
+// [draw, height scale, shadow's half-width in tree heights]; a kind listed twice grows twice as often.
+const TREE_KINDS = [[drawDome, 1, .4], [drawDome, 1, .4], [drawUmbrella, .9, .55], [drawUmbrella, .9, .55], [drawColumn, 1.15, .2]];
 const SUNLIT = [236, 238, 186];
 function drawTrees(c, z, tree, haze) {
   for (let j = 0; j < TREES.perStrip; j++) {
@@ -980,10 +981,10 @@ function drawTrees(c, z, tree, haze) {
     const leaf = mix(tree, haze, hazed), trunk = mix([96, 74, 52], haze, hazed);
     const paint = h < TREES.detailPx ? { leaf: css(leaf), trunk: css(trunk) }
       : { leaf: css(leaf), dark: css(leaf.map(v => v * .82)), light: css(mix(leaf, SUNLIT, .13)), trunk: css(trunk) };
-    ctx.fillStyle = `rgba(30,20,10,${.22 * (1 - hazed)})`;
-    ctx.beginPath(); ctx.ellipse(base.x, base.y, .3 * h, .05 * h, 0, 0, Math.PI * 2); ctx.fill();
-    const [draw, scale] = TREE_KINDS[Math.floor(hash(n + .5) * TREE_KINDS.length)];
-    draw(base, scale * h, paint, hash(n + .6));
+    const [draw, scale, spread] = TREE_KINDS[Math.floor(hash(n + .5) * TREE_KINDS.length)], th = scale * h;
+    softShadow(base.x + .15 * th, base.y + .01 * th, (spread + .1) * th, .1 * th, .45 * (1 - hazed));
+    softShadow(base.x, base.y, .12 * th, .035 * th, .45 * (1 - hazed));
+    draw(base, th, paint, hash(n + .6));
   }
 }
 
@@ -1040,6 +1041,23 @@ function drawColumn(base, h, paint, r) {
   const flip = r < .5 ? -1 : 1, sway = .03 * (r - .5);
   trunk(base, h, .3, .06, .04, 0, paint.trunk);
   canopy(base, h, [[0, .34, .15, .14], [sway, .56, .14, .19], [2 * sway, .8, .11, .17], [3 * sway, .98, .06, .09]], flip, paint);
+}
+
+// Soft shadows: one blurred disc, drawn once and stretched to each shadow's size, centred on
+// x, y with radii rx, ry; alpha sets how dark.
+const shadowDisc = (() => {
+  const size = 64, disc = document.createElement("canvas");
+  disc.width = disc.height = size;
+  const dc = disc.getContext("2d"), g = dc.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0, "rgba(30,20,10,1)"); g.addColorStop(.4, "rgba(30,20,10,.65)"); g.addColorStop(1, "rgba(30,20,10,0)");
+  dc.fillStyle = g; dc.fillRect(0, 0, size, size);
+  return disc;
+})();
+function softShadow(x, y, rx, ry, alpha) {
+  if (alpha <= 0) return;
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(shadowDisc, x - rx, y - ry, 2 * rx, 2 * ry);
+  ctx.globalAlpha = 1;
 }
 
 // A fine grain over the scene, like newsprint, so no step between shades shows.
@@ -1100,13 +1118,13 @@ function drawScene(c, t) {
   }
   ctx.globalAlpha = 1;
 
-  // Soft shadows under the pages.
+  // Soft shadows under the pages: a wide pool, darker where the page stands.
   pages.forEach(p => {
     const o = visibility(p.z - c.z);
     if (!o) return;
     const q = project(c, roadX(p.z), 0, p.z);
-    ctx.fillStyle = `rgba(30,20,10,${.28 * o})`;
-    ctx.beginPath(); ctx.ellipse(q.x, q.y, .56 * q.s, .05 * q.s, 0, 0, Math.PI * 2); ctx.fill();
+    softShadow(q.x + .06 * q.s, q.y, .7 * q.s, .09 * q.s, .32 * o);
+    softShadow(q.x, q.y, .52 * q.s, .03 * q.s, .3 * o);
   });
 
   ctx.globalAlpha = GRAIN; ctx.fillStyle = grain; ctx.fillRect(0, 0, W, H);
@@ -1275,6 +1293,13 @@ function wallLink(html, href, className, event) {
   });
   return a;
 }
+// Off the newspaper's sites no subscription can be bought, so Subscribe stands in for one:
+// it turns the test options to a subscriber and travels on to the page the reader wanted.
+function testSubscribe(html, wanted) {
+  const button = Object.assign(document.createElement("button"), { type: "button", className: "wall-cta", innerHTML: html });
+  button.addEventListener("click", () => { settings.wall = "subscriber"; applySettings(); travelTo(wanted); });
+  return button;
+}
 function showWall(state, wanted) {
   const failed = state === "error";
   $("wallTitle").textContent = failed ? WALL.errorTitle : WALL.title;
@@ -1287,8 +1312,10 @@ function showWall(state, wanted) {
     retry.addEventListener("click", () => travelTo(wanted));
     actions.push(retry);
   } else {
-    actions.push(wallLink(`${paywallIcon(WALL.icons.nandi)}<span>${WALL.subscribe}</span>`,
-      Subscription.subscribeUrl("exhibition_road"), "wall-cta", "karunadotsava_subscribe_click"));
+    const subscribe = `${paywallIcon(WALL.icons.nandi)}<span>${WALL.subscribe}</span>`;
+    actions.push(Subscription.live
+      ? wallLink(subscribe, Subscription.subscribeUrl("exhibition_road"), "wall-cta", "karunadotsava_subscribe_click")
+      : testSubscribe(subscribe, wanted));
     if (state === "logged-out") {
       const login = wallLink(`<span>${WALL.login}</span>${paywallIcon(WALL.icons.login)}`,
         Subscription.loginUrl(), "wall-login", "karunadotsava_login_click");

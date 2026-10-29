@@ -16,13 +16,16 @@ const Subscription = (() => {
   // sandboxes, which use the test login (web-dev.tpml.in) and their own AccessType keys. Each
   // key is the one the site itself loads (checked 29 Oct 2026); the live keys in the main
   // sites' repos are wrong (DH's answers 404, PV's is a placeholder). If a site changes its
-  // key, everyone there reads as a non-subscriber: update it here.
+  // key, everyone there reads as a non-subscriber: update it here. A site with check: false is
+  // treated as anywhere else (no check, the page's test options choose the answer); remove the
+  // flag to turn its check back on.
   const PV = { brand: "pv", passRoute: "/auth/accesstype-pv-token" };
   const DH = { brand: "dh", passRoute: "/auth/accesstype-dh-token" };
   const SITES = [
     { ...PV, host: "www.prajavani.net", sso: "https://web.tpml.in", accessTypeKey: "vMyvRVh97dcV4nDspcBBXyKq" },
     { ...DH, host: "www.deccanherald.com", sso: "https://web.tpml.in", accessTypeKey: "WVXWA5UYqHx2oGx3CZDBVeHa" },
-    { ...PV, host: "dev.prajavani.net", sso: "https://web-dev.tpml.in", accessTypeKey: "dr9394kutfXvSAuHxynXv4RQ" },
+    // Check off here for now (owner's request, 29 Oct 2026).
+    { ...PV, host: "dev.prajavani.net", sso: "https://web-dev.tpml.in", accessTypeKey: "dr9394kutfXvSAuHxynXv4RQ", check: false },
     { ...PV, host: "prajavani-sandbox-web.quintype.io", sso: "https://web-dev.tpml.in", accessTypeKey: "dr9394kutfXvSAuHxynXv4RQ" },
     { ...PV, host: "prajavani-training-web.quintype.io", sso: "https://web-dev.tpml.in", accessTypeKey: "dr9394kutfXvSAuHxynXv4RQ" },
     { ...DH, host: "dh-sandbox-web.quintype.io", sso: "https://web-dev.tpml.in", accessTypeKey: "nBX5K3Z2JAaFD5As78im28dh" }
@@ -30,7 +33,7 @@ const Subscription = (() => {
   const brand = document.documentElement.dataset.brand === "dh" ? "dh" : "pv";
   const forBrand = SITES.filter(s => s.brand === brand);
   // Elsewhere (Vercel, Cloudflare Pages, localhost) the edition's live site stands in for the links.
-  const site = forBrand.find(s => s.host === location.hostname) || forBrand[0];
+  const site = forBrand.find(s => s.host === location.hostname && s.check !== false) || forBrand[0];
   const live = location.hostname === site.host;
   // Off the live site, Subscribe and Log in still lead to the newspaper's own pages.
   const returnUrl = live ? location.origin + location.pathname : `https://${site.host}/`;
