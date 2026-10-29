@@ -861,8 +861,10 @@ body {
   --shrink: 0.12;
 }
 
+/* Its own layer, so the cards and arrows stack only against each other, never over the sticky nav. */
 .carousel__stage {
   position: relative;
+  isolation: isolate;
 }
 
 .carousel__track {
@@ -956,7 +958,7 @@ body {
 .carousel__arrow {
   position: absolute;
   top: 50%;
-  z-index: 20;
+  z-index: 11; /* above the front card (10) */
   translate: 0 -50%;
 }
 
@@ -968,8 +970,7 @@ body {
   right: 0;
 }
 
-/* Summary of the front story; reserves its lines so the page doesn't jump. */
-/* Always three lines high, so the page doesn't move as the stories change. */
+/* Summary of the front story; always three lines high, so the page doesn't move as the stories change. */
 .carousel__caption {
   display: -webkit-box;
   -webkit-box-orient: vertical;

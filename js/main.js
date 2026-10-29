@@ -5,7 +5,7 @@
 (() => {
   "use strict";
 
-  const AUTOPLAY_MS = 6000;
+  const AUTOPLAY_MS = 5000;
   const SWIPE_PX = 40;
   const COLLECTION_TIMEOUT_MS = 5000;
   const TOP_STORIES = 20; // read from the top collection
@@ -805,8 +805,8 @@
   /*
    * Moves a rotating block on by itself every AUTOPLAY_MS, except with reduced motion,
    * in a background tab, or while a mouse hovers or keyboard focus is inside (touch
-   * taps don't count as hover). Screen readers hear changes in `live` only while it
-   * isn't moving by itself.
+   * taps and clicks don't count). Screen readers hear changes in `live` only while it
+   * isn't moving by itself. Returns a function that restarts the count, for manual moves.
    */
   function autoplay(root, live, advance) {
     let timer = null;
@@ -828,17 +828,18 @@
       hovering = false;
       sync();
     });
-    root.addEventListener("focusin", () => {
-      focused = true;
+    root.addEventListener("focusin", (event) => {
+      focused = event.target.matches(":focus-visible");
       sync();
     });
     root.addEventListener("focusout", (event) => {
-      focused = root.contains(event.relatedTarget);
+      focused = root.contains(event.relatedTarget) && event.relatedTarget.matches(":focus-visible");
       sync();
     });
     document.addEventListener("visibilitychange", sync);
     reducedMotion.addEventListener("change", sync);
     sync();
+    return sync;
   }
 
   /*
@@ -869,20 +870,26 @@
       caption.textContent = stories[current].summary;
     }
 
+    show(0);
+    const restartAutoplay = autoplay(root, track, () => show(current + 1));
+
+    // A manual move restarts the count, so the next card doesn't come too soon.
+    function move(index) {
+      show(index);
+      restartAutoplay();
+    }
+
     // Swipe moves one card; a tap on a side card brings it forward instead of following its link.
-    const wasSwipe = addSwipe(track, (step) => show(current + step));
+    const wasSwipe = addSwipe(track, (step) => move(current + step));
     track.addEventListener("click", (event) => {
       const index = slides.indexOf(event.target.closest(".slide"));
       if (wasSwipe() || index !== current) event.preventDefault();
-      if (!wasSwipe() && index !== current) show(index);
+      if (!wasSwipe() && index !== current) move(index);
     });
 
     root.querySelectorAll(".carousel__arrow").forEach((button) => {
-      button.addEventListener("click", () => show(current + Number(button.dataset.step)));
+      button.addEventListener("click", () => move(current + Number(button.dataset.step)));
     });
-
-    show(0);
-    autoplay(root, track, () => show(current + 1));
   }
 
   /* "{month} {day}" for a quote's date, with the month's name in Kannada. */
