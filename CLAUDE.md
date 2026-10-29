@@ -311,6 +311,11 @@ Define them as CSS custom properties in one place.
     `index-en.html` with their `css/`, `js/` and `assets/` links rewritten by
     `python tools/build-cms.py` following `cms/hosting.json`. Regenerate them after any
     change to either page or to `hosting.json`; never edit them by hand.
+  - The exhibition road test has its own: `cms/exhibition-road.cms.html`, for a PV CMS page
+    (first tried on dev.prajavani.net/pages/test1). **Never paste `exhibition-road.html`
+    itself**: its relative links break on a CMS page. The build rewrites every
+    `css/`, `js/`, `assets/` path, also in CSS `url()` and script strings, so write image
+    paths out in full (no paths assembled from pieces).
   - `css/` and `js/` are served by **Cloudflare Pages** from this repository, at
     https://rajyothsava.pages.dev/ (`_headers` lets the CMS pages load them cross-site;
     every push to `main` redeploys). `hosting.json` `scripts` is its address.

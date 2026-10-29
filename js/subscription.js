@@ -22,6 +22,7 @@ const Subscription = (() => {
   const SITES = [
     { ...PV, host: "www.prajavani.net", sso: "https://web.tpml.in", accessTypeKey: "vMyvRVh97dcV4nDspcBBXyKq" },
     { ...DH, host: "www.deccanherald.com", sso: "https://web.tpml.in", accessTypeKey: "WVXWA5UYqHx2oGx3CZDBVeHa" },
+    { ...PV, host: "dev.prajavani.net", sso: "https://web-dev.tpml.in", accessTypeKey: "dr9394kutfXvSAuHxynXv4RQ" },
     { ...PV, host: "prajavani-sandbox-web.quintype.io", sso: "https://web-dev.tpml.in", accessTypeKey: "dr9394kutfXvSAuHxynXv4RQ" },
     { ...PV, host: "prajavani-training-web.quintype.io", sso: "https://web-dev.tpml.in", accessTypeKey: "dr9394kutfXvSAuHxynXv4RQ" },
     { ...DH, host: "dh-sandbox-web.quintype.io", sso: "https://web-dev.tpml.in", accessTypeKey: "nBX5K3Z2JAaFD5As78im28dh" }

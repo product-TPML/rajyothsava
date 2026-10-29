@@ -586,17 +586,19 @@ const DECADE_LINES = {
   2020: "ಎಪ್ಪತ್ತರ ಹೊಸ್ತಿಲು"
 };
 // Subscriber wall: the first FREE_STOPS pages are open to everyone, the rest of the road is
-// for Prajavani subscribers. The words await the PV desk's approval. Each benefit has one of
-// the icons from prajavani.net's paywall (assets/paywall).
+// for Prajavani subscribers. The words await the PV desk's approval. The icons are from
+// prajavani.net's paywall; their paths are written out in full so tools/build-cms.py can
+// point them at their hosted addresses.
 const FREE_STOPS = 5;
 const WALL = {
   title: "ಮುಂದಿನ ಹಾದಿ ಚಂದಾದಾರರಿಗೆ",
   note: `ಮೊದಲ ${FREE_STOPS} ಪುಟಗಳು ಎಲ್ಲರಿಗೂ. ಏಳು ದಶಕಗಳ ಉಳಿದ ಪುಟಗಳನ್ನು ಪ್ರಜಾವಾಣಿ ಚಂದಾದಾರರು ನೋಡಬಹುದು.`,
   features: [
-    { icon: "premium", text: "ಕರುನಾಡಿನ ಹಾದಿಯ ಎಲ್ಲ ಪುಟಗಳು ಮತ್ತು ಪ್ರೀಮಿಯಂ ಬರಹಗಳು" },
-    { icon: "epaper", text: "ದಿನದ ಪತ್ರಿಕೆ ಇ‑ಪೇಪರ್‌ನಲ್ಲಿ" },
-    { icon: "ad-light", text: "ಕಡಿಮೆ ಜಾಹೀರಾತಿನ ಓದು" }
+    { icon: "assets/paywall/premium.svg", text: "ಕರುನಾಡಿನ ಹಾದಿಯ ಎಲ್ಲ ಪುಟಗಳು ಮತ್ತು ಪ್ರೀಮಿಯಂ ಬರಹಗಳು" },
+    { icon: "assets/paywall/epaper.svg", text: "ದಿನದ ಪತ್ರಿಕೆ ಇ‑ಪೇಪರ್‌ನಲ್ಲಿ" },
+    { icon: "assets/paywall/ad-light.svg", text: "ಕಡಿಮೆ ಜಾಹೀರಾತಿನ ಓದು" }
   ],
+  icons: { nandi: "assets/paywall/nandi.svg", nandiLarge: "assets/paywall/nandi-large.svg", login: "assets/paywall/login.svg" },
   subscribe: "ಚಂದಾದಾರರಾಗಿ",
   loginAsk: "ಈಗಾಗಲೇ ಚಂದಾದಾರರೇ?",
   login: "ಲಾಗಿನ್ ಆಗಿ",
@@ -1068,9 +1070,9 @@ function markLockedStops() {
   accessState().then(state =>
     ticks.forEach((t, i) => t.classList.toggle("is-locked", state !== "subscriber" && i >= FREE_STOPS)));
 }
-const paywallIcon = name => `<img src="assets/paywall/${name}.svg" alt="">`;
+const paywallIcon = (src, className) => `<img${className ? ` class="${className}"` : ""} src="${src}" alt="">`;
 $("wallFeatures").innerHTML = WALL.features.map(f => `<li>${paywallIcon(f.icon)}<span>${f.text}</span></li>`).join("")
-  + `<img class="wall-nandi" src="assets/paywall/nandi-large.svg" alt="">`;
+  + paywallIcon(WALL.icons.nandiLarge, "wall-nandi");
 // Leaving for the login or subscribe page: remember where the reader was, to bring them back there.
 function wallLink(html, href, className, event) {
   const a = Object.assign(document.createElement("a"), { className, href, innerHTML: html });
@@ -1092,10 +1094,10 @@ function showWall(state, wanted) {
     retry.addEventListener("click", () => travelTo(wanted));
     actions.push(retry);
   } else {
-    actions.push(wallLink(`${paywallIcon("nandi")}<span>${WALL.subscribe}</span>`,
+    actions.push(wallLink(`${paywallIcon(WALL.icons.nandi)}<span>${WALL.subscribe}</span>`,
       Subscription.subscribeUrl("exhibition_road"), "wall-cta", "karunadotsava_subscribe_click"));
     if (state === "logged-out") {
-      const login = wallLink(`<span>${WALL.login}</span>${paywallIcon("login")}`,
+      const login = wallLink(`<span>${WALL.login}</span>${paywallIcon(WALL.icons.login)}`,
         Subscription.loginUrl(), "wall-login", "karunadotsava_login_click");
       login.addEventListener("click", () => Subscription.trackLoginStart("karunadotsava_road"));
       const line = Object.assign(document.createElement("p"), { className: "wall-login-line", textContent: WALL.loginAsk });

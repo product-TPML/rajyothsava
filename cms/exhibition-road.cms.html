@@ -1,0 +1,1332 @@
+<!doctype html>
+<html lang="kn">
+<head>
+<meta charset="utf-8">
+<title>ಕರುನಾಡಿನ ಹಾದಿ | ಪ್ರಜಾವಾಣಿ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#A80F22">
+<link rel="icon" href="https://images.assettype.com/prajavani/2026-10-28/8hxyq3pa/favicon-pv.svg" type="image/svg+xml">
+<link rel="preload" href="https://fea.assettype.com/tpml/assets/PvHeadlineSemibold3.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://fea.assettype.com/tpml/assets/PrajavaniTextRegular.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Fonts and colour tokens come from the main site's stylesheet. -->
+<link rel="stylesheet" href="https://rajyothsava.pages.dev/css/styles.css">
+<style>
+/* Layout: one fixed phone screen. Road scene fills it; header on top, story sheet and map dock at the bottom. */
+:root {
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --header-h: 60px;
+  --dock-h: 60px;
+  --peek-h: 56px;
+  --sheet-h: 70vh;
+}
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+body {
+  background: var(--cream);
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Header: the site's own masthead (sizes, padding and container come from styles.css),
+   fixed on top of the scene. The year and test button sit together on the right. */
+.bar {
+  position: fixed; inset: 0 0 auto; z-index: 30;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.bar .brand { margin-right: auto; }
+/* Year as a split-flap calendar: one card per digit, each card in two halves.
+   A changing digit's top half folds down (leaf) to reveal the new digit. */
+.year { display: flex; gap: 3px; }
+.flip {
+  --flip-h: 34px;
+  position: relative; width: 21px; height: var(--flip-h);
+  perspective: 160px;
+  font: 600 24px/var(--flip-h) var(--font-headline); color: var(--ink);
+  text-align: center; font-variant-numeric: tabular-nums;
+}
+.flip-half {
+  position: absolute; left: 0; right: 0; height: 50%; overflow: hidden;
+  backface-visibility: hidden;
+}
+.flip-half > span { display: block; height: var(--flip-h); }
+.flip-top { top: 0; transform-origin: bottom; border-radius: 4px 4px 0 0; background: var(--white); }
+.flip-bottom { bottom: 0; transform-origin: top; border-radius: 0 0 4px 4px; background: var(--paper); }
+.flip-bottom > span { margin-top: calc(var(--flip-h) / -2); }
+.flip-leaf { visibility: hidden; }
+/* The hinge line across the middle of each card. */
+.flip::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px;
+  background: rgb(0 0 0 / 22%);
+}
+/* Header button: plain icon on the red, like the main site's menu button. */
+.bar .icon-button { flex: none; color: var(--white); }
+.bar .icon-button:hover, .bar .icon-button[aria-expanded="true"] { background: var(--red-dark); }
+.viewer .icon-button { flex: none; border: 1px solid rgb(255 255 255 / 45%); }
+
+/* Scene */
+.stage { position: fixed; inset: 0; z-index: 0; touch-action: none; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.world { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+
+.paper {
+  position: absolute; left: 0; top: 0;
+  width: 400px; height: 640px; box-sizing: border-box;
+  transform-origin: 0 0;
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 16px 18px; overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, var(--paper-edge) 100%),
+    var(--paper);
+  color: var(--paper-ink);
+  font-family: var(--font-headline);
+  box-shadow: 0 14px 30px rgba(40, 25, 10, .28);
+}
+.mast {
+  text-align: center; font-size: 42px; font-weight: 600; line-height: 1.3;
+  border-bottom: 3px double var(--paper-ink); padding-bottom: 2px;
+}
+.dateline {
+  display: flex; justify-content: space-between;
+  font: 600 12px/1.6 var(--font-text);
+  border-bottom: 1px solid var(--paper-ink); padding-bottom: 4px;
+}
+.banner { margin: 2px 0; font-size: 34px; font-weight: 600; line-height: 1.3; text-wrap: balance; }
+.cols {
+  flex: 1; min-height: 0;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto 1fr; gap: 10px;
+}
+.photo {
+  grid-column: 1 / 3; aspect-ratio: 4 / 3;
+  display: grid; place-items: center;
+  background:
+    repeating-linear-gradient(45deg, var(--paper-line) 0 2px, transparent 2px 7px),
+    var(--paper-photo);
+  font: 600 14px var(--font-text);
+}
+.photo span { background: var(--paper); padding: 2px 10px; }
+.lines {
+  min-height: 0;
+  background: repeating-linear-gradient(to bottom, var(--paper-line) 0 3px, transparent 3px 9px);
+}
+.cols > .lines { grid-column: 3; grid-row: 1 / 3; }
+.sub { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+.sub b { font-size: 17px; line-height: 1.3; }
+.sub .lines { flex: 1; }
+.stamp {
+  position: absolute; right: 14px; bottom: 16px;
+  padding: 2px 10px; border: 2px solid var(--red); color: var(--red);
+  font: 600 15px/1.5 var(--font-text); transform: rotate(-7deg);
+  background: var(--paper);
+}
+
+.stone {
+  position: absolute; left: 0; top: 0;
+  width: 110px; height: 140px; box-sizing: border-box;
+  transform-origin: 0 0;
+  display: flex; align-items: center; justify-content: center; padding-top: 44px;
+  border-radius: 55px 55px 6px 6px;
+  background: linear-gradient(var(--yellow) 0 34%, var(--white) 34%);
+  box-shadow: inset 0 -8px 0 rgba(0, 0, 0, .1), 0 4px 8px rgba(0, 0, 0, .22);
+  color: var(--ink); font: 600 40px/1 var(--font-headline); font-variant-numeric: tabular-nums;
+}
+/* Decade arch over the road: the gate artwork, with the decade and its caption on its board. */
+.arch {
+  position: absolute; left: 0; top: 0;
+  width: 560px; aspect-ratio: 573 / 857;
+  background: url("https://rajyothsava.pages.dev/assets/Gate.svg") center / contain no-repeat;
+  transform-origin: 0 0;
+}
+/* Pages and stones get their own layer only while travelling, so they are redrawn sharp on arrival.
+   Arches never do: they are read while moving, and a cached layer would blur as it grows. */
+.moving .paper, .moving .stone { will-change: transform, opacity; }
+/* Sits on the gate's yellow board (its place in the artwork, in percent). */
+.arch-board {
+  position: absolute; left: 7.5%; right: 7.5%; top: 13.5%; height: 17.5%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: var(--red-dark); text-align: center;
+}
+.arch-decade { font: 600 72px/1.2 var(--font-headline); }
+.arch-line { font: 600 30px/1.4 var(--font-text); }
+
+/* First-visit hint: fades in, and fades away after the first trip. */
+.hint {
+  position: fixed; left: 50%; z-index: 15; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px 8px 12px; border-radius: 999px;
+  background: rgb(28 20 22 / 86%); color: var(--white);
+  font-size: 15px; font-weight: 600; white-space: nowrap; pointer-events: none;
+  box-shadow: var(--shadow-raised);
+  animation: hint-in .5s .6s both var(--ease);
+  transition: opacity var(--duration-slow);
+}
+.hint.is-gone { opacity: 0; }
+.hint .icon { width: 20px; height: 20px; color: var(--yellow); animation: nudge 1.2s ease-in-out infinite; }
+[data-swipe="down"] .hint .icon { --dir: 1; rotate: 180deg; }
+@keyframes nudge { 50% { translate: 0 calc(var(--dir, -1) * 5px); } }
+@keyframes hint-in { from { opacity: 0; translate: 0 8px; } }
+
+/* Story sheet: the peek bar (date and headline) stays as its header when opened. */
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 22;
+  height: var(--sheet-h);
+  display: flex; flex-direction: column;
+  background: var(--white); border-radius: 16px 16px 0 0;
+  box-shadow: 0 -6px 24px rgb(40 20 10 / 18%);
+  transform: translateY(calc(var(--sheet-h) - var(--peek-h)));
+  transition: transform .35s var(--ease);
+}
+.sheet.open { transform: none; }
+.peek {
+  position: relative; flex: none;
+  display: flex; align-items: center; gap: 12px; text-align: left;
+  min-height: 56px; box-sizing: border-box;
+  padding: 16px var(--gutter-r) 10px var(--gutter-l);
+  border: 0; background: transparent; touch-action: none;
+}
+.peek::before {
+  content: ""; position: absolute; top: 6px; left: 50%; width: 36px; height: 4px;
+  margin-left: -18px; border-radius: 2px; background: var(--line-strong);
+}
+.sheet.open .peek { border-bottom: 1px solid var(--line); }
+.peek-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.peek-date {
+  color: var(--red); font-weight: 600; font-size: 13px; line-height: 1.5;
+}
+.peek-head {
+  font-family: var(--font-headline);
+  font-size: 18px; font-weight: 600; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.sheet.open .peek-head { font-size: 22px; -webkit-line-clamp: 4; text-wrap: balance; }
+/* Call to action on the peek bar: "read the story" when closed, "close" when open.
+   Not a button of its own: the whole bar is the button. */
+.peek-cta {
+  flex: none; display: inline-flex; align-items: center; gap: 4px;
+  min-height: 36px; padding: 0 12px 0 14px; border-radius: 999px;
+  background: var(--red); color: var(--white);
+  font-size: 14px; font-weight: 600; line-height: 1; white-space: nowrap;
+  transition: background-color var(--duration), color var(--duration);
+}
+.peek-cta .icon { width: 18px; height: 18px; transition: rotate var(--duration-slow) var(--ease); }
+.peek:hover .peek-cta { background: var(--red-dark); }
+.peek-cta-close, .sheet.open .peek-cta-read { display: none; }
+.sheet.open .peek-cta-close { display: inline; }
+.sheet.open .peek-cta { background: var(--yellow-soft); color: var(--red); }
+.sheet.open .peek-cta .icon { rotate: 180deg; }
+.peek-text { transition: opacity var(--duration); }
+.moving .peek-text { opacity: .35; }
+
+.sheet-body {
+  flex: 1; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y;
+  padding: 16px var(--gutter-r) 32px var(--gutter-l);
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.sheet-body > * { max-width: 62ch; }
+.story-body p { margin: 0 0 16px; font-size: 17px; line-height: 1.75; }
+.story-body p:first-child { font-size: 18px; }
+.credit {
+  margin: 4px 0 20px; padding-top: 10px; border-top: 1px solid var(--line);
+  color: var(--ink-muted); font-size: 13px; line-height: 1.6;
+}
+.sheet-actions { display: flex; flex-direction: column; gap: 10px; }
+.sheet-actions .button { justify-content: space-between; min-height: 52px; border-radius: 10px; font-size: 16px; }
+.sheet-actions .button--primary:focus-visible { outline-color: var(--yellow); }
+
+/* Map dock: previous / next and the timeline of stops. */
+.dock {
+  position: fixed; inset: auto 0 0; z-index: 25;
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px var(--gutter-r) calc(6px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  background: var(--cream); border-top: 1px solid var(--line);
+}
+.nav-btn {
+  flex: none; display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0; border-radius: 50%;
+  border: 0; background: var(--red); color: var(--white);
+  box-shadow: var(--shadow);
+  transition: background-color var(--duration), scale var(--duration);
+}
+.nav-btn:active:enabled { scale: .92; }
+.nav-btn:hover:enabled { background: var(--red-dark); }
+.nav-btn:disabled { background: var(--line); color: var(--ink-muted); box-shadow: none; cursor: default; }
+/* The timeline is one slider: a tick per page, a thumb on the current one. Drag or tap to
+   pick a page (the year shows above the finger); arrow keys step through them. */
+.map { position: relative; flex: 1; height: 48px; margin: 0 10px; touch-action: none; cursor: pointer; }
+.map::before, .map-fill {
+  content: ""; position: absolute; left: 0; top: 17px; height: 3px; border-radius: 2px;
+}
+.map::before { right: 0; background: var(--line); }
+.map-fill { background: var(--red); transition: width var(--duration-slow) var(--ease); }
+.map-tick {
+  position: absolute; top: 12px; width: 2px; height: 13px; margin-left: -1px;
+  border-radius: 1px; background: var(--line-strong);
+}
+.map-tick.is-past { background: var(--red); }
+.map-thumb, .map-bubble { position: absolute; translate: -50% 0; transition: left var(--duration-slow) var(--ease); }
+.map-thumb {
+  top: 9px; width: 18px; height: 18px; box-sizing: border-box; border-radius: 50%;
+  background: var(--red); border: 3px solid var(--yellow);
+  box-shadow: 0 0 0 4px rgb(168 15 34 / 14%);
+}
+.map-bubble {
+  bottom: calc(100% + 6px); padding: 4px 10px; border-radius: 6px;
+  background: var(--ink); color: var(--white);
+  font: 600 14px/1.4 var(--font-headline); font-variant-numeric: tabular-nums;
+  white-space: nowrap; pointer-events: none;
+}
+.map.is-scrubbing .map-thumb, .map.is-scrubbing .map-bubble { transition: none; }
+.map-end { position: absolute; bottom: 0; font-size: 11px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.map-end.end { right: 0; }
+/* Stops past the free stretch, for subscribers only. */
+.map-tick.is-locked { top: 15px; height: 7px; background: var(--line-strong); }
+
+/* Subscriber wall: shown where the free stretch ends. It follows the design of prajavani.net's
+   own paywall (Github PV: molecules/paywall): the page fades to cream, then a dark red card
+   with a gold heading, three benefits beside the large Nandi, a gold Subscribe button and a
+   log-in line. Its colours are the paywall's, kept here as tokens. The dock stays usable,
+   so the reader can still go back. */
+.wall {
+  --paywall-dark: #2f0005;
+  --paywall-red: #6b0d1a;
+  --paywall-heading: #ffd34d;
+  --paywall-gold: linear-gradient(100deg, #b78423 -0.4%, #fefb62 81.45%, #f0b00b 106.61%);
+  --paywall-fade: #fff8e8;
+  position: fixed; inset: 0 0 var(--dock-h); z-index: 26;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0 var(--gutter-r) 12px var(--gutter-l);
+  background: linear-gradient(180deg, rgb(255 248 232 / 0) 20%, rgb(255 248 232 / 75%) 45%, var(--paywall-fade) 70%);
+  animation: viewer-in var(--duration-slow) var(--ease);
+}
+.wall-card {
+  position: relative; width: 100%; max-width: 440px; box-sizing: border-box; overflow: hidden;
+  display: flex; flex-direction: column;
+  padding: 16px 16px 24px; border-radius: 9px;
+  background: linear-gradient(132deg, var(--paywall-dark) 37.64%, var(--paywall-red) 91.6%);
+  color: var(--white);
+  box-shadow: 0 0 8px rgb(0 0 0 / 25%);
+  animation: wall-up var(--duration-slow) var(--ease);
+}
+@keyframes wall-up { from { translate: 0 24px; } }
+.wall-close { position: absolute; top: 4px; right: 4px; z-index: 1; color: var(--white); }
+.wall-close:hover { background: rgb(255 255 255 / 10%); }
+.wall-title { margin: 0 40px 10px 0; color: var(--paywall-heading); font: 600 22px/38px var(--font-text); }
+.wall-note { margin: 0 0 17px; font: 400 16px/1.5 var(--font-text); }
+/* Benefits in a column, the large Nandi beside them, cropped by the card's right edge. */
+.wall-features { position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0 0 18px; padding: 0; list-style: none; }
+.wall-features li { position: relative; display: flex; align-items: center; gap: 12px; max-width: 62%; font: 400 16px/1.4 var(--font-text); }
+.wall-features li img { flex: none; width: 32px; height: 32px; }
+.wall-nandi { position: absolute; top: -17px; right: -16px; width: 137px; height: 165px; object-fit: cover; object-position: left; }
+.wall-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.wall-cta {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  align-self: stretch; min-height: 51px; padding: 10px 16px; box-sizing: border-box;
+  border: 0; border-radius: 6px; background: var(--paywall-gold); color: #000;
+  box-shadow: 0 0 8px rgb(0 0 0 / 8%);
+  font: 600 16px/1.4 var(--font-text); text-decoration: none; cursor: pointer;
+}
+/* The paywall's nudge: the semibold face sits high in its line box. */
+.wall-cta span { margin-top: 4px; }
+.wall-cta img { width: 22px; height: 16px; }
+.wall-login-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 5px; font: 400 16px/1.5 var(--font-text); }
+.wall-login {
+  display: inline-flex; align-items: center; gap: 5px; min-height: 44px;
+  color: var(--white); font-weight: 600; text-decoration: none;
+}
+.wall-login:hover { text-decoration: underline; }
+.wall-login img { width: 14px; height: 14px; }
+.wall :focus-visible { outline-color: var(--paywall-heading); }
+.wall-card:focus { outline: none; }
+
+/* Test options (review only). */
+.tests {
+  position: fixed; z-index: 40;
+  top: calc(var(--header-h) + 6px); right: var(--gutter-r);
+  width: min(320px, calc(100% - 32px)); box-sizing: border-box;
+  padding: 14px 16px; border-radius: 12px;
+  background: var(--white); box-shadow: var(--shadow-raised);
+}
+.tests h2 { margin: 0 0 4px; font-size: 16px; }
+.tests p { margin: 0 0 10px; color: var(--ink-muted); font-size: 13px; line-height: 1.5; }
+.tests fieldset { margin: 0 0 12px; padding: 0; border: 0; }
+.tests legend { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+.tests label { display: flex; align-items: center; gap: 8px; min-height: 40px; font-size: 15px; }
+.tests input { width: 20px; height: 20px; accent-color: var(--red); }
+.tests .button { width: 100%; }
+
+/* Full-screen page viewer. */
+.viewer {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; flex-direction: column;
+  background: var(--night); color: var(--white);
+  animation: viewer-in var(--duration-slow) var(--ease);
+}
+@keyframes viewer-in { from { opacity: 0; } }
+.viewer-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: calc(env(safe-area-inset-top, 0px) + 6px) var(--gutter-r) 6px var(--gutter-l);
+}
+.viewer-title { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.viewer-date { color: var(--yellow); font-size: 12px; font-weight: 600; line-height: 1.5; }
+.viewer-head {
+  font: 600 16px/1.35 var(--font-headline);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.viewer .icon-button:hover { background: rgb(255 255 255 / 10%); }
+.viewer :focus-visible { outline-color: var(--yellow); }
+/* Pinch (phone) or wheel (desktop) zooms; drag moves a zoomed page. Handled in script. */
+.viewer-stage { position: relative; flex: 1; overflow: hidden; touch-action: none; cursor: zoom-in; }
+.viewer-stage.is-zoomed { cursor: grab; }
+.viewer-stage.is-dragging { cursor: grabbing; }
+.viewer-page { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.viewer-page .paper { animation: page-in var(--duration-slow) var(--ease); }
+@keyframes page-in { from { opacity: 0; scale: .96; } }
+.viewer-note {
+  margin: 0; padding: 8px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  text-align: center; color: rgb(255 255 255 / 70%); font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .peek-cta .icon, .map-fill { transition: none; }
+  .hint, .hint .icon, .viewer, .viewer-page .paper, .wall, .wall-card { animation: none; }
+}
+</style>
+</head>
+<body>
+<header class="masthead bar">
+  <div class="container masthead__inner">
+    <h1 class="brand">
+      <a class="brand__link" href="index.html">
+        <img class="brand__mark" src="https://images.assettype.com/prajavani/2026-10-28/4ofcatud/karunadotsava-pv-720.webp" alt="ಪ್ರಜಾವಾಣಿ ಕರುನಾಡೋತ್ಸವ: ಮುಖಪುಟಕ್ಕೆ" width="720" height="236">
+      </a>
+    </h1>
+    <div class="year" id="year" aria-hidden="true"></div>
+    <span class="visually-hidden" id="yearSpoken" aria-live="polite"></span>
+    <button class="icon-button" id="testsBtn" type="button" aria-label="Test options" aria-expanded="false">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="stage" id="stage">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="world" id="world" aria-hidden="true"></div>
+</div>
+
+<div class="hint" id="hint">
+  <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+  <span id="hintText">ಮುಂದೆ ಸಾಗಲು ಕೆಳಕ್ಕೆ ಸರಿಸಿ</span>
+</div>
+
+<section class="sheet" id="sheet" aria-label="ಕಥೆ">
+  <button class="peek" id="peek" type="button" aria-expanded="false" aria-controls="sheetBody">
+    <span class="peek-text">
+      <span class="peek-date" id="peekDate"></span>
+      <span class="peek-head" id="peekHead"></span>
+    </span>
+    <span class="peek-cta">
+      <span class="peek-cta-read">ಕಥೆ ಓದಿ</span><span class="peek-cta-close">ಮುಚ್ಚಿ</span>
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+    </span>
+  </button>
+  <div class="sheet-body" id="sheetBody">
+    <div class="story-body" id="storyBody"></div>
+    <p class="credit" id="credit"></p>
+    <div class="sheet-actions">
+      <button class="button button--outline" id="viewPage" type="button">
+        <span>ಮೂಲ ಪುಟ ನೋಡಿ</span>
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+      <button class="button button--primary" id="nextStop" type="button"></button>
+    </div>
+  </div>
+</section>
+
+<nav class="dock" id="dock" aria-label="ಕಾಲರೇಖೆ">
+  <button class="nav-btn" id="prevBtn" type="button" aria-label="ಹಿಂದಿನ ಪುಟ">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <div class="map" id="map" role="slider" tabindex="0" aria-label="ವರ್ಷ ಆಯ್ಕೆ">
+    <div class="map-fill" id="mapFill"></div>
+    <div class="map-thumb" id="mapThumb"></div>
+    <div class="map-bubble" id="mapBubble" hidden></div>
+  </div>
+  <button class="nav-btn" id="nextBtn" type="button" aria-label="ಮುಂದಿನ ಪುಟ">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+</nav>
+
+<div class="tests" id="tests" hidden>
+  <h2>Test options</h2>
+  <p>Swipe to travel, tap the page to open it, pull up the story. Switch this to compare.</p>
+  <fieldset>
+    <legend>Swipe to move ahead</legend>
+    <label><input type="radio" name="swipe" id="swipeDown" value="down"> Swipe down</label>
+    <label><input type="radio" name="swipe" id="swipeUp" value="up"> Swipe up</label>
+  </fieldset>
+  <!-- Only off the newspaper's own sites, where the real subscriber check can't run. -->
+  <fieldset id="wallTest">
+    <legend>Subscriber wall: try as</legend>
+    <label><input type="radio" name="wall" value="logged-out"> Logged out</label>
+    <label><input type="radio" name="wall" value="not-subscriber"> Logged in, not subscribed</label>
+    <label><input type="radio" name="wall" value="subscriber"> Subscriber</label>
+    <label><input type="radio" name="wall" value="error"> Check failed</label>
+  </fieldset>
+  <button class="button button--primary" id="testsDone" type="button">Done</button>
+</div>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="viewerHead">
+  <div class="viewer-bar">
+    <span class="viewer-title">
+      <span class="viewer-date" id="viewerDate"></span>
+      <span class="viewer-head" id="viewerHead"></span>
+    </span>
+    <button class="icon-button" id="viewerClose" type="button" aria-label="ಮುಚ್ಚಿ">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="viewer-stage" id="viewerStage"><div class="viewer-page" id="viewerPage"></div></div>
+  <p class="viewer-note" id="viewerNote"></p>
+</div>
+
+<div class="wall" id="wall" hidden>
+  <section class="wall-card" id="wallCard" role="dialog" tabindex="-1" aria-labelledby="wallTitle" aria-describedby="wallNote">
+    <button class="icon-button wall-close" id="wallClose" type="button" aria-label="ಮುಚ್ಚಿ">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h2 class="wall-title" id="wallTitle"></h2>
+    <p class="wall-note" id="wallNote"></p>
+    <ul class="wall-features" id="wallFeatures"></ul>
+    <div class="wall-actions" id="wallActions"></div>
+  </section>
+</div>
+
+<script src="https://rajyothsava.pages.dev/js/subscription.js"></script>
+<script>
+// Sample entries. Real page scans and write-ups replace these. Each needs its date (iso),
+// headline and paragraphs; the year, weekday and Kannada date are worked out from iso.
+const SAMPLE_NOTE = "ಇದು ಮಾದರಿ ಬರಹ. ಸಂಪಾದಕೀಯ ತಂಡ ಈ ಪುಟದ ನಿಜವಾದ ಕಥೆಯನ್ನು ಇಲ್ಲಿ ಸೇರಿಸಲಿದೆ.";
+const FEATURED = [
+  {
+    iso: "1956-11-01", headline: "ವಿಶಾಲ ಮೈಸೂರು ರಾಜ್ಯ ಉದಯ",
+    paras: [
+      "1956ರ ನವೆಂಬರ್ 1ರಂದು ಬಾಂಬೆ, ಮದ್ರಾಸ್ ಮತ್ತು ಹೈದರಾಬಾದ್ ಪ್ರಾಂತ್ಯಗಳಲ್ಲಿ ಹಾಗೂ ಕೊಡಗಿನಲ್ಲಿ ಹಂಚಿಹೋಗಿದ್ದ ಕನ್ನಡ ಮಾತನಾಡುವ ಪ್ರದೇಶಗಳು ಮೈಸೂರು ರಾಜ್ಯದೊಂದಿಗೆ ಒಂದಾದವು.",
+      "ದಶಕಗಳ ಏಕೀಕರಣ ಚಳವಳಿಯ ಕನಸು ಅಂದು ನನಸಾಯಿತು. ಊರೂರುಗಳಲ್ಲಿ ಹಬ್ಬದ ವಾತಾವರಣ ಮನೆಮಾಡಿತ್ತು.",
+      SAMPLE_NOTE
+    ]
+  },
+  {
+    iso: "1973-11-01", headline: "ಮೈಸೂರು ಇನ್ನು ಕರ್ನಾಟಕ",
+    paras: [
+      "1973ರ ನವೆಂಬರ್ 1ರಂದು ಮೈಸೂರು ರಾಜ್ಯಕ್ಕೆ ‘ಕರ್ನಾಟಕ’ ಎಂದು ಮರುನಾಮಕರಣ ಮಾಡಲಾಯಿತು. ಆಗ ಡಿ. ದೇವರಾಜ ಅರಸು ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿದ್ದರು.",
+      "ಹೊಸ ಹೆಸರು ನಾಡಿನ ಎಲ್ಲ ಭಾಗಗಳನ್ನೂ ಒಳಗೊಳ್ಳುವ ಗುರುತಾಯಿತು.",
+      SAMPLE_NOTE
+    ]
+  },
+  {
+    iso: "2008-10-31", headline: "ಕನ್ನಡಕ್ಕೆ ಶಾಸ್ತ್ರೀಯ ಭಾಷೆಯ ಸ್ಥಾನಮಾನ",
+    paras: [
+      "2008ರ ಅಕ್ಟೋಬರ್ 31ರಂದು ಕೇಂದ್ರ ಸರ್ಕಾರ ಕನ್ನಡಕ್ಕೆ ಶಾಸ್ತ್ರೀಯ ಭಾಷೆಯ ಸ್ಥಾನಮಾನ ಘೋಷಿಸಿತು. ರಾಜ್ಯೋತ್ಸವಕ್ಕೆ ಒಂದು ದಿನ ಮುಂಚೆ ಬಂದ ಸುದ್ದಿ ಸಂಭ್ರಮವನ್ನು ಇಮ್ಮಡಿಗೊಳಿಸಿತು.",
+      "ಸುದೀರ್ಘ ಇತಿಹಾಸವಿರುವ ಭಾಷೆಗೆ ಸಿಕ್ಕ ಈ ಮನ್ನಣೆ ಸಂಶೋಧನೆ ಮತ್ತು ಅಧ್ಯಯನಕ್ಕೆ ಹೊಸ ದಾರಿ ತೆರೆಯಿತು.",
+      SAMPLE_NOTE
+    ]
+  },
+  {
+    iso: "2014-11-01", headline: "ಬೆಂಗಳೂರು: ಹೆಸರು ಈಗ ಅಧಿಕೃತ",
+    paras: [
+      "2014ರ ನವೆಂಬರ್ 1ರಿಂದ ಬ್ಯಾಂಗಲೋರ್ ಅಧಿಕೃತವಾಗಿ ‘ಬೆಂಗಳೂರು’ ಆಯಿತು. ಮೈಸೂರು, ಮಂಗಳೂರು, ಬೆಳಗಾವಿ ಸೇರಿದಂತೆ ಇನ್ನೂ ಹಲವು ನಗರಗಳ ಹೆಸರುಗಳೂ ಕನ್ನಡದ ಉಚ್ಚಾರಕ್ಕೆ ಮರಳಿದವು.",
+      SAMPLE_NOTE
+    ]
+  },
+  {
+    iso: "2026-11-01", headline: "ಕರುನಾಡಿಗೆ ಎಪ್ಪತ್ತು",
+    paras: [
+      "2026ರ ನವೆಂಬರ್ 1ಕ್ಕೆ ಕರ್ನಾಟಕ ರಾಜ್ಯ ಉದಯವಾಗಿ ಎಪ್ಪತ್ತು ವರ್ಷ.",
+      "ಈ ಹಾದಿಯ ಪುಟಗಳನ್ನು ನವೆಂಬರ್ 19ರಂದು ರಂಗೋಲಿ ಮೆಟ್ರೋ ಆರ್ಟ್ ಸೆಂಟರ್‌ನಲ್ಲಿ ನೇರವಾಗಿ ನೋಡಬಹುದು.",
+      SAMPLE_NOTE
+    ]
+  }
+];
+// Dummy filler (TEMPORARY): 45 more pages so the road can be tried with about 50 entries.
+// Made-up topics on made-up dates; replace with the real list.
+const DUMMY_YEARS = [1957, 1958, 1960, 1961, 1962, 1964, 1965, 1967, 1968, 1970, 1971, 1972, 1974, 1975, 1977,
+  1978, 1980, 1981, 1982, 1982, 1984, 1986, 1987, 1989, 1990, 1991, 1993, 1995, 1996, 1998, 2000, 2001, 2003,
+  2004, 2006, 2008, 2010, 2011, 2012, 2016, 2017, 2019, 2020, 2022, 2024];
+const DUMMY_TOPICS = ["ರಾಜ್ಯೋತ್ಸವ ಸಂಭ್ರಮ", "ಹೊಸ ರೈಲು ಮಾರ್ಗ", "ಸಾಹಿತ್ಯ ಸಮ್ಮೇಳನ", "ಅಣೆಕಟ್ಟು ಉದ್ಘಾಟನೆ",
+  "ಕ್ರೀಡಾಕೂಟದಲ್ಲಿ ಚಿನ್ನ", "ಬರಗಾಲ ಪರಿಹಾರ", "ಚುನಾವಣಾ ಫಲಿತಾಂಶ", "ಚಲನಚಿತ್ರ ಪ್ರಶಸ್ತಿ",
+  "ವಿಶ್ವವಿದ್ಯಾಲಯ ಆರಂಭ", "ದಸರಾ ವೈಭವ", "ಮಳೆಯಿಂದ ಪ್ರವಾಹ", "ಕೈಗಾರಿಕಾ ವಸಾಹತು"];
+const DUMMY = DUMMY_YEARS.map((y, i) => {
+  const topic = DUMMY_TOPICS[i % DUMMY_TOPICS.length];
+  const iso = `${y}-${String(1 + (i * 5) % 12).padStart(2, "0")}-${String(1 + (i * 7) % 28).padStart(2, "0")}`;
+  return { iso, headline: topic, paras: [`${y}ರ ಮಾದರಿ ಸುದ್ದಿ: ${topic}.`, SAMPLE_NOTE] };
+});
+
+const KN_MONTHS = ["ಜನವರಿ", "ಫೆಬ್ರುವರಿ", "ಮಾರ್ಚ್", "ಏಪ್ರಿಲ್", "ಮೇ", "ಜೂನ್", "ಜುಲೈ", "ಆಗಸ್ಟ್", "ಸೆಪ್ಟೆಂಬರ್", "ಅಕ್ಟೋಬರ್", "ನವೆಂಬರ್", "ಡಿಸೆಂಬರ್"];
+const KN_DAYS = ["ಭಾನುವಾರ", "ಸೋಮವಾರ", "ಮಂಗಳವಾರ", "ಬುಧವಾರ", "ಗುರುವಾರ", "ಶುಕ್ರವಾರ", "ಶನಿವಾರ"];
+const ENTRIES = [...FEATURED, ...DUMMY]
+  .sort((a, b) => a.iso.localeCompare(b.iso))
+  .map(e => {
+    const [y, m, d] = e.iso.split("-").map(Number);
+    return {
+      ...e, year: y,
+      date: `${d} ${KN_MONTHS[m - 1]} ${y}`,
+      weekday: KN_DAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]
+    };
+  });
+const CREDIT = "ಮಾದರಿ ಪುಟ. ನಿಜವಾದ ಪತ್ರಿಕೆಯ ಸ್ಕ್ಯಾನ್ ಇಲ್ಲಿ ಬರಲಿದೆ.";
+// Caption on each decade's arch. Sample lines; the editorial team will write the real ones.
+const DECADE_LINES = {
+  1960: "ಹೊಸ ರಾಜ್ಯ ಕಟ್ಟುವ ಕಾಲ",
+  1970: "ಕರ್ನಾಟಕ ಎಂಬ ಹೆಸರು",
+  1980: "ಗೋಕಾಕ್ ಚಳವಳಿ",
+  1990: "ಮಾಹಿತಿ ತಂತ್ರಜ್ಞಾನದ ಉದಯ",
+  2000: "ಶಾಸ್ತ್ರೀಯ ಭಾಷೆಯ ಮನ್ನಣೆ",
+  2010: "ನಗರಗಳಿಗೆ ಕನ್ನಡದ ಹೆಸರು",
+  2020: "ಎಪ್ಪತ್ತರ ಹೊಸ್ತಿಲು"
+};
+// Subscriber wall: the first FREE_STOPS pages are open to everyone, the rest of the road is
+// for Prajavani subscribers. The words await the PV desk's approval. The icons are from
+// prajavani.net's paywall; their paths are written out in full so tools/build-cms.py can
+// point them at their hosted addresses.
+const FREE_STOPS = 5;
+const WALL = {
+  title: "ಮುಂದಿನ ಹಾದಿ ಚಂದಾದಾರರಿಗೆ",
+  note: `ಮೊದಲ ${FREE_STOPS} ಪುಟಗಳು ಎಲ್ಲರಿಗೂ. ಏಳು ದಶಕಗಳ ಉಳಿದ ಪುಟಗಳನ್ನು ಪ್ರಜಾವಾಣಿ ಚಂದಾದಾರರು ನೋಡಬಹುದು.`,
+  features: [
+    { icon: "https://rajyothsava.pages.dev/assets/paywall/premium.svg", text: "ಕರುನಾಡಿನ ಹಾದಿಯ ಎಲ್ಲ ಪುಟಗಳು ಮತ್ತು ಪ್ರೀಮಿಯಂ ಬರಹಗಳು" },
+    { icon: "https://rajyothsava.pages.dev/assets/paywall/epaper.svg", text: "ದಿನದ ಪತ್ರಿಕೆ ಇ‑ಪೇಪರ್‌ನಲ್ಲಿ" },
+    { icon: "https://rajyothsava.pages.dev/assets/paywall/ad-light.svg", text: "ಕಡಿಮೆ ಜಾಹೀರಾತಿನ ಓದು" }
+  ],
+  icons: { nandi: "https://rajyothsava.pages.dev/assets/paywall/nandi.svg", nandiLarge: "https://rajyothsava.pages.dev/assets/paywall/nandi-large.svg", login: "https://rajyothsava.pages.dev/assets/paywall/login.svg" },
+  subscribe: "ಚಂದಾದಾರರಾಗಿ",
+  loginAsk: "ಈಗಾಗಲೇ ಚಂದಾದಾರರೇ?",
+  login: "ಲಾಗಿನ್ ಆಗಿ",
+  errorTitle: "ಚಂದಾದಾರಿಕೆ ಖಚಿತವಾಗಲಿಲ್ಲ",
+  errorNote: "ನಿಮ್ಮ ಚಂದಾದಾರಿಕೆಯನ್ನು ಈಗ ಖಚಿತಪಡಿಸಲು ಆಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  retry: "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ"
+};
+
+// World units: a page is 1 wide and R tall; one year of road is S long.
+const S = 2.6, D = 3, R = 1.6;
+const ROAD_HALF = 0.42, DASH = 1.2;
+// Sizes in world units; base is the CSS width each element is drawn at.
+const STONE = { x: 0.47, w: 0.22, h: 0.28, base: 110 };
+// h keeps the gate artwork's proportions; board: height of the board's centre as a share of
+// the gate's height (matches .arch-board).
+const ARCH = { w: 1.4, h: 1.4 * 857 / 573, base: 560, board: 0.78 };
+const PAPER_W = 400;
+const Y0 = ENTRIES[0].year, Y1 = ENTRIES[ENTRIES.length - 1].year;
+
+// Road positions. Time sets the spacing (S per year), but pages never stand closer than
+// PAGE_GAP, or ARCH_GAP when a decade arch sits between them, so a busy year still gives
+// every page its own stretch of road and every arch room to slow down.
+const PAGE_GAP = 5.5, ARCH_GAP = 10;
+const decadeOf = y => Math.floor(y / 10);
+const pageZ = ENTRIES.reduce((zs, e, i) => {
+  if (!i) return [0];
+  const prev = ENTRIES[i - 1], gap = decadeOf(e.year) > decadeOf(prev.year) ? ARCH_GAP : PAGE_GAP;
+  return [...zs, zs[i - 1] + Math.max((e.year - prev.year) * S, gap)];
+}, []);
+// Year ↔ road position, through each page's [year, z]. A second page in the same year gets
+// a hair more than the year, so the counter stays on that year between them.
+const knots = ENTRIES.map((e, i) => {
+  let same = 0;
+  while (i - same > 0 && ENTRIES[i - same - 1].year === e.year) same++;
+  return [e.year + same * 1e-4, pageZ[i]];
+});
+function alongKnots(v, from, to, slope) {
+  const first = knots[0], last = knots[knots.length - 1];
+  if (v <= first[from]) return first[to] + (v - first[from]) * slope;
+  if (v >= last[from]) return last[to] + (v - last[from]) * slope;
+  const i = knots.findIndex(k => k[from] >= v), a = knots[i - 1], b = knots[i];
+  return a[to] + (b[to] - a[to]) * (v - a[from]) / (b[from] - a[from]);
+}
+const zOf = year => alongKnots(year, 0, 1, S);
+const yearAt = z => alongKnots(z, 1, 0, 1 / S);
+const roadX = z => 1.1 * Math.sin(z / 13) + 0.5 * Math.sin(z / 31);
+const ageOf = y => (y - Y0) / (Y1 - Y0);
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+// Colours that age with the year: [oldest, newest].
+const TONES = {
+  skyTop: ["#E9DABB", "#F4EFE4"], haze: ["#F3E5C8", "#FFFAF0"],
+  hill: ["#A7A273", "#7FA05A"], ridge: ["#9C9A83", "#7A9189"],
+  road: ["#6E6153", "#4A4644"], edge: ["#E8DCC4", "#EEEAE2"],
+  paper: ["#E6D3A8", "#FBFAF6"], ink: ["#2E261C", "#1F1F1F"], photo: ["#CDB78E", "#D9D6CF"]
+};
+// Flag colours for the centre line, read from the site's tokens.
+const tokens = getComputedStyle(document.documentElement);
+const RED = tokens.getPropertyValue("--red").trim(), YELLOW = tokens.getPropertyValue("--yellow").trim();
+
+const $ = id => document.getElementById(id);
+const canvas = $("scene"), ctx = canvas.getContext("2d");
+const world = $("world");
+
+let settings = { swipe: "down", wall: "logged-out" };
+try { settings = { ...settings, ...JSON.parse(localStorage.getItem("road-test") || "{}") }; } catch (e) {}
+
+// Back from logging in or subscribing: start at the page the reader left the road from.
+const RESUME_KEY = "road-stop";
+const startStop = (() => {
+  try {
+    const i = Number(sessionStorage.getItem(RESUME_KEY));
+    sessionStorage.removeItem(RESUME_KEY);
+    return clamp(i, 0, ENTRIES.length - 1) || 0;
+  } catch (e) { return 0; }
+})();
+
+let view = { W: 0, H: 0, F: 1, h0: 1, horizon: 0, groundBottom: 0 };
+let camZ = pageZ[startStop] - D, pull = 0, cur = startStop, moving = false, lastArrive = 0;
+
+function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+const css = (c, alpha = 1) => `rgba(${c.map(Math.round).join(",")},${alpha})`;
+const toneRgb = (name, t) => mix(...TONES[name].map(hexToRgb), t);
+const tone = (name, t, alpha = 1) => css(toneRgb(name, t), alpha);
+
+function paperHTML(e) {
+  return `<div class="mast">ಮಾದರಿ ಪತ್ರಿಕೆ</div>
+    <div class="dateline"><span>${e.weekday}, ${e.date}</span><span>ಬೆಂಗಳೂರು</span></div>
+    <div class="banner">${e.headline}</div>
+    <div class="cols">
+      <div class="photo"><span>ಚಿತ್ರ</span></div>
+      <div class="lines"></div>
+      <div class="sub"><b>ಊರೂರಲ್ಲಿ ಸಂಭ್ರಮ</b><div class="lines"></div></div>
+      <div class="sub"><b>ಸಂಪಾದಕೀಯ</b><div class="lines"></div></div>
+    </div>
+    <span class="stamp">ಮಾದರಿ ಪುಟ</span>`;
+}
+function paintPaper(el, e) {
+  const t = ageOf(e.year);
+  el.style.setProperty("--paper", tone("paper", t));
+  el.style.setProperty("--paper-ink", tone("ink", t));
+  el.style.setProperty("--paper-line", tone("ink", t, .26));
+  el.style.setProperty("--paper-photo", tone("photo", t));
+  el.style.setProperty("--paper-edge", `rgba(120,80,30,${(.35 * (1 - t)).toFixed(2)})`);
+}
+
+// Build pages, one milestone per year and one arch per decade.
+const pages = ENTRIES.map((e, i) => {
+  const el = document.createElement("article");
+  el.className = "paper";
+  el.innerHTML = paperHTML(e);
+  paintPaper(el, e);
+  world.appendChild(el);
+  return { el, z: pageZ[i] };
+});
+const stones = [];
+for (let y = Y0; y <= Y1; y++) {
+  const el = document.createElement("div");
+  el.className = "stone";
+  el.textContent = y;
+  world.appendChild(el);
+  stones.push({ el, z: zOf(y) - 0.1 });
+}
+const decades = [];
+for (let y = (decadeOf(Y0) + 1) * 10; y <= Y1; y += 10) decades.push(y);
+const arches = decades.map(year => {
+  const el = document.createElement("div");
+  el.className = "arch";
+  const line = DECADE_LINES[year] ? `<span class="arch-line">${DECADE_LINES[year]}</span>` : "";
+  el.innerHTML = `<div class="arch-board"><span class="arch-decade">${year}ರ ದಶಕ</span>${line}</div>`;
+  world.appendChild(el);
+  // Stand just before the decade's first stone, but never between the viewer and an arrived page.
+  let z = zOf(year) - 0.3;
+  const nextPage = pages.find(p => p.z >= z);
+  if (nextPage) z = Math.min(z, nextPage.z - D - 0.6);
+  return { el, z };
+});
+
+// Timeline slider: a tick per page; drag or tap to pick one, arrow keys to step.
+const map = $("map"), mapThumb = $("mapThumb"), mapBubble = $("mapBubble");
+const mapPos = i => `${ageOf(ENTRIES[i].year) * 100}%`;
+const ticks = ENTRIES.map((e, i) => {
+  const t = document.createElement("span");
+  t.className = "map-tick";
+  t.style.left = mapPos(i);
+  map.insertBefore(t, mapThumb);
+  return t;
+});
+map.insertAdjacentHTML("beforeend", `<span class="map-end">${Y0}</span><span class="map-end end">${Y1}</span>`);
+map.setAttribute("aria-valuemin", 0);
+map.setAttribute("aria-valuemax", ENTRIES.length - 1);
+function nearestEntry(clientX) {
+  const r = map.getBoundingClientRect(), t = clamp((clientX - r.left) / r.width, 0, 1);
+  return ENTRIES.reduce((best, e, i) => Math.abs(ageOf(e.year) - t) < Math.abs(ageOf(ENTRIES[best].year) - t) ? i : best, 0);
+}
+let scrub = null;
+function showScrub(i) {
+  scrub = i;
+  mapBubble.hidden = false;
+  mapBubble.textContent = ENTRIES[i].year;
+  mapBubble.style.left = mapThumb.style.left = mapPos(i);
+}
+function endScrub(travel) {
+  map.classList.remove("is-scrubbing");
+  mapBubble.hidden = true;
+  if (travel && scrub !== null) travelTo(scrub);
+  scrub = null;
+  mapThumb.style.left = mapPos(cur);
+}
+map.addEventListener("pointerdown", e => {
+  map.classList.add("is-scrubbing");
+  showScrub(nearestEntry(e.clientX));
+  map.setPointerCapture(e.pointerId);
+});
+map.addEventListener("pointermove", e => { if (scrub !== null) showScrub(nearestEntry(e.clientX)); });
+map.addEventListener("pointerup", () => endScrub(true));
+map.addEventListener("pointercancel", () => endScrub(false));
+map.addEventListener("keydown", e => {
+  const to = { ArrowRight: cur + 1, ArrowUp: cur + 1, ArrowLeft: cur - 1, ArrowDown: cur - 1, Home: 0, End: ENTRIES.length - 1 }[e.key];
+  if (to === undefined) return;
+  e.preventDefault();
+  travelTo(clamp(to, 0, ENTRIES.length - 1));
+});
+
+function camera() {
+  const c = { z: camZ, x: roadX(camZ + D), f: view.F * (1 - 0.4 * pull), h: view.h0 + 0.7 * pull };
+  // Near an arch the camera looks up, bringing the board to boardAim where the trip slows.
+  const boardY = view.horizon + (c.h - ARCH.board * ARCH.h) * c.f / ARCH_SLOW.at;
+  c.horizon = view.horizon + archNearness(camZ) * Math.max(0, view.boardAim - boardY);
+  return c;
+}
+function project(c, x, y, z) {
+  const dz = z - c.z, s = c.f / dz;
+  return { x: view.W / 2 + (x - c.x) * s, y: c.horizon + (c.h - y) * s, s, dz };
+}
+// Far objects fade into haze; the page you pass fades as you go through it.
+function visibility(dz) {
+  if (dz < 0.35 || dz > 70) return 0;
+  return Math.min(clamp(1 - (dz - D) / 50, 0, 1), clamp((dz - 0.35 * D) / (0.55 * D), 0, 1));
+}
+
+function layout() {
+  const W = innerWidth, H = innerHeight, dpr = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const headerBottom = document.querySelector(".bar").getBoundingClientRect().bottom;
+  const dockH = $("dock").offsetHeight, peekH = $("peek").offsetHeight;
+  const root = document.documentElement.style;
+  root.setProperty("--header-h", `${headerBottom}px`);
+  root.setProperty("--dock-h", `${dockH}px`);
+  root.setProperty("--peek-h", `${peekH}px`);
+  root.setProperty("--sheet-h", `${H - headerBottom - dockH}px`);
+
+  // The arrived page stands on the road, as large as the free space allows.
+  const top = headerBottom + 12, bottom = H - dockH - peekH - 40;
+  const pw = Math.max(120, Math.min(0.84 * W, (bottom - top) / R));
+  const h0 = 0.58 * R;
+  // groundBottom: lowest point of the road not hidden by the bars at the bottom;
+  // boardAim: where an arch's board is brought to as the trip slows, 40% down the space
+  // between the header and the peek bar (a little above the middle).
+  view = { W, H, F: pw * D, h0, horizon: bottom - pw * h0, groundBottom: bottom + 40, boardAim: top + 0.4 * (bottom + 40 - top) };
+  $("hint").style.top = `${bottom - 64}px`;
+  render();
+}
+
+// Land height: flat beside the road, rising into rolling hills further out.
+function groundHeight(x, z) {
+  const ramp = clamp((Math.abs(x - roadX(z)) - 1.3) / 3.5, 0, 1);
+  if (!ramp) return 0;
+  const rolling = 0.55 + 0.3 * Math.sin(x * 0.45 + z * 0.13) + 0.25 * Math.sin(z * 0.29 - x * 0.8);
+  return ramp * ramp * (3 - 2 * ramp) * rolling * 2.2;
+}
+
+// Two hazy ridges on the horizon, like the Western Ghats; they drift slowly as the road turns.
+function drawRidges(c, t) {
+  const { W } = view, { horizon } = c, scale = view.F / (3 * 300);
+  [{ amp: 64, drift: 9, wave: 90, fade: .55 }, { amp: 38, drift: 16, wave: 52, fade: .3 }].forEach((r, i) => {
+    ctx.fillStyle = css(mix(toneRgb("ridge", t), toneRgb("haze", t), r.fade));
+    ctx.beginPath(); ctx.moveTo(0, horizon + 2);
+    for (let x = 0; x <= W; x += 8) {
+      const u = x + c.x * r.drift * 10 + c.z * r.drift * .2;
+      const h = .55 + .25 * Math.sin(u / r.wave + i) + .2 * Math.sin(u / (r.wave * .41) + 2 * i);
+      ctx.lineTo(x, horizon - r.amp * scale * h);
+    }
+    ctx.lineTo(W, horizon + 2); ctx.closePath(); ctx.fill();
+  });
+}
+
+// Land drawn as slices across the view, far to near, each covering the ones behind it.
+// Slices sit on a fixed world grid, so the field bands move past as you travel.
+function drawTerrain(c, t) {
+  const { W, H } = view, hill = toneRgb("hill", t), haze = toneRgb("haze", t);
+  const STEP = 1;
+  for (let k = Math.floor((c.z + 70) / STEP); k * STEP > c.z + 0.4; k--) {
+    const z = k * STEP, dz = z - c.z, s = c.f / dz, half = W / 2 / s + 0.5;
+    const band = k % 4 < 2 ? 1 : .95;
+    ctx.fillStyle = css(mix(hill.map(v => v * band), haze, clamp((dz - 4) / 60, 0, 1)));
+    ctx.beginPath();
+    for (let i = 0; i <= 32; i++) {
+      const x = c.x - half + 2 * half * i / 32, p = project(c, x, groundHeight(x, z), z);
+      i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y);
+    }
+    ctx.lineTo(W + 10, H); ctx.lineTo(-10, H); ctx.closePath(); ctx.fill();
+  }
+}
+
+function drawScene(c, t) {
+  const { W, H } = view, { horizon } = c;
+  ctx.clearRect(0, 0, W, H);
+  let g = ctx.createLinearGradient(0, 0, 0, horizon);
+  g.addColorStop(0, tone("skyTop", t)); g.addColorStop(1, tone("haze", t));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, horizon);
+  ctx.fillStyle = tone("haze", t); ctx.fillRect(0, horizon, W, H - horizon);
+  drawRidges(c, t);
+  drawTerrain(c, t);
+
+  // Road surface and edges, sampled closer together near the viewer.
+  const near = c.z + 0.3, far = c.z + 90, left = [], right = [];
+  for (let i = 0; i <= 70; i++) {
+    const u = i / 70, z = near + (far - near) * u * u, x = roadX(z);
+    left.push(project(c, x - ROAD_HALF, 0, z));
+    right.push(project(c, x + ROAD_HALF, 0, z));
+  }
+  ctx.beginPath();
+  left.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+  for (let i = right.length - 1; i >= 0; i--) ctx.lineTo(right[i].x, right[i].y);
+  ctx.closePath();
+  // The far end of the road fades into the haze, like the land around it.
+  g = ctx.createLinearGradient(0, horizon, 0, horizon + 60);
+  g.addColorStop(0, tone("haze", t)); g.addColorStop(1, tone("road", t));
+  ctx.fillStyle = g; ctx.fill();
+  ctx.strokeStyle = tone("edge", t); ctx.lineWidth = 1.5;
+  [left, right].forEach(side => {
+    ctx.beginPath();
+    side.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+    ctx.stroke();
+  });
+
+  // Centre line: alternating yellow and red dashes, the flag colours.
+  for (let k = Math.ceil(near / DASH); k * DASH < c.z + 60; k++) {
+    const z0 = k * DASH, z1 = z0 + DASH / 2;
+    const a = project(c, roadX(z0) - .03, 0, z0), b = project(c, roadX(z0) + .03, 0, z0);
+    const d = project(c, roadX(z1) + .03, 0, z1), e = project(c, roadX(z1) - .03, 0, z1);
+    ctx.globalAlpha = clamp(1 - (z0 - c.z) / 60, 0, 1);
+    ctx.fillStyle = k % 2 ? RED : YELLOW;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(d.x, d.y); ctx.lineTo(e.x, e.y); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // Soft shadows under the pages.
+  pages.forEach(p => {
+    const o = visibility(p.z - c.z);
+    if (!o) return;
+    const q = project(c, roadX(p.z), 0, p.z);
+    ctx.fillStyle = `rgba(30,20,10,${.28 * o})`;
+    ctx.beginPath(); ctx.ellipse(q.x, q.y, .56 * q.s, .05 * q.s, 0, 0, Math.PI * 2); ctx.fill();
+  });
+}
+
+// Header year: four split-flap cards. Only digits that change flip; a new change
+// mid-flip cuts the old one short, so fast trips flutter like a real flip board.
+const FLIP_MS = 260;
+const flaps = [0, 1, 2, 3].map(() => {
+  const el = document.createElement("span");
+  el.className = "flip";
+  el.innerHTML = ["flip-top", "flip-bottom", "flip-top flip-leaf", "flip-bottom flip-leaf"]
+    .map(c => `<span class="flip-half ${c}"><span></span></span>`).join("");
+  $("year").appendChild(el);
+  const [top, bottom, leafTop, leafBottom] = [...el.children].map(h => ({ half: h, text: h.firstChild }));
+  return { top, bottom, leafTop, leafBottom, digit: null, anims: [] };
+});
+function setDigit(f, digit) {
+  if (f.digit === digit) return;
+  const old = f.digit ?? digit;
+  f.digit = digit;
+  f.anims.forEach(a => a.cancel());
+  // Behind the leaves: new digit on top, old digit below until the lower leaf covers it.
+  f.top.text.textContent = digit;
+  f.bottom.text.textContent = old;
+  f.leafTop.text.textContent = old;
+  f.leafBottom.text.textContent = digit;
+  const settle = () => {
+    f.bottom.text.textContent = digit;
+    f.leafTop.half.style.visibility = f.leafBottom.half.style.visibility = "";
+  };
+  if (old === digit || reduceMotion.matches) { settle(); return; }
+  f.leafTop.half.style.visibility = f.leafBottom.half.style.visibility = "visible";
+  const half = FLIP_MS / 2;
+  f.anims = [
+    f.leafTop.half.animate([{ transform: "rotateX(0)" }, { transform: "rotateX(-90deg)" }],
+      { duration: half, easing: "ease-in", fill: "forwards" }),
+    f.leafBottom.half.animate([{ transform: "rotateX(90deg)" }, { transform: "rotateX(0)" }],
+      { duration: half, delay: half, easing: "ease-out", fill: "both" })
+  ];
+  f.anims[1].onfinish = () => { if (f.digit === digit) settle(); };
+}
+const setYear = year => String(year).split("").forEach((d, i) => setDigit(flaps[i], d));
+
+function place(item, c, xOffset, worldW, worldH, baseW) {
+  const o = visibility(item.z - c.z);
+  item.el.style.visibility = o ? "visible" : "hidden";
+  if (!o) return;
+  const q = project(c, roadX(item.z) + xOffset, worldH, item.z);
+  const w = worldW * q.s;
+  item.el.style.transform = `translate(${(q.x - w / 2).toFixed(1)}px,${q.y.toFixed(1)}px) scale(${(w / baseW).toFixed(4)})`;
+  item.el.style.opacity = o.toFixed(3);
+  item.el.style.zIndex = Math.round(10000 - q.dz * 100);
+}
+
+function render() {
+  const c = camera();
+  // While moving, the counter shows the nearest stone still on screen (the next one ahead).
+  const nearestSeen = c.h * c.f / (view.groundBottom - c.horizon);
+  const lookYear = clamp(yearAt(c.z + Math.max(D, nearestSeen)), Y0, Y1);
+  drawScene(c, ageOf(lookYear));
+  pages.forEach(p => place(p, c, 0, 1, R, PAPER_W));
+  stones.forEach(s => place(s, c, STONE.x, STONE.w, STONE.h, STONE.base));
+  arches.forEach(a => place(a, c, 0, ARCH.w, ARCH.h, ARCH.base));
+  setYear(moving ? Math.ceil(lookYear - 1e-3) : ENTRIES[cur].year);
+}
+
+// Trip timing: pulls away from a page quickly and settles gently onto the next one.
+// rampUp / rampDown: share of the trip spent speeding up and slowing down.
+const TRIP = { rampUp: 0.12, rampDown: 0.4 };
+const ease = (() => {
+  const v = t => t < TRIP.rampUp ? Math.sin(Math.PI / 2 * t / TRIP.rampUp) ** 2
+    : t > 1 - TRIP.rampDown ? Math.sin(Math.PI / 2 * (1 - t) / TRIP.rampDown) ** 2 : 1;
+  const N = 200, acc = [0];
+  for (let i = 1; i <= N; i++) acc.push(acc[i - 1] + v((i - .5) / N));
+  return t => {
+    const x = clamp(t, 0, 1) * N, i = Math.min(N - 1, Math.floor(x));
+    return (acc[i] + (acc[i + 1] - acc[i]) * (x - i)) / acc[N];
+  };
+})();
+
+// The trip glides almost to a stop before every arch it passes, so each board can be read.
+// at: distance ahead of the arch where it is slowest; reach: how far before and after the
+// slow-down spreads; minSpeed: share of normal speed at the slowest point; extraMs: time added per arch.
+const ARCH_SLOW = { at: 5, reach: 3, minSpeed: 0.05, extraMs: 1600 };
+const slowPoint = a => a.z - ARCH_SLOW.at;
+// How near z is to an arch's slow point: 1 there, easing (a cosine curve) to 0 at ARCH_SLOW.reach.
+const archNearness = z => arches.reduce((v, a) => {
+  const d = Math.abs(z - slowPoint(a)) / ARCH_SLOW.reach;
+  return d < 1 ? Math.max(v, (1 + Math.cos(Math.PI * d)) / 2) : v;
+}, 0);
+// Speed along the road (1 = normal), dipping smoothly around each arch.
+const speedAt = z => 1 - (1 - ARCH_SLOW.minSpeed) * archNearness(z);
+// Spread the road between two stops over time by slowness, so slow stretches take longer.
+// Returns a function from eased progress (0–1) to camera position.
+function travelPath(from, to) {
+  const N = 240, acc = [0];
+  for (let i = 1; i <= N; i++) {
+    const z = from + (to - from) * (i - .5) / N;
+    acc.push(acc[i - 1] + 1 / speedAt(z));
+  }
+  return f => {
+    const target = f * acc[N];
+    let i = 1;
+    while (i < N && acc[i] < target) i++;
+    const part = (target - acc[i - 1]) / (acc[i] - acc[i - 1] || 1);
+    return from + (to - from) * (i - 1 + part) / N;
+  };
+}
+
+function go(j) {
+  if (j < 0 || j >= ENTRIES.length || j === cur || moving) return;
+  setSheet(false);
+  $("hint").classList.add("is-gone");
+  const gap = Math.abs(ENTRIES[j].year - ENTRIES[cur].year);
+  const from = camZ, to = pages[j].z - D;
+  const reduce = reduceMotion.matches;
+  const passed = arches.filter(a => slowPoint(a) > Math.min(from, to) && slowPoint(a) < Math.max(from, to)).length;
+  const duration = reduce ? 0 : clamp(500 + 25 * gap, 500, 1400) + ARCH_SLOW.extraMs * passed;
+  const lift = reduce ? 0 : Math.min(1, gap / 8);
+  const path = travelPath(from, to);
+  cur = j; moving = true;
+  document.body.classList.add("moving");
+  const start = performance.now();
+  (function frame(now) {
+    const t = duration ? clamp((now - start) / duration, 0, 1) : 1;
+    camZ = path(ease(t));
+    pull = lift * Math.sin(Math.PI * t);
+    if (t < 1) { render(); requestAnimationFrame(frame); return; }
+    camZ = to; pull = 0; moving = false; lastArrive = performance.now();
+    document.body.classList.remove("moving");
+    fillText(); render();
+    try { navigator.vibrate && navigator.vibrate(8); } catch (e) {}
+  })(start);
+}
+
+// Every way of moving along the road comes through here. Past the free stretch, only a
+// subscriber travels on; everyone else meets the wall. The real check runs only on the
+// newspaper's own sites (SITES in js/subscription.js); elsewhere the test options give the answer.
+const accessState = () => Subscription.live ? Subscription.status() : Promise.resolve(settings.wall);
+async function travelTo(j) {
+  if (j < 0 || j >= ENTRIES.length || j === cur || moving) return;
+  hideWall();
+  if (j < FREE_STOPS) { go(j); return; }
+  const state = await accessState();
+  if (state === "subscriber") go(j);
+  else showWall(state, j);
+}
+const step = d => travelTo(cur + d);
+
+function markLockedStops() {
+  accessState().then(state =>
+    ticks.forEach((t, i) => t.classList.toggle("is-locked", state !== "subscriber" && i >= FREE_STOPS)));
+}
+const paywallIcon = (src, className) => `<img${className ? ` class="${className}"` : ""} src="${src}" alt="">`;
+$("wallFeatures").innerHTML = WALL.features.map(f => `<li>${paywallIcon(f.icon)}<span>${f.text}</span></li>`).join("")
+  + paywallIcon(WALL.icons.nandiLarge, "wall-nandi");
+// Leaving for the login or subscribe page: remember where the reader was, to bring them back there.
+function wallLink(html, href, className, event) {
+  const a = Object.assign(document.createElement("a"), { className, href, innerHTML: html });
+  a.addEventListener("click", () => {
+    Subscription.track(event);
+    try { sessionStorage.setItem(RESUME_KEY, cur); } catch (e) {}
+  });
+  return a;
+}
+function showWall(state, wanted) {
+  const failed = state === "error";
+  $("wallTitle").textContent = failed ? WALL.errorTitle : WALL.title;
+  $("wallNote").textContent = failed ? WALL.errorNote : WALL.note;
+  $("wallFeatures").hidden = failed;
+  const actions = [];
+  if (failed) {
+    const retry = Object.assign(document.createElement("button"),
+      { type: "button", className: "wall-cta", innerHTML: `<span>${WALL.retry}</span>` });
+    retry.addEventListener("click", () => travelTo(wanted));
+    actions.push(retry);
+  } else {
+    actions.push(wallLink(`${paywallIcon(WALL.icons.nandi)}<span>${WALL.subscribe}</span>`,
+      Subscription.subscribeUrl("exhibition_road"), "wall-cta", "karunadotsava_subscribe_click"));
+    if (state === "logged-out") {
+      const login = wallLink(`<span>${WALL.login}</span>${paywallIcon(WALL.icons.login)}`,
+        Subscription.loginUrl(), "wall-login", "karunadotsava_login_click");
+      login.addEventListener("click", () => Subscription.trackLoginStart("karunadotsava_road"));
+      const line = Object.assign(document.createElement("p"), { className: "wall-login-line", textContent: WALL.loginAsk });
+      line.append(login);
+      actions.push(line);
+    }
+  }
+  $("wallActions").replaceChildren(...actions);
+  setSheet(false);
+  $("wall").hidden = false;
+  $("wallCard").focus();
+  Subscription.track("road_locked", { state });
+}
+function hideWall() { $("wall").hidden = true; }
+$("wallClose").addEventListener("click", hideWall);
+$("wall").addEventListener("click", e => { if (e.target === e.currentTarget) hideWall(); });
+
+function fillText() {
+  const e = ENTRIES[cur], next = ENTRIES[cur + 1];
+  $("peekDate").textContent = e.date;
+  $("peekHead").textContent = e.headline;
+  $("storyBody").innerHTML = e.paras.map(p => `<p>${p}</p>`).join("");
+  $("credit").textContent = CREDIT;
+  $("nextStop").innerHTML = (next ? `<span>ಮುಂದಿನ ನಿಲ್ದಾಣ: ${next.year}</span>` : `<span>ಮೊದಲಿನಿಂದ ಮತ್ತೆ ಆರಂಭಿಸಿ</span>`) +
+    `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="${next ? "M5 12h14M13 6l6 6-6 6" : "M4 12a8 8 0 1 0 3-6.2M4 4v4h4"}"/></svg>`;
+  $("prevBtn").disabled = cur === 0;
+  $("nextBtn").disabled = cur === ENTRIES.length - 1;
+  ticks.forEach((t, i) => t.classList.toggle("is-past", i <= cur));
+  $("mapFill").style.width = mapPos(cur);
+  if (scrub === null) mapThumb.style.left = mapPos(cur);
+  map.setAttribute("aria-valuenow", cur);
+  map.setAttribute("aria-valuetext", `${e.date}: ${e.headline}`);
+  $("yearSpoken").textContent = e.year;
+}
+
+// Story sheet: tap the bar, or swipe it up and down. Pulling the story down from its top closes it too.
+const sheet = $("sheet"), peek = $("peek"), sheetBody = $("sheetBody");
+function setSheet(open) {
+  sheet.classList.toggle("open", open);
+  peek.setAttribute("aria-expanded", open);
+}
+let peekStart = null, peekSwiped = false;
+peek.addEventListener("pointerdown", e => { peekStart = e.clientY; peekSwiped = false; });
+peek.addEventListener("pointerup", e => {
+  if (peekStart === null) return;
+  const dy = e.clientY - peekStart; peekStart = null;
+  if (Math.abs(dy) > 24) { peekSwiped = true; setSheet(dy < 0); }
+});
+peek.addEventListener("click", () => {
+  if (peekSwiped) { peekSwiped = false; return; }
+  setSheet(!sheet.classList.contains("open"));
+});
+// Touch events here, not pointer events: the browser takes over pointers once the story scrolls.
+let pullStart = null;
+sheetBody.addEventListener("touchstart", e => {
+  const t = e.touches[0];
+  pullStart = e.touches.length === 1 && sheetBody.scrollTop <= 0 ? { x: t.clientX, y: t.clientY } : null;
+}, { passive: true });
+sheetBody.addEventListener("touchmove", e => {
+  if (!pullStart || sheetBody.scrollTop > 0) return;
+  const dx = e.touches[0].clientX - pullStart.x, dy = e.touches[0].clientY - pullStart.y;
+  if (dy > 48 && dy > Math.abs(dx)) { pullStart = null; setSheet(false); }
+}, { passive: true });
+$("nextStop").addEventListener("click", () => travelTo(cur + 1 < ENTRIES.length ? cur + 1 : 0));
+$("viewPage").addEventListener("click", () => openViewer());
+
+// Travelling: swipe on the scene, arrows, mouse wheel or keyboard.
+const stage = $("stage");
+let touch = null;
+stage.addEventListener("pointerdown", e => {
+  touch = { x: e.clientX, y: e.clientY };
+  stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener("pointercancel", () => { touch = null; });
+stage.addEventListener("pointerup", e => {
+  if (!touch) return;
+  const dx = e.clientX - touch.x, dy = e.clientY - touch.y;
+  touch = null;
+  if (Math.abs(dy) > 36 && Math.abs(dy) > Math.abs(dx)) {
+    const up = dy < 0;
+    step((settings.swipe === "up") === up ? 1 : -1);
+  } else if (Math.hypot(dx, dy) < 10 && !moving) {
+    const r = pages[cur].el.getBoundingClientRect();
+    if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) openViewer();
+  }
+});
+stage.addEventListener("wheel", e => {
+  e.preventDefault();
+  if (moving || performance.now() - lastArrive < 450 || Math.abs(e.deltaY) < 12) return;
+  step(e.deltaY > 0 ? 1 : -1);
+}, { passive: false });
+$("prevBtn").addEventListener("click", () => step(-1));
+$("nextBtn").addEventListener("click", () => step(1));
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeViewer(); setSheet(false); toggleTests(false); hideWall(); return; }
+  if (!$("viewer").hidden) { viewerKey(e); return; }
+  if (e.target.closest(".tests, .sheet-body, .map, .wall")) return;
+  if (["ArrowDown", "PageDown", "ArrowRight"].includes(e.key)) { e.preventDefault(); step(1); }
+  if (["ArrowUp", "PageUp", "ArrowLeft"].includes(e.key)) { e.preventDefault(); step(-1); }
+});
+
+// Full-screen page. Phones pinch to zoom, computers use the mouse wheel or trackpad;
+// a zoomed page is dragged around, and a double tap or double click zooms in and back out.
+const viewerStage = $("viewerStage"), viewerPage = $("viewerPage");
+const ZOOM = { max: 4, doubleTap: 2.5, wheel: 0.0015, margin: 16 };
+const touchScreen = matchMedia("(pointer: coarse)");
+let fit = { w: 0, h: 0 }, zoom = { s: 1, x: 0, y: 0 };
+
+// Fit the whole page in the stage at zoom 1.
+function fitViewer() {
+  const r = viewerStage.getBoundingClientRect(), m = ZOOM.margin;
+  const w = Math.min(r.width - 2 * m, (r.height - 2 * m) / R);
+  fit = { w, h: w * R, stageW: r.width, stageH: r.height };
+  viewerPage.style.width = `${w}px`; viewerPage.style.height = `${w * R}px`;
+  viewerPage.firstChild.style.transform = `scale(${w / PAPER_W})`;
+  setZoom(zoom.s, zoom.x, zoom.y);
+}
+// Keep the page centred while it fits, and its edges inside the stage once it is bigger.
+function setZoom(s, x, y) {
+  s = clamp(s, 1, ZOOM.max);
+  const w = fit.w * s, h = fit.h * s;
+  x = w <= fit.stageW ? (fit.stageW - w) / 2 : clamp(x, fit.stageW - w, 0);
+  y = h <= fit.stageH ? (fit.stageH - h) / 2 : clamp(y, fit.stageH - h, 0);
+  zoom = { s, x, y };
+  viewerPage.style.transform = `translate(${x}px,${y}px) scale(${s})`;
+  viewerStage.classList.toggle("is-zoomed", s > 1);
+}
+// Zoom to scale s, keeping the point (px, py) of the stage still.
+function zoomAt(s, px, py) {
+  const k = clamp(s, 1, ZOOM.max) / zoom.s;
+  setZoom(zoom.s * k, px - (px - zoom.x) * k, py - (py - zoom.y) * k);
+}
+const stagePoint = e => {
+  const r = viewerStage.getBoundingClientRect();
+  return [e.clientX - r.left, e.clientY - r.top];
+};
+
+const fingers = new Map();
+let lastTap = 0, pinch = null;
+viewerStage.addEventListener("pointerdown", e => {
+  fingers.set(e.pointerId, stagePoint(e));
+  viewerStage.classList.add("is-dragging");
+  pinch = null;
+  if (fingers.size === 1) {
+    const now = performance.now();
+    if (now - lastTap < 300) {
+      const [x, y] = stagePoint(e);
+      zoomAt(zoom.s > 1 ? 1 : ZOOM.doubleTap, x, y);
+      lastTap = 0;
+    } else lastTap = now;
+  }
+  viewerStage.setPointerCapture(e.pointerId);
+});
+viewerStage.addEventListener("pointermove", e => {
+  if (!fingers.has(e.pointerId)) return;
+  const [px, py] = fingers.get(e.pointerId), [x, y] = stagePoint(e);
+  fingers.set(e.pointerId, [x, y]);
+  if (fingers.size === 1) { setZoom(zoom.s, zoom.x + x - px, zoom.y + y - py); return; }
+  // Two fingers: zoom by the change in their distance, around their midpoint, and follow the midpoint.
+  const [a, b] = [...fingers.values()];
+  const mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], dist = Math.hypot(a[0] - b[0], a[1] - b[1]);
+  if (pinch) {
+    zoomAt(zoom.s * dist / pinch.dist, mid[0], mid[1]);
+    setZoom(zoom.s, zoom.x + mid[0] - pinch.mid[0], zoom.y + mid[1] - pinch.mid[1]);
+  }
+  pinch = { dist, mid };
+});
+const releaseFinger = e => {
+  fingers.delete(e.pointerId);
+  pinch = null;
+  if (!fingers.size) viewerStage.classList.remove("is-dragging");
+};
+viewerStage.addEventListener("pointerup", releaseFinger);
+viewerStage.addEventListener("pointercancel", releaseFinger);
+viewerStage.addEventListener("wheel", e => {
+  e.preventDefault();
+  const [x, y] = stagePoint(e);
+  zoomAt(zoom.s * Math.exp(-e.deltaY * ZOOM.wheel), x, y);
+}, { passive: false });
+// Keyboard: + and - zoom around the centre, 0 resets.
+function viewerKey(e) {
+  const centre = [fit.stageW / 2, fit.stageH / 2];
+  if (e.key === "+" || e.key === "=") zoomAt(zoom.s * 1.25, ...centre);
+  else if (e.key === "-") zoomAt(zoom.s / 1.25, ...centre);
+  else if (e.key === "0") setZoom(1, 0, 0);
+}
+
+function openViewer() {
+  const e = ENTRIES[cur], el = document.createElement("article");
+  el.className = "paper"; el.innerHTML = paperHTML(e); paintPaper(el, e);
+  viewerPage.replaceChildren(el);
+  $("viewerDate").textContent = e.date;
+  $("viewerHead").textContent = e.headline;
+  $("viewerNote").textContent = touchScreen.matches
+    ? "ಎರಡು ಬೆರಳುಗಳಿಂದ ಹಿಗ್ಗಿಸಿ ಓದಿ"
+    : "ಮೌಸ್ ಚಕ್ರ ಅಥವಾ ಟ್ರ್ಯಾಕ್‌ಪ್ಯಾಡ್‌ನಿಂದ ಹಿಗ್ಗಿಸಿ ಓದಿ";
+  $("viewer").hidden = false;
+  zoom = { s: 1, x: 0, y: 0 };
+  fitViewer();
+  $("viewerClose").focus();
+}
+function closeViewer() { $("viewer").hidden = true; }
+$("viewerClose").addEventListener("click", closeViewer);
+
+// Test options.
+function applySettings() {
+  document.body.dataset.swipe = settings.swipe;
+  $(settings.swipe === "up" ? "swipeUp" : "swipeDown").checked = true;
+  const wallChoice = document.querySelector(`input[name="wall"][value="${settings.wall}"]`);
+  if (wallChoice) wallChoice.checked = true;
+  $("hintText").textContent = settings.swipe === "up" ? "ಮುಂದೆ ಸಾಗಲು ಮೇಲಕ್ಕೆ ಸರಿಸಿ" : "ಮುಂದೆ ಸಾಗಲು ಕೆಳಕ್ಕೆ ಸರಿಸಿ";
+  try { localStorage.setItem("road-test", JSON.stringify(settings)); } catch (e) {}
+  markLockedStops();
+  layout();
+}
+$("wallTest").hidden = Subscription.live;
+function toggleTests(open) {
+  $("tests").hidden = !open;
+  $("testsBtn").setAttribute("aria-expanded", open);
+}
+$("testsBtn").addEventListener("click", () => toggleTests($("tests").hidden));
+$("testsDone").addEventListener("click", () => toggleTests(false));
+document.querySelectorAll(".tests input").forEach(input =>
+  input.addEventListener("change", () => { settings[input.name] = input.value; applySettings(); }));
+
+addEventListener("resize", () => { layout(); if (!$("viewer").hidden) fitViewer(); });
+fillText();
+applySettings();
+document.fonts && document.fonts.ready.then(layout);
+</script>
+</body>
+</html>
