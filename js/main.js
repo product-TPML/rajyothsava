@@ -915,7 +915,8 @@
     function show(index) {
       current = Math.min(Math.max(index, 0), quotes.length - 1);
       quotes.forEach((quote, i) => quote.setAttribute("aria-hidden", String(i !== current)));
-      day.textContent = current === 0 ? UI.quotesToday : quoteDay(runSoFar[current].date);
+      const { date } = runSoFar[current];
+      day.textContent = date === todayInIndia() ? UI.quotesToday : quoteDay(date); // after the last day, its date
       back.disabled = current === quotes.length - 1;
       forward.disabled = current === 0;
     }
