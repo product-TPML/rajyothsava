@@ -2,20 +2,17 @@
  * Rajyotsava poster maker. The page shows a one-screen teaser with example posters;
  * its button opens the maker full screen. The reader adds a photo, picks "my pride",
  * "my dream" or "my community", writes a line (and optionally their name and town),
- * then shares or downloads a tall poster that fits a WhatsApp status. The site's link
- * goes with the poster as the share message. Everything is drawn on a canvas in the
- * browser; the photo never leaves the reader's device.
+ * then shares or downloads a 4:5 poster, the usual size for a shared picture. The
+ * site's link goes with the poster as the share message. Everything is drawn on a canvas
+ * in the browser; the photo never leaves the reader's device.
  */
 (() => {
   "use strict";
 
   const WIDTH = 1080;
-  const HEIGHT = 1920;
+  const HEIGHT = 1350; // 4:5
   const MARGIN = 80;
-  // WhatsApp covers the top of a status with the sender's name and the very bottom
-  // with its reply bar, so the words stay between these lines; the photo runs edge to edge.
-  const SAFE_TOP = 230;
-  const SAFE_BOTTOM = 1790;
+  const BORDER = 14; // the width of each of the border's two colours
   // The reader's line is set large when short and smaller as it runs onto more lines:
   // the largest size for 1, 2, 3 and 4 lines. Four lines at most.
   const LINE_SIZES = [104, 96, 84, 72];
@@ -109,7 +106,7 @@
       ctx.font = font(600, 48, TEXT);
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(POSTER.placeholder, WIDTH / 2, HEIGHT * 0.42);
+      ctx.fillText(POSTER.placeholder, WIDTH / 2, HEIGHT * 0.4);
       return;
     }
     const { image } = poster;
@@ -124,46 +121,31 @@
 
   /* Darkens the top and bottom of the photo so white words read on any picture. */
   function drawShade(ctx) {
-    const top = ctx.createLinearGradient(0, 0, 0, 600);
+    const top = ctx.createLinearGradient(0, 0, 0, 480);
     top.addColorStop(0, shade("night", 0.7));
     top.addColorStop(1, shade("night", 0));
     ctx.fillStyle = top;
-    ctx.fillRect(0, 0, WIDTH, 600);
+    ctx.fillRect(0, 0, WIDTH, 480);
 
-    const bottom = ctx.createLinearGradient(0, 820, 0, HEIGHT);
+    const bottomTop = 250;
+    const bottom = ctx.createLinearGradient(0, bottomTop, 0, HEIGHT);
     bottom.addColorStop(0, shade("night", 0));
     bottom.addColorStop(0.45, shade("night", 0.72));
     bottom.addColorStop(1, shade("night", 0.92));
     ctx.fillStyle = bottom;
-    ctx.fillRect(0, 820, WIDTH, HEIGHT - 820);
+    ctx.fillRect(0, bottomTop, WIDTH, HEIGHT - bottomTop);
   }
 
-  /*
-   * The Karunadotsava mark at the top on the site's red, and beside it the date line,
-   * one part per line ("ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ" / "ನವೆಂಬರ್ 1, 2026"), centred on the mark.
-   */
-  function drawEvent(ctx, mark) {
+  /* The Karunadotsava mark at the top left, on the site's red. */
+  function drawMark(ctx, mark) {
     const pad = 20;
     const markHeight = 136;
     const markWidth = (mark.width / mark.height) * markHeight;
-    const boxWidth = markWidth + pad * 2;
-    const boxHeight = markHeight + pad * 2;
     ctx.fillStyle = token("red");
     ctx.beginPath();
-    ctx.roundRect(MARGIN, SAFE_TOP, boxWidth, boxHeight, 16);
+    ctx.roundRect(MARGIN, MARGIN, markWidth + pad * 2, markHeight + pad * 2, 16);
     ctx.fill();
-    ctx.drawImage(mark, MARGIN + pad, SAFE_TOP + pad, markWidth, markHeight);
-
-    const parts = POSTER.eventLine.split(" · ");
-    const textLeft = MARGIN + boxWidth + 32;
-    const textSize = 36;
-    const lineHeight = textSize * 1.45;
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = token("yellow");
-    ctx.font = font(600, textSize, TEXT);
-    const firstMiddle = SAFE_TOP + boxHeight / 2 - ((parts.length - 1) * lineHeight) / 2;
-    parts.forEach((part, i) => ctx.fillText(part, textLeft, firstMiddle + i * lineHeight, WIDTH - MARGIN - textLeft));
+    ctx.drawImage(mark, MARGIN + pad, MARGIN + pad, markWidth, markHeight);
   }
 
   /* Splits text into lines no wider than maxWidth, at spaces. */
@@ -205,7 +187,7 @@
 
     // Credit: the white brand logo and "made at" line on a dark red pill.
     const pillHeight = 84;
-    const pillTop = SAFE_BOTTOM - pillHeight;
+    const pillTop = HEIGHT - MARGIN - pillHeight;
     const logoHeight = 44;
     const logoWidth = (logo.width / logo.height) * logoHeight;
     const credit = format(POSTER.credit, { address: POSTER.address });
@@ -244,12 +226,13 @@
     ctx.fillText(prompt.label, MARGIN, headingBaseline);
   }
 
-  /* The Kannada flag's colours along the bottom edge. */
-  function drawFlagBand(ctx) {
-    ctx.fillStyle = token("yellow");
-    ctx.fillRect(0, HEIGHT - 28, WIDTH, 14);
-    ctx.fillStyle = token("red");
-    ctx.fillRect(0, HEIGHT - 14, WIDTH, 14);
+  /* A border in the Kannada flag's colours round the whole poster: yellow outside, red inside. */
+  function drawBorder(ctx) {
+    ctx.lineWidth = BORDER;
+    ctx.strokeStyle = token("yellow");
+    ctx.strokeRect(BORDER / 2, BORDER / 2, WIDTH - BORDER, HEIGHT - BORDER);
+    ctx.strokeStyle = token("red");
+    ctx.strokeRect(BORDER * 1.5, BORDER * 1.5, WIDTH - BORDER * 3, HEIGHT - BORDER * 3);
   }
 
   /* Draws a poster onto a canvas of any size with the poster's shape. */
@@ -260,9 +243,9 @@
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
     drawPhoto(ctx, poster);
     drawShade(ctx);
-    drawEvent(ctx, mark);
+    drawMark(ctx, mark);
     drawWords(ctx, poster, logo);
-    drawFlagBand(ctx);
+    drawBorder(ctx);
   }
 
   function render() {

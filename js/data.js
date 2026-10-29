@@ -41,7 +41,7 @@ const UI = {
 
   posterEyebrow: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್",
   posterTitle: "ನನ್ನ ಹೆಮ್ಮೆ, ನನ್ನ ಕನಸು, ನಮ್ಮ ಸಮುದಾಯ",
-  posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಸೇರಿಸಿ, ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಬಗ್ಗೆ ನಿಮ್ಮ ಹೆಮ್ಮೆ, ಕನಸು ಅಥವಾ ನಿಮ್ಮ ಸಮುದಾಯದ ಬಗ್ಗೆ ಬರೆಯಿರಿ. ವಾಟ್ಸ್‌ಆ್ಯಪ್ ಸ್ಟೇಟಸ್‌ಗೆ ಹೊಂದುವ ಪೋಸ್ಟರ್ ಸಿದ್ಧ.",
+  posterLead: "ನಿಮ್ಮ ಫೋಟೊ ಸೇರಿಸಿ, ಕನ್ನಡ, ಕರ್ನಾಟಕದ ಬಗ್ಗೆ ನಿಮ್ಮ ಹೆಮ್ಮೆ, ಕನಸು ಅಥವಾ ನಿಮ್ಮ ಸಮುದಾಯದ ಬಗ್ಗೆ ಬರೆಯಿರಿ.",
   posterStart: "ಪೋಸ್ಟರ್ ಮಾಡಿ",
   posterPrivacy: "ನಿಮ್ಮ ಫೋಟೊವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ, ಸಂಗ್ರಹಿಸುವುದೂ ಇಲ್ಲ. ಪೋಸ್ಟರ್ ನಿಮ್ಮ ಸಾಧನದಲ್ಲೇ ತಯಾರಾಗುತ್ತದೆ.",
   posterPhoto: "ಫೋಟೊ",
@@ -198,7 +198,7 @@ const VIDEO_FEED = "/pages/karunadothsava-json";
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of
  * Kannada and Karnataka, what they dream for its future, or about their community.
- * The poster is tall (9:16) so it fits a WhatsApp status.
+ * The poster is 4:5 (1080×1350), the usual size for a shared picture.
  * prompts  → the choices, one tab each; about says under the tabs what the choice means
  *            for Karunadotsava; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
@@ -243,7 +243,6 @@ const POSTER = {
   lineMax: 90,
   camera: "user",
   placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
-  eventLine: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg",
   credit: "{address} ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
   address: "prajavani.net/rajyotsava",

@@ -27,7 +27,7 @@ const UI = {
 
   posterEyebrow: "Your Rajyotsava poster",
   posterTitle: "Your pride, your dream, your community",
-  posterLead: "Add your photo and write what makes you proud of Kannada and Karnataka, your dream for its future, or about your community. Your poster is ready for WhatsApp status.",
+  posterLead: "Add your photo and write what makes you proud of Kannada and Karnataka, your dream for its future, or about your community.",
   posterStart: "Make a poster",
   posterPrivacy: "Your photo is never uploaded or stored. The poster is made on your device.",
   posterPhoto: "Photo",
@@ -154,7 +154,7 @@ const EVENT = {
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of
  * Kannada and Karnataka, what they dream for its future, or about their community.
- * The poster is tall (9:16) so it fits a WhatsApp status.
+ * The poster is 4:5 (1080×1350), the usual size for a shared picture.
  * prompts  → the choices, one tab each; about says under the tabs what the choice means
  *            for Karunadothsava; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
@@ -199,7 +199,6 @@ const POSTER = {
   lineMax: 90,
   camera: "user",
   placeholder: "Your photo",
-  eventLine: "Rajyotsava · 1 November 2026",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg",
   credit: "Made at {address}",
   address: "deccanherald.com/rajyotsava",

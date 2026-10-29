@@ -1429,7 +1429,7 @@ body {
 
 /*
  * The maker, full screen: a title bar, then the poster on a deep red stage with the
- * choices in a white panel (below it on phones, beside it on desktop), and the
+ * choices in a white panel (scrolling under it on phones, beside it on desktop), and the
  * save buttons always in reach at the bottom.
  */
 .studio {
@@ -1486,20 +1486,24 @@ body {
   overscroll-behavior: contain;
 }
 
+/* On phones the stage stays pinned at the top while the choices scroll beneath it. */
 .studio__stage {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: grid;
   justify-items: center;
   gap: var(--space-2);
   margin: 0;
-  padding: var(--space-4) var(--gutter) var(--space-3);
+  padding: var(--space-3) var(--gutter);
   background: radial-gradient(circle at 50% 35%, var(--red-dark), var(--red-deep));
 }
 
-/* Kept short on phones so the first choices show below it. */
+/* Kept short on phones so the choices have room below the pinned preview. */
 .studio__canvas {
   width: auto;
   max-width: 100%;
-  height: min(54dvh, 560px);
+  height: min(40dvh, 420px);
   border-radius: 10px;
   box-shadow: 0 16px 40px rgb(0 0 0 / 45%);
 }

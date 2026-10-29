@@ -235,7 +235,8 @@ Define them as CSS custom properties in one place.
 - On the page it is a teaser that fits one phone screen (owner's choice): heading,
   three example posters on a deep red panel, one start button and the privacy note.
   The button opens the maker full screen: the poster on a deep red "stage", the
-  choices in a white panel, the save buttons fixed at the bottom.
+  choices in a white panel, the save buttons fixed at the bottom. On phones the poster
+  stays pinned at the top while the choices scroll under it (owner's request).
 - The reader adds any photo (selfie, group or scene) and writes one short line under
   "ನನ್ನ ಹೆಮ್ಮೆ" (my pride), "ನನ್ನ ಕನಸು" (my dream for Kannada and Karnataka) or
   "ನಮ್ಮ ಸಮುದಾಯ" (our community; third tab, owner's request, worded by the desk), with
@@ -245,10 +246,11 @@ Define them as CSS custom properties in one place.
 - The maker's form runs: the tab ("ಯಾವುದರ ಬಗ್ಗೆ?"), the line, then the photo, because the
   photo follows the choice (owner's request). Under the tabs, each tab's `about` says what it
   means for Karunadotsava (owner's request).
-- The poster is 1080×1920 (9:16) for WhatsApp status and Instagram stories. The words
-  keep clear of the top and bottom strips WhatsApp covers. The Karunadotsava mark sits at
-  the top (136px tall, 20% smaller than before, owner's request) with the date line beside
-  it, one part per line ("ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ" / "ನವೆಂಬರ್ 1, 2026": `eventLine` split at " · ").
+- The poster is 1080×1350 (4:5), the usual size for a shared picture, with no 9:16
+  status option (owner's decision). No strips are kept clear for
+  WhatsApp (owner's request). A two-colour border runs round the whole poster, yellow
+  outside and red inside (owner's request). The Karunadotsava mark sits at the top left
+  (136px tall, owner's request), with nothing beside it: no date line (owner's request).
   The Prajavani logo is small, in a dark red "made at prajavani.net/rajyotsava" pill
   (owner's choice: readers write their own words, so the brand is a credit).
 - The reader's line runs to 4 lines (90 characters), set smaller the more lines it takes
@@ -367,3 +369,10 @@ The owner explicitly asked for clean code and no patchwork. Treat this as a hard
 - Before saying something is finished, open the page and check it at phone and
   desktop sizes. Then tell the owner in plain words what was tested and what
   wasn't.
+- **Always tell the owner when a CMS page changes** (owner's rule). Whenever a change alters
+  `cms/index.cms.html` or `cms/index-en.cms.html` (any change to `index.html`,
+  `index-en.html` or `cms/hosting.json`, then `python tools/build-cms.py`), say plainly
+  which one changed and that it must be pasted again into the CMS: `cms/index.cms.html`
+  → the prajavani.net page, `cms/index-en.cms.html` → the deccanherald.com page. Changes
+  only to `css/` or `js/` reach the live pages through Cloudflare on push and need no
+  re-paste; say that too. Check with `git diff --stat cms/` before reporting.
