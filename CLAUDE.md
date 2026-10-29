@@ -38,7 +38,7 @@ and the fonts from the live sites.
 |---|---|---|
 | Prajavani logo | `https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg` | White ಪ್ರಜಾವಾಣಿ wordmark with Nandi and tagline (SVG, 1327×319). Linked, not downloaded (owner's choice). |
 | Deccan Herald logo | `https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg` | White DH letters, Nandi and "DECCAN HERALD", stacked (SVG, 78×68). Used by the English edition. |
-| Karunadotsava mark | `assets/hero/karunadotsava-pv-720.webp`, `assets/hero/karunadotsava-dh-720.webp` | The final event logo from `assets/Karunadothsava Fin logo PV-DH.ai` (supplied by the owner; page 1 DH, page 2 PV): Gandaberunda, newspaper logo and title in gold/white, exported from the .ai without its gold border and gradient plaque, on a transparent background (owner's choice), 720px wide. The header sits it on the site's own red (`--red`); the poster gives it a red box. Used in the masthead (as the whole home link), the opening's top bar and the top of the poster. Re-export from the .ai if the artwork changes; never redraw it. There is no separate hero section; the carousel follows the nav bar. |
+| Karunadotsava mark | `assets/hero/karunadotsava-pv-720.webp`, `assets/hero/karunadotsava-dh-720.webp` | The final event logo: PV from `assets/Karunadothsava Fin logo PV-DH.ai` (page 2), DH from `assets/Karunadothsava Fin logo DH edited 281026.pdf` (the DH edit of 28 October, spelled "Karunadotsava"), both supplied by the owner: Gandaberunda, newspaper logo and title in gold/white, exported without the gold border and gradient plaque, on a transparent background (owner's choice), 720px wide. The header sits it on the site's own red (`--red`); the poster gives it a red box. Used in the masthead (as the whole home link), the opening's top bar and the top of the poster. Re-export from the source file if the artwork changes; never redraw it. There is no separate hero section; the carousel follows the nav bar. |
 | Headline font | `https://fea.assettype.com/tpml/assets/PvHeadlineSemibold3.woff2` | Prajavani headline face, weight 600: headlines, section titles, carousel. |
 | Body font | `https://fea.assettype.com/tpml/assets/PrajavaniTextRegular.woff2` | Weight 400: body text, descriptions, menus. |
 | Body semibold | `https://fea.assettype.com/tpml/assets/PrajavaniTextSemibold.woff2` | Weight 600: labels, buttons, emphasis. |
@@ -287,7 +287,7 @@ Define them as CSS custom properties in one place.
 
 - `index-en.html` + `js/data-en.js`: the same site in English for Deccan Herald (DH),
   requested by the owner. It uses the DH Karunadotsava mark and DH logo (see Brand assets)
-  in place of Prajavani's, spells the title "Karunadothsava" to match the mark, and DH's typefaces through `data-brand="dh"` on `<html>`.
+  in place of Prajavani's, spells the title "Karunadotsava" to match the mark (DH's collection slugs keep "karunadothsava"), and DH's typefaces through `data-brand="dh"` on `<html>`.
 - Owner's choices: no quotes banner, no videos, no photo stories, no facts; adds "From the
   archives" from DH's **"karunadothsava-archives"** collection (the first 6 in the desk's
   order, as clippings with photo, headline and subheadline; "See all" for the rest).

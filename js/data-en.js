@@ -156,7 +156,7 @@ const EVENT = {
  * Kannada and Karnataka, what they dream for its future, or about their community.
  * The poster is 4:5 (1080×1350), the usual size for a shared picture.
  * prompts  → the choices, one tab each; about says under the tabs what the choice means
- *            for Karunadothsava; example is shown faintly until the reader writes,
+ *            for Karunadotsava; example is shown faintly until the reader writes,
  *            suggestions are tap-to-use starting points.
  * samples  → the example posters on the page. photo (optional) → the address of a photo
  *            the newspaper owns, from the CMS media gallery; without one, the poster
@@ -220,7 +220,7 @@ const OPENING = {
   skipLabel: "Skip the opening and go to the site",
   finale: {
     eyebrow: "71st Karnataka Rajyotsava · 1 November 2026",
-    title: "Karunadothsava",
+    title: "Karunadotsava",
     text: "Happy Rajyotsava. Celebrate the land, language and culture of Karnataka with Deccan Herald",
     enter: "Read the special edition",
   },
