@@ -68,7 +68,7 @@ The photo stories section shows the first 5 stories in the **karunadotsava-photo
 
 ## Quotes
 
-One quote runs each day. Each quote in `QUOTES` in `js/data.js` has the `date` it runs (for example `"2026-11-01"`, India time). The red banner shows only the quotes whose day has come. Before the first date it doesn't appear at all. It opens on today's quote, beside the speaker's silhouette; the back arrow (or a swipe) goes to earlier days and the forward arrow comes back. Each quote names its silhouette with `art`. The editorial team supplies speakers' photos; they are restyled in ChatGPT into the silhouette style and added as described under Silhouettes.
+One quote runs each day. Each quote in `QUOTES` in `js/data.js` has the `date` it runs (for example `"2026-11-01"`, India time). The red banner shows only the quotes whose day has come. Before the first date it doesn't appear at all. It opens on today's quote, beside the speaker's silhouette; the back arrow (or a swipe) goes to earlier days and the forward arrow comes back. Each quote names its silhouette with `art`; until that silhouette is made, the quote shows without a portrait. The editorial team supplies speakers' photos; they are restyled in ChatGPT into the silhouette style and added as described under Silhouettes.
 
 ## Poster maker
 
@@ -91,7 +91,7 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Collections:** work only when each page is served from its newspaper's site (www.prajavani.net, www.deccanherald.com). If they will live elsewhere, the web team must allow it (a CORS header on the collection address).
 - [ ] **DH collections:** "karunadothsava-stories" and "karunadothsava-archives" currently return about 37,000 general news stories each (they look automatic, not hand-picked), so the archives section shows ordinary news. The DH desk should make them hand-picked collections with only Karunadothsava stories and archive pages.
 - [ ] **Videos:** the CMS page `/pages/karunadothsava-json` holds the test links (picked to try the layout). The editors replace them with the final links.
-- [ ] **Quotes:** the four in the file are placeholders, dated 25–28 October so they show during review. The editorial team will send all 30 in one sheet: each quote with its date, speaker and a link to the speaker's photo. Each photo is then restyled into a silhouette (see Silhouettes).
+- [ ] **Quotes:** the desk's 30 are in, running 1–30 November in the sheet's order. Still to do: (1) the same Bendre quote is on 7 and 16 November; the desk sends a replacement for one. (2) Aluru Venkata Rao's photo link ("AryanKurup-AVRoad-Photo2") looks like a road, not him; the desk checks it. (3) Silhouettes: only Kuvempu, Rajkumar and Visvesvaraya are made; the other speakers' quotes show without a portrait until theirs are (see Silhouettes; the `art` ids are in `QUOTES`).
 - [ ] **Poster addresses:** `prajavani.net/rajyotsava` (Kannada) and `deccanherald.com/rajyotsava` (English) are printed on every poster and sent with it. The web team sets both up the same way to point to each edition, or tells us the real addresses (`POSTER.address` in `js/data.js` and `js/data-en.js`).
 - [ ] **Poster wording:** the headings, prompts, suggestions and the example posters' lines and names (made up for illustration) need editorial approval.
 - [ ] **Poster disclaimer:** "ಈ ಸೌಲಭ್ಯ ಪೋಸ್ಟರ್ ತಯಾರಿಸಲು ಮಾತ್ರ…" (`posterDisclaimer`) and the English one need a legal/editorial check.

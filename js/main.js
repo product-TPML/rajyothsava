@@ -253,7 +253,8 @@
         el(
           "li",
           { class: "quote" },
-          el("span", { class: "quote__portrait" }, drawSilhouette(quote.art, "quote", "right")), // facing the words
+          // facing the words; a speaker whose silhouette isn't made yet shows the words alone
+          SILHOUETTE_ART[quote.art] && el("span", { class: "quote__portrait" }, drawSilhouette(quote.art, "quote", "right")),
           el(
             "blockquote",
             { class: "quote__words" },

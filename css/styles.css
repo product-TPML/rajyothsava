@@ -1198,8 +1198,7 @@ body {
 
 .quote {
   grid-area: 1 / 1;
-  display: grid;
-  grid-template-columns: 88px 1fr;
+  display: flex;
   align-items: center;
   gap: var(--space-4);
   transition: opacity var(--duration-slow) var(--ease), visibility var(--duration-slow);
@@ -1212,6 +1211,7 @@ body {
 
 /* A round cream frame with a yellow ring; the figure stands on its lower edge, cut off by the curve. */
 .quote__portrait {
+  flex: 0 0 88px;
   display: grid;
   align-items: end;
   justify-items: center;
@@ -1317,8 +1317,11 @@ body {
   }
 
   .quote {
-    grid-template-columns: 120px 1fr;
     gap: var(--space-5);
+  }
+
+  .quote__portrait {
+    flex-basis: 120px;
   }
 
   .quote__text {
