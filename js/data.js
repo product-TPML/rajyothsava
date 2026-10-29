@@ -257,7 +257,8 @@ const POSTER = {
  * whose day hasn't come stay hidden, and until the first date the banner is left out.
  * art names the speaker's silhouette in js/silhouette-art.js (see OPENING below); until
  * it is made, the quote shows without a portrait.
- * From the desk's sheet, in its order, 1 to 29 November (its repeat of Bendre's quote left out).
+ * From the desk's sheet, in its order, 1 to 29 November (its repeat of Bendre's quote left out);
+ * 30 November repeats the first day's.
  */
 const QUOTES = [
   { date: "2026-11-01", text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗೂ ನೀ ಕನ್ನಡವಾಗಿರು.", by: "ರಾಷ್ಟ್ರಕವಿ ಕುವೆಂಪು", art: "kuvempu" },
@@ -289,6 +290,7 @@ const QUOTES = [
   { date: "2026-11-27", text: "ಕನ್ನಡಿಗ ತನ್ನ ನಾಡಿನಲ್ಲಿ ಯಜಮಾನನಾಗಿ ಬಾಳಬೇಕು. ಭಾಷಾ ಪ್ರೇಮ ಎನ್ನುವುದು ಪ್ರದರ್ಶನಕ್ಕಲ್ಲ, ಅದು ಆಚರಣೆಯಲ್ಲಿರಬೇಕು.", by: "ಪಾಟೀಲ ಪುಟ್ಟಪ್ಪ", art: "puttappa" },
   { date: "2026-11-28", text: "ವಿಜ್ಞಾನ ಮತ್ತು ಸಂಶೋಧನೆಯಲ್ಲಿ ಯುವಜನರು ತೊಡಗಿಸಿಕೊಂಡಾಗ ಮಾತ್ರ ಕರ್ನಾಟಕ ಮತ್ತು ಭಾರತ ಜಾಗತಿಕ ಮಟ್ಟದಲ್ಲಿ ಮಿಂಚಲು ಸಾಧ್ಯ", by: "ಡಾ. ಸಿ.ಎನ್.ಆರ್. ರಾವ್", art: "cnrrao" },
   { date: "2026-11-29", text: "ಜಾಣ ಜಾಣೆಯರೆದೆಗೆ ಕನಸು ಕೊಡುವವಳೆ, ಬಾಗಿದವರಿಗೆ ಭಾಗ ಹೃದಯ ಕೊಡುವವಳೆ; ನಿನ್ಹಾಂಗ ಧರ್ಮದಲಿ ಧಾರಾಳತನದಲ್ಲಿ ಇನ್ನೊಬ್ಬರನು ಕಾಣೆ ಧರೆಗೆ ದೊಡ್ಡವಳೆ ಸಾವಿರದ ಶರಣವ್ವ ಕನ್ನಡದ ತಾಯೇ", by: "ಡಾ. ಚಂದ್ರಶೇಖರ ಕಂಬಾರ", art: "kambar" },
+  { date: "2026-11-30", text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗೂ ನೀ ಕನ್ನಡವಾಗಿರು.", by: "ರಾಷ್ಟ್ರಕವಿ ಕುವೆಂಪು", art: "kuvempu" },
 ];
 
 /*
