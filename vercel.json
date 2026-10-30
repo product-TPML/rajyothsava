@@ -4,5 +4,9 @@
     { "source": "/api/v1/collections/karunadothsava-archives", "destination": "https://www.deccanherald.com/api/v1/collections/karunadothsava-archives" },
     { "source": "/api/v1/collections/:slug", "destination": "https://www.prajavani.net/api/v1/collections/:slug" },
     { "source": "/pages/karunadothsava-json", "destination": "https://www.prajavani.net/pages/karunadothsava-json" }
+  ],
+  "headers": [
+    { "source": "/api/v1/collections/:slug", "headers": [{ "key": "x-vercel-enable-rewrite-caching", "value": "0" }] },
+    { "source": "/pages/karunadothsava-json", "headers": [{ "key": "x-vercel-enable-rewrite-caching", "value": "0" }] }
   ]
 }

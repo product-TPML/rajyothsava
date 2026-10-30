@@ -328,7 +328,8 @@ Define them as CSS custom properties in one place.
     `/api/v1/collections/…` (DH's two slugs to deccanherald.com, the rest to prajavani.net)
     and `/pages/karunadothsava-json` on to the live sites, so the test site reads live data.
     `.vercelignore` leaves out tools and notes. If DH's collection slugs change, update
-    `vercel.json` too.
+    `vercel.json` too. Vercel keeps no copy of these answers (`x-vercel-enable-rewrite-caching: 0`),
+    or collection edits could take up to two hours to show there.
   - The collections' address in both data files is relative (`/api/v1/collections/`): the
     newspaper's own API on its site, a proxy everywhere else.
   - One page only (no extra HTML pages; new screens are views inside the page), and keep it
