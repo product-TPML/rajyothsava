@@ -36,6 +36,15 @@ const UI = {
     "highlighting the many facets of Karnataka’s identity and championing the diverse expressions that make " +
     "the State truly special.",
 
+  // The digital subscription offer, after "About Karunadotsava". The newspaper's name is its logo,
+  // so the text leaves it out; the price is set large in gold.
+  subscribeTag: "Premium",
+  subscribeText: "Digital subscription, now at",
+  subscribePrice: "₹1299/year",
+  subscribeButton: "Subscribe now",
+  subscribeUrl:
+    "https://www.deccanherald.com/subscribe?utm_source=karunadothsava&utm_medium=subscription&utm_campaign=awareness",
+
   posterEyebrow: "My Rajyotsava poster",
   posterTitle: "My pride. My dream. My Karnataka.",
   posterLead:

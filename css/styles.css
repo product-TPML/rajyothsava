@@ -71,6 +71,8 @@
   --yellow-soft: #fff4d6;
   --gold-light: #ffe9a8;
   --gold-deep: #e0a136;
+  --gold-border: #c98900; /* the subscription offer's gold edges, as on the newspapers' own sites */
+  --gold-shadow: #b77d08;
   --white: #ffffff;
   --cream: #fffaf0;
   --paper: #f7f7f5;
@@ -1123,6 +1125,205 @@ body {
   }
 }
 
+/* ---------- Subscription offer ---------- */
+
+/*
+ * The newspaper's digital subscription as a premium banner, set apart from the cream
+ * carousel above: a deep red card with a gold edge and a soft gold glow, a large faint
+ * Nandi in the background, the newspaper's white logo with a gold "Premium" tag, the offer
+ * in white with its price large in gold, and the subscription theme's raised gold button
+ * with a passing shine. Phone: centred and stacked; tablet and up: one row, button on the right.
+ */
+.subscribe {
+  padding-block: var(--space-6);
+  background: var(--white);
+}
+
+.subscribe__inner {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-4);
+  border: 2px solid var(--gold-deep);
+  border-radius: calc(var(--radius) * 2);
+  background:
+    radial-gradient(circle at 0% 0%, rgb(246 199 68 / 22%), transparent 55%),
+    linear-gradient(135deg, var(--red-dark), var(--red-deep) 60%, var(--night));
+  box-shadow: var(--shadow-raised);
+  text-align: center;
+}
+
+/*
+ * The Nandi as a watermark: the black mark turned white and faint, the card's full height so
+ * its head is never cut. Phone: at the right, past the card's edge (only its back is cut).
+ */
+.subscribe__nandi {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: -48px;
+  width: auto;
+  height: 100%;
+  filter: brightness(0) invert(1);
+  opacity: 0.07; /* fainter than the logo's own Nandi */
+  pointer-events: none;
+}
+
+.subscribe__copy {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+}
+
+/* The logo with the tag centred below it. */
+.subscribe__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+/* The white logo at a legible size: its height, scaled like the footer's (--logo-scale). */
+.subscribe__logo {
+  width: auto;
+  height: calc(32px * var(--logo-scale));
+}
+
+/* A flat gold label, not a button: gradient fill, no edge, shadow or hover. */
+.subscribe__tag {
+  padding: 2px var(--space-3);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold-light), var(--yellow) 55%, var(--gold-deep));
+  color: var(--red-deep);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Two lines: the offer as a quiet white caption, then the price large in gold. */
+.subscribe__text {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: rgb(255 255 255 / 88%);
+}
+
+.subscribe__price {
+  font-family: var(--font-headline);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--yellow);
+  white-space: nowrap;
+}
+
+.subscribe__button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+  background: linear-gradient(var(--gold-light), var(--yellow));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%), 0 2px 0 var(--gold-shadow), 0 4px 8px rgb(0 0 0 / 18%);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  transition: transform var(--duration), box-shadow var(--duration);
+}
+
+.subscribe__button:is(:hover, :focus-visible) {
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 65%), 0 3px 0 var(--gold-shadow), 0 7px 12px rgb(0 0 0 / 22%);
+}
+
+.subscribe__button:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgb(0 0 0 / 12%), 0 1px 0 var(--gold-shadow);
+}
+
+.subscribe__button img {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+@media (min-width: 768px) {
+  .subscribe__inner {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-items: start;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    text-align: left;
+  }
+
+  /* Whole, in the open space before the button. */
+  .subscribe__nandi {
+    right: 220px;
+  }
+
+  .subscribe__copy {
+    justify-items: start;
+    gap: var(--space-4);
+  }
+
+  .subscribe__logo {
+    height: calc(48px * var(--logo-scale));
+  }
+
+  .subscribe__text {
+    font-size: 1.375rem;
+  }
+
+  .subscribe__button {
+    padding-inline: var(--space-5);
+    font-size: 1rem;
+  }
+
+  .subscribe__price {
+    font-size: 2.5rem;
+  }
+}
+
+/* Desktop: one low row; the logo and tag, a thin gold rule, the offer, then the button. */
+@media (min-width: 1024px) {
+  .subscribe__inner {
+    padding-block: var(--space-5);
+  }
+
+  .subscribe__copy {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .subscribe__logo {
+    height: calc(40px * var(--logo-scale));
+  }
+
+  .subscribe__text {
+    padding-left: var(--space-6);
+    border-left: 1px solid rgb(246 199 68 / 45%);
+  }
+
+  .subscribe__price {
+    font-size: 2.25rem;
+  }
+}
+
 /* ---------- Exhibition ---------- */
 
 /*
@@ -1885,7 +2086,9 @@ body {
   transition: opacity var(--duration), transform var(--duration), visibility var(--duration), padding var(--duration-slow), gap var(--duration-slow);
 }
 
-.poster-cta::before {
+/* The passing shine of the gold buttons. */
+.poster-cta::before,
+.subscribe__button::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -1987,7 +2190,8 @@ main[data-view="all"] ~ .poster-cta {
 @media (prefers-reduced-motion: reduce) {
   .poster-cta,
   .poster-cta::before,
-  .poster-cta .icon {
+  .poster-cta .icon,
+  .subscribe__button::before {
     animation: none;
   }
 }

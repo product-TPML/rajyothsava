@@ -25,6 +25,15 @@ const UI = {
   carouselNext: "ಮುಂದಿನ ಕಥನ",
   slideOf: "{n} / {total}",
 
+  // The digital subscription offer, right after the carousel. The newspaper's name is its logo,
+  // so the text leaves it out; the price is set large in gold.
+  subscribeTag: "ಪ್ರೀಮಿಯಂ",
+  subscribeText: "ಡಿಜಿಟಲ್ ಚಂದಾದಾರಿಕೆ ಈಗ",
+  subscribePrice: "₹999/ವರ್ಷಕ್ಕೆ",
+  subscribeButton: "ಈಗಲೇ ಚಂದಾದಾರರಾಗಿ",
+  subscribeUrl:
+    "https://www.prajavani.net/subscribe?utm_source=karunadothsava&utm_medium=subscription&utm_campaign=awareness",
+
   quotesLabel: "ನುಡಿಮುತ್ತುಗಳು",
   quotesPrev: "ಹಿಂದಿನ ದಿನದ ನುಡಿಮುತ್ತು",
   quotesNext: "ಮುಂದಿನ ದಿನದ ನುಡಿಮುತ್ತು",
