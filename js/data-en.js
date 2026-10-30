@@ -26,8 +26,9 @@ const UI = {
   slideOf: "{n} / {total}",
 
   posterEyebrow: "My Rajyotsava poster",
-  posterTitle: "My pride, my dream, my community",
-  posterLead: "Add your photo and write what makes you proud of Kannada and Karnataka, your dream for its future, or about your community.",
+  posterTitle: "My pride. My dream. My Karnataka.",
+  posterLead:
+    "Celebrate Karnataka Rajyotsava by putting yourself in the picture! Add your selfie, share what makes you proud of Kannada and Karnataka, express your dreams for the state's future or celebrate the community you belong to. Create your own Karunadotsava poster and share it on social media with #Karunadotsava. Let your voice be part of Karnataka's celebration!",
   posterStart: "Make a poster",
   posterPrivacy: "Your photo is never uploaded or stored. The poster is made on your device.",
   posterPhoto: "Photo",
@@ -133,10 +134,12 @@ const STORY_LISTS = {
  */
 const EVENT = {
   eyebrow: "Exhibition",
-  title: "61 years: Karnataka in Deccan Herald",
+  title: "Karnataka: A Journey Through Newspaper Archives",
   text:
-    "Pages from Prajavani and Deccan Herald over the decades, telling the story of Karnataka " +
-    "and Kannada, brought together in a physical exhibition. Come and see history as it was first printed.",
+    "Journey through Karnataka’s history, one newspaper page at a time. Featuring archival pages from " +
+    "Deccan Herald and Prajavani across the decades, this exclusive physical exhibition brings alive the " +
+    "defining moments, milestones and movements that have shaped Kannada and Karnataka. Step into the " +
+    "past and experience history as it first made headlines.",
   day: "19–29",
   month: "Nov",
   whenLabel: "When",
@@ -144,7 +147,7 @@ const EVENT = {
   dateLabel: "19 to 29 November 2026",
   venue: "Rangoli Metro Art Center, MG Road, Bengaluru",
   calendarButton: "Add to Google Calendar",
-  calendarTitle: "61 years: Karnataka in Deccan Herald: Prajavani and Deccan Herald exhibition",
+  calendarTitle: "Karnataka: A Journey Through Newspaper Archives (Deccan Herald and Prajavani exhibition)",
   date: "2026-11-19",
   endDate: "2026-11-29",
   time: null,
@@ -153,7 +156,7 @@ const EVENT = {
 
 /*
  * Poster maker. Readers add a photo and write, in a line, what makes them proud of
- * Kannada and Karnataka, what they dream for its future, or about their community.
+ * Kannada and Karnataka, what they dream for its future, or what Karnataka means to them.
  * The poster is 4:5 (1080×1350), the usual size for a shared picture.
  * prompts  → the choices, one tab each; about says under the tabs what the choice means
  *            for Karunadotsava; example is shown faintly until the reader writes,
@@ -183,17 +186,17 @@ const POSTER = {
       example: "Every child grows up reading Kannada",
       suggestions: ["Kannada schools thrive", "A green Bengaluru again", "Jobs close to home", "Lakes full once more", "Kannada leads in technology"],
     },
-    community: {
-      label: "My community",
-      about: "The state is built by the people around us. Honour the good work of your town, neighbourhood, association or circle.",
-      hint: "A word about the people of your town, neighbourhood or circle.",
-      example: "Our youth club that cleaned the village lake",
-      suggestions: ["Our Kannada sangha", "My neighbourhood", "My village folk", "Our school", "Our farmers", "Our youth club"],
+    karnataka: {
+      label: "My Karnataka",
+      about: "Every Kannadiga carries their own Karnataka. Share the place, people, tradition or moment that makes it yours.",
+      hint: "What does Karnataka mean to you?",
+      example: "Sunset over the boulders of Hampi",
+      suggestions: ["My favourite place", "A song or film I love", "Someone who inspires me", "Our coastline", "Our hills and forests", "Bengaluru, my city"],
     },
   },
   samples: [
     { prompt: "dream", line: "May the Western Ghats stay green forever", name: "Anita, Chikkamagaluru", photo: "https://images.prajavani.net/prajavani/2026-01-18/27zvf7tq/site13420005-1200-630-20131017190939.jpg?w=1080&auto=format%2Ccompress" },
-    { prompt: "community", line: "Our village youth keeping the dollu alive", name: "Ramesh, Shivamogga", photo: "https://images.prajavani.net/prajavani/2025-09-30/4e3mi3am/file82km3zx7oy811jr3xdrr.jpg?w=1080&auto=format%2Ccompress" },
+    { prompt: "karnataka", line: "Where the dollu beats, that's my Karnataka", name: "Ramesh, Shivamogga", photo: "https://images.prajavani.net/prajavani/2025-09-30/4e3mi3am/file82km3zx7oy811jr3xdrr.jpg?w=1080&auto=format%2Ccompress" },
     { prompt: "pride", line: "Mysuru glowing in the Dasara lights", name: "Suma, Mysuru", photo: "https://images.prajavani.net/prajavani/2024-10-02/quile09v/file7xfreybrow81cwek9ikf.jpg?w=1080&auto=format%2Ccompress" },
   ],
   lineMax: 90,

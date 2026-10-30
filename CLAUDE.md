@@ -300,6 +300,8 @@ Define them as CSS custom properties in one place.
 - `index-en.html` + `js/data-en.js`: the same site in English for Deccan Herald (DH),
   requested by the owner. It uses the DH Karunadotsava mark and DH logo (see Brand assets)
   in place of Prajavani's, spells the title "Karunadotsava" to match the mark (DH's collection slugs keep "karunadothsava"), and DH's typefaces through `data-brand="dh"` on `<html>`.
+- Poster maker (owner, 30 October): headed "My pride. My dream. My Karnataka." with the DH
+  desk's intro; the third tab is "My Karnataka" (key `karnataka`) in place of community.
 - Owner's choices: no quotes banner, no videos, no photo stories, no facts; adds "From the
   archives" from DH's **"karunadothsava-archives"** collection (the first 3 in the desk's
   order, as clippings with photo, headline and subheadline; "See all" for the rest).
