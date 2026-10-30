@@ -13,7 +13,7 @@
   const HEIGHT = 1350; // 4:5
   const MARGIN = 80;
   const BORDER = 14; // the width of each of the border's two colours
-  const BORDER_RADIUS = 36; // the rounding of the red's inner corners
+  const BORDER_RADIUS = 36; // the rounding of the red band's inner corners (its outer ones follow)
   // The reader's line is set large when short and smaller as it runs onto more lines:
   // the largest size for 1, 2, 3 and 4 lines. Four lines at most.
   const LINE_SIZES = [104, 96, 84, 72];
@@ -228,14 +228,17 @@
   }
 
   /* A border in the Kannada flag's colours round the whole poster: yellow outside, red inside.
-     The red's inner corners are rounded; its outer edge stays flush with the yellow. */
+     The red band has rounded corners on both edges; the yellow fills the poster's square corners. */
   function drawBorder(ctx) {
-    ctx.lineWidth = BORDER;
-    ctx.strokeStyle = token("yellow");
-    ctx.strokeRect(BORDER / 2, BORDER / 2, WIDTH - BORDER, HEIGHT - BORDER);
+    const band = (inset, radius) => ctx.roundRect(inset, inset, WIDTH - inset * 2, HEIGHT - inset * 2, radius);
     ctx.beginPath();
-    ctx.rect(BORDER, BORDER, WIDTH - BORDER * 2, HEIGHT - BORDER * 2);
-    ctx.roundRect(BORDER * 2, BORDER * 2, WIDTH - BORDER * 4, HEIGHT - BORDER * 4, BORDER_RADIUS);
+    band(0, 0);
+    band(BORDER, BORDER_RADIUS + BORDER);
+    ctx.fillStyle = token("yellow");
+    ctx.fill("evenodd");
+    ctx.beginPath();
+    band(BORDER, BORDER_RADIUS + BORDER);
+    band(BORDER * 2, BORDER_RADIUS);
     ctx.fillStyle = token("red");
     ctx.fill("evenodd");
   }
