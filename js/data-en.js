@@ -134,19 +134,20 @@ const STORY_LISTS = {
  */
 const EVENT = {
   eyebrow: "Exhibition",
-  title: "Karnataka on the front page",
+  title: "61 years: Karnataka in Deccan Herald",
   text:
     "Pages from Prajavani and Deccan Herald over the decades, telling the story of Karnataka " +
     "and Kannada, brought together in a physical exhibition. Come and see history as it was first printed.",
-  day: "19",
+  day: "19–29",
   month: "Nov",
   whenLabel: "When",
   whereLabel: "Where",
-  dateLabel: "Thursday, 19 November 2026",
+  dateLabel: "19 to 29 November 2026",
   venue: "Rangoli Metro Art Center, MG Road, Bengaluru",
   calendarButton: "Add to Google Calendar",
-  calendarTitle: "Karnataka on the front page: Prajavani and Deccan Herald exhibition",
+  calendarTitle: "61 years: Karnataka in Deccan Herald: Prajavani and Deccan Herald exhibition",
   date: "2026-11-19",
+  endDate: "2026-11-29",
   time: null,
   location: "Rangoli Metro Art Center, MG Road, Bengaluru",
 };
@@ -192,9 +193,9 @@ const POSTER = {
     },
   },
   samples: [
-    { prompt: "dream", line: "May the Western Ghats stay green forever", name: "Anita, Chikkamagaluru" },
-    { prompt: "community", line: "Our village youth keeping the dollu alive", name: "Ramesh, Shivamogga" },
-    { prompt: "pride", line: "Mysuru glowing in the Dasara lights", name: "Suma, Mysuru" },
+    { prompt: "dream", line: "May the Western Ghats stay green forever", name: "Anita, Chikkamagaluru", photo: "https://images.prajavani.net/prajavani/2026-01-18/27zvf7tq/site13420005-1200-630-20131017190939.jpg?w=1080&auto=format%2Ccompress" },
+    { prompt: "community", line: "Our village youth keeping the dollu alive", name: "Ramesh, Shivamogga", photo: "https://images.prajavani.net/prajavani/2025-09-30/4e3mi3am/file82km3zx7oy811jr3xdrr.jpg?w=1080&auto=format%2Ccompress" },
+    { prompt: "pride", line: "Mysuru glowing in the Dasara lights", name: "Suma, Mysuru", photo: "https://images.prajavani.net/prajavani/2024-10-02/quile09v/file7xfreybrow81cwek9ikf.jpg?w=1080&auto=format%2Ccompress" },
   ],
   lineMax: 90,
   camera: "user",

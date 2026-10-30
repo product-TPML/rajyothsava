@@ -158,7 +158,8 @@ const STORY_LISTS = {
 /*
  * The exhibition announced right after the carousel, with an "Add to Google Calendar"
  * button that opens Google Calendar with the details filled in.
- * date     → YYYY-MM-DD; also used for the calendar entry.
+ * date     → the first day, YYYY-MM-DD; endDate → the last day (null for one day).
+ *            Both are used for the calendar entry.
  * time     → null for an all-day calendar entry; or { label, start: "HH:MM", end: "HH:MM" }
  *            (India time) to show the hours and put them in the calendar.
  *            PLACEHOLDER: the timings haven't been announced yet.
@@ -167,19 +168,20 @@ const STORY_LISTS = {
  */
 const EVENT = {
   eyebrow: "ಪ್ರದರ್ಶನ",
-  title: "ಮುಖಪುಟದಲ್ಲಿ ಕರುನಾಡು",
+  title: "61 ವರ್ಷ: ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ಕರುನಾಡು",
   text:
     "ಕರ್ನಾಟಕ ಮತ್ತು ಕನ್ನಡದ ಕುರಿತು ದಶಕಗಳಿಂದ ಪ್ರಜಾವಾಣಿ ಮತ್ತು ಡೆಕ್ಕನ್ ಹೆರಾಲ್ಡ್‌ನಲ್ಲಿ ಪ್ರಕಟವಾದ " +
     "ಆಯ್ದ ಪುಟಗಳ ಪ್ರದರ್ಶನ. ಇತಿಹಾಸವನ್ನು ಅದು ಮೊದಲು ಮುದ್ರಣವಾದಂತೆಯೇ ನೋಡಲು ಬನ್ನಿ.",
-  day: "19",
+  day: "19–29",
   month: "ನವೆಂಬರ್",
   whenLabel: "ದಿನಾಂಕ",
   whereLabel: "ಸ್ಥಳ",
-  dateLabel: "ಗುರುವಾರ, ನವೆಂಬರ್ 19, 2026",
+  dateLabel: "ನವೆಂಬರ್ 19ರಿಂದ 29ರವರೆಗೆ, 2026",
   venue: "ರಂಗೋಲಿ ಮೆಟ್ರೋ ಆರ್ಟ್ ಸೆಂಟರ್, ಎಂ.ಜಿ. ರಸ್ತೆ, ಬೆಂಗಳೂರು",
   calendarButton: "Google ಕ್ಯಾಲೆಂಡರ್‌ಗೆ ಸೇರಿಸಿ",
-  calendarTitle: "ಮುಖಪುಟದಲ್ಲಿ ಕರುನಾಡು: ಪ್ರಜಾವಾಣಿ ಮತ್ತು ಡೆಕ್ಕನ್ ಹೆರಾಲ್ಡ್ ಪುಟಗಳ ಪ್ರದರ್ಶನ",
+  calendarTitle: "61 ವರ್ಷ: ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ಕರುನಾಡು: ಪ್ರಜಾವಾಣಿ ಮತ್ತು ಡೆಕ್ಕನ್ ಹೆರಾಲ್ಡ್ ಪುಟಗಳ ಪ್ರದರ್ಶನ",
   date: "2026-11-19",
+  endDate: "2026-11-29",
   time: null,
   location: "Rangoli Metro Art Center, MG Road, Bengaluru",
 };
@@ -236,9 +238,9 @@ const POSTER = {
     },
   },
   samples: [
-    { prompt: "dream", line: "ಪಶ್ಚಿಮ ಘಟ್ಟಗಳು ಎಂದೆಂದೂ ಹಸಿರಾಗಿರಲಿ", name: "ಅನಿತಾ, ಚಿಕ್ಕಮಗಳೂರು" },
-    { prompt: "community", line: "ಡೊಳ್ಳು ಕುಣಿತ ಉಳಿಸಿರುವ ನಮ್ಮೂರ ಯುವಕರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ" },
-    { prompt: "pride", line: "ದಸರೆಯ ಬೆಳಕಲ್ಲಿ ಮಿನುಗುವ ಮೈಸೂರು", name: "ಸುಮಾ, ಮೈಸೂರು" },
+    { prompt: "dream", line: "ಪಶ್ಚಿಮ ಘಟ್ಟಗಳು ಎಂದೆಂದೂ ಹಸಿರಾಗಿರಲಿ", name: "ಅನಿತಾ, ಚಿಕ್ಕಮಗಳೂರು", photo: "https://images.prajavani.net/prajavani/2026-01-18/27zvf7tq/site13420005-1200-630-20131017190939.jpg?w=1080&auto=format%2Ccompress" },
+    { prompt: "community", line: "ಡೊಳ್ಳು ಕುಣಿತ ಉಳಿಸಿರುವ ನಮ್ಮೂರ ಯುವಕರು", name: "ರಮೇಶ್, ಶಿವಮೊಗ್ಗ", photo: "https://images.prajavani.net/prajavani/2025-09-30/4e3mi3am/file82km3zx7oy811jr3xdrr.jpg?w=1080&auto=format%2Ccompress" },
+    { prompt: "pride", line: "ದಸರೆಯ ಬೆಳಕಲ್ಲಿ ಮಿನುಗುವ ಮೈಸೂರು", name: "ಸುಮಾ, ಮೈಸೂರು", photo: "https://images.prajavani.net/prajavani/2024-10-02/quile09v/file7xfreybrow81cwek9ikf.jpg?w=1080&auto=format%2Ccompress" },
   ],
   lineMax: 90,
   camera: "user",
@@ -290,7 +292,7 @@ const QUOTES = [
   { date: "2026-11-27", text: "ಕನ್ನಡಿಗ ತನ್ನ ನಾಡಿನಲ್ಲಿ ಯಜಮಾನನಾಗಿ ಬಾಳಬೇಕು. ಭಾಷಾ ಪ್ರೇಮ ಎನ್ನುವುದು ಪ್ರದರ್ಶನಕ್ಕಲ್ಲ, ಅದು ಆಚರಣೆಯಲ್ಲಿರಬೇಕು.", by: "ಪಾಟೀಲ ಪುಟ್ಟಪ್ಪ", art: "puttappa" },
   { date: "2026-11-28", text: "ವಿಜ್ಞಾನ ಮತ್ತು ಸಂಶೋಧನೆಯಲ್ಲಿ ಯುವಜನರು ತೊಡಗಿಸಿಕೊಂಡಾಗ ಮಾತ್ರ ಕರ್ನಾಟಕ ಮತ್ತು ಭಾರತ ಜಾಗತಿಕ ಮಟ್ಟದಲ್ಲಿ ಮಿಂಚಲು ಸಾಧ್ಯ", by: "ಡಾ. ಸಿ.ಎನ್.ಆರ್. ರಾವ್", art: "cnrrao" },
   { date: "2026-11-29", text: "ಜಾಣ ಜಾಣೆಯರೆದೆಗೆ ಕನಸು ಕೊಡುವವಳೆ, ಬಾಗಿದವರಿಗೆ ಭಾಗ ಹೃದಯ ಕೊಡುವವಳೆ; ನಿನ್ಹಾಂಗ ಧರ್ಮದಲಿ ಧಾರಾಳತನದಲ್ಲಿ ಇನ್ನೊಬ್ಬರನು ಕಾಣೆ ಧರೆಗೆ ದೊಡ್ಡವಳೆ ಸಾವಿರದ ಶರಣವ್ವ ಕನ್ನಡದ ತಾಯೇ", by: "ಡಾ. ಚಂದ್ರಶೇಖರ ಕಂಬಾರ", art: "kambar" },
-  { date: "2026-11-30", text: "ಎಲ್ಲಾದರು ಇರು, ಎಂತಾದರು ಇರು, ಎಂದೆಂದಿಗೂ ನೀ ಕನ್ನಡವಾಗಿರು.", by: "ರಾಷ್ಟ್ರಕವಿ ಕುವೆಂಪು", art: "kuvempu" },
+  { date: "2026-11-30", text: "ಕನ್ನಡವು ಕನ್ನಡವ ಕನ್ನಡಿಸುತಿರಬೇಕು", by: "ವರಕವಿ ದ.ರಾ.ಬೇಂದ್ರೆ", art: "bendre" },
 ];
 
 /*

@@ -267,17 +267,18 @@
     );
   }
 
-  /* A Google Calendar "add event" link: all day, or with times in India time. */
+  /* A Google Calendar "add event" link: all day, or with times in India time, over one day or several. */
   function calendarUrl(event) {
-    const day = event.date.replaceAll("-", "");
+    const compact = (date) => date.replaceAll("-", "");
+    const lastDay = event.endDate || event.date;
     let dates;
     if (event.time) {
-      const at = (hhmm) => `${day}T${hhmm.replace(":", "")}00`;
-      dates = `${at(event.time.start)}/${at(event.time.end)}`;
+      const at = (date, hhmm) => `${compact(date)}T${hhmm.replace(":", "")}00`;
+      dates = `${at(event.date, event.time.start)}/${at(lastDay, event.time.end)}`;
     } else {
-      const next = new Date(`${event.date}T00:00:00Z`);
+      const next = new Date(`${lastDay}T00:00:00Z`);
       next.setUTCDate(next.getUTCDate() + 1); // all-day entries end on the following day
-      dates = `${day}/${next.toISOString().slice(0, 10).replaceAll("-", "")}`;
+      dates = `${compact(event.date)}/${compact(next.toISOString().slice(0, 10))}`;
     }
     const params = new URLSearchParams({
       action: "TEMPLATE",

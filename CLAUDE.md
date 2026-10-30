@@ -223,7 +223,7 @@ Define them as CSS custom properties in one place.
 ## Exhibition
 
 - `EVENT` in each data file, shown right after the carousel on both pages: the
-  physical exhibition of Prajavani and DH pages on Karnataka and Kannada (19 November,
+  physical exhibition of Prajavani and DH pages on Karnataka and Kannada (19 to 29 November,
   Rangoli Metro Art Center, MG Road). Owner's request.
 - "Add to Google Calendar" is a plain Google Calendar link built in `js/main.js`
   (`calendarUrl`) from `EVENT`; no accounts, scripts or tracking.
