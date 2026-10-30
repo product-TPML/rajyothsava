@@ -301,6 +301,7 @@ const QUOTES = [
  * finale  → the closing screen with the map and flag.
  * timing  → milliseconds. Length = (figures + 1) × figureMs + finaleMs (map and flag)
  *           + holdMs (closing screen held), then exitMs while the opening lifts away.
+ *           holdMs null holds the closing screen until the reader taps.
  */
 const OPENING = {
   label: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ ಆರಂಭಿಕ ಪರಿಚಯ",

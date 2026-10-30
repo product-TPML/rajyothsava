@@ -138,11 +138,13 @@
     frame = requestAnimationFrame(wave);
   }
 
-  // The last figure has fully passed after (figures + 1) slots; then the finale runs and is held.
+  // The last figure has fully passed after (figures + 1) slots; then the finale runs and is held (until a tap if holdMs is null).
   function play() {
     opening.classList.add("opening--playing");
     waveFlag();
-    timer = setTimeout(leave, (figures.length + 1) * timing.figureMs + timing.finaleMs + timing.holdMs);
+    if (timing.holdMs !== null) {
+      timer = setTimeout(leave, (figures.length + 1) * timing.figureMs + timing.finaleMs + timing.holdMs);
+    }
   }
 
   function leave() {

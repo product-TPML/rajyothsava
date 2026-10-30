@@ -25,6 +25,16 @@ const UI = {
   carouselNext: "Next story",
   slideOf: "{n} / {total}",
 
+  // What Karunadotsava stands for: after the carousel, and on the opening's closing screen.
+  aboutTitle: "About Karunadotsava",
+  aboutText:
+    "Karunadotsava celebrates the soul of Karnataka — its pride in Kannada, the richness of its linguistic " +
+    "diversity, including Tulu, Konkani, Kodava and Urdu, its timeless heritage, vibrant culture and the " +
+    "indomitable spirit of its people. As the State celebrates its rich legacy while embracing the " +
+    "possibilities of the future, Deccan Herald brings these stories, voices and traditions to the forefront, " +
+    "highlighting the many facets of Karnataka’s identity and championing the diverse expressions that make " +
+    "the State truly special.",
+
   posterEyebrow: "My Rajyotsava poster",
   posterTitle: "My pride. My dream. My Karnataka.",
   posterLead:
@@ -213,8 +223,9 @@ const POSTER = {
  * Opening animation, played once a day before the site appears.
  * figures → flown past in this order (history order), alternating red and black.
  *           art names a silhouette in js/silhouette-art.js.
- * finale  → the closing screen with the map and flag.
- * timing  → milliseconds; see OPENING in js/data.js.
+ * finale  → the closing screen with the map and flag; its text is the "About Karunadotsava" text.
+ * timing  → milliseconds; see OPENING in js/data.js. holdMs null: the closing screen
+ *           stays until the reader taps (owner's choice, so the text can be read).
  */
 const OPENING = {
   label: "Karnataka Rajyotsava opening",
@@ -223,7 +234,7 @@ const OPENING = {
   finale: {
     eyebrow: "71st Karnataka Rajyotsava · 1 November 2026",
     title: "Karunadotsava",
-    text: "Happy Rajyotsava. Celebrate the land, language and culture of Karnataka with Deccan Herald",
+    text: UI.aboutText,
     enter: "Read the special edition",
   },
   figures: [
@@ -235,5 +246,5 @@ const OPENING = {
     { name: "Kuvempu", art: "kuvempu" },
     { name: "Dr Rajkumar", art: "rajkumar" },
   ],
-  timing: { figureMs: 600, finaleMs: 2600, holdMs: 3000, exitMs: 700 },
+  timing: { figureMs: 600, finaleMs: 2600, holdMs: null, exitMs: 700 },
 };
