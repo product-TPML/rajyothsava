@@ -26,11 +26,12 @@ const UI = {
   slideOf: "{n} / {total}",
 
   // What Karunadotsava stands for: after the carousel, and on the opening's closing screen.
+  // A blank line ("\n\n") starts a new paragraph.
   aboutTitle: "About Karunadotsava",
   aboutText:
     "Karunadotsava celebrates the soul of Karnataka — its pride in Kannada, the richness of its linguistic " +
     "diversity, including Tulu, Konkani, Kodava and Urdu, its timeless heritage, vibrant culture and the " +
-    "indomitable spirit of its people. As the State celebrates its rich legacy while embracing the " +
+    "indomitable spirit of its people.\n\nAs the State celebrates its rich legacy while embracing the " +
     "possibilities of the future, Deccan Herald brings these stories, voices and traditions to the forefront, " +
     "highlighting the many facets of Karnataka’s identity and championing the diverse expressions that make " +
     "the State truly special.",

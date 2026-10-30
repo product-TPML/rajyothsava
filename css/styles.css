@@ -1073,6 +1073,7 @@ body {
 
 .about__text {
   font-size: 1.0625rem;
+  white-space: pre-line; /* keeps the paragraph break in the text */
   color: var(--ink);
 }
 
@@ -3131,6 +3132,7 @@ span.pager__step {
 
 .opening__text {
   max-width: 24em;
+  white-space: pre-line; /* keeps a paragraph break in the text */
   color: var(--ink-muted);
 }
 
