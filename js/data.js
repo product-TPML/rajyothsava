@@ -210,8 +210,8 @@ const VIDEO_FEED = "/pages/karunadothsava-json";
  *            the page's header.
  *            PLACEHOLDER: the lines and names are made up for illustration.
  * camera   → which phone camera "ಕ್ಯಾಮೆರಾ" opens ("user" = front, "environment" = back).
- * logo     → the brand logo in the poster's "made at" credit.
- * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
+ * logo     → the brand logo in the credit at the foot of the poster.
+ * address  → the site's final address, sent with the poster when it is shared.
  */
 const POSTER = {
   prompts: {
@@ -246,8 +246,7 @@ const POSTER = {
   camera: "user",
   placeholder: "ನಿಮ್ಮ ಫೋಟೊ",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/uf85tvay/PV-White.svg",
-  credit: "{address} ನಲ್ಲಿ ತಯಾರಿಸಿದ್ದು",
-  address: "prajavani.net/rajyotsava",
+  address: "prajavani.net/karunadotsava",
   fileName: "prajavani-rajyotsava-poster.jpg",
   // Ends the message sent with the poster, after the reader's own words.
   shareInvite: "ನಿಮ್ಮ ರಾಜ್ಯೋತ್ಸವ ಪೋಸ್ಟರ್ ನೀವೂ ಮಾಡಿ: https://{address}",

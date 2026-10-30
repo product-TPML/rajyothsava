@@ -180,30 +180,25 @@
   }
 
   /*
-   * From the bottom up: the "made at" credit, the name, the reader's line and the
+   * From the bottom up: the brand credit, the name, the reader's line and the
    * prompt's heading above it. Until the reader writes, the example line shows faintly.
    */
   function drawWords(ctx, poster, logo) {
     const prompt = POSTER.prompts[poster.prompt];
 
-    // Credit: the white brand logo and "made at" line on a dark red pill.
+    // Credit: the white brand logo on a dark red pill.
     const pillHeight = 84;
     const pillTop = HEIGHT - MARGIN - pillHeight;
     const logoHeight = 44;
     const logoWidth = (logo.width / logo.height) * logoHeight;
-    const credit = format(POSTER.credit, { address: POSTER.address });
-    ctx.font = font(400, 32, TEXT);
-    const pillWidth = 28 + logoWidth + 22 + ctx.measureText(credit).width + 30;
+    const pillPadding = 30;
     ctx.fillStyle = token("red-dark");
     ctx.beginPath();
-    ctx.roundRect(MARGIN, pillTop, pillWidth, pillHeight, pillHeight / 2);
+    ctx.roundRect(MARGIN, pillTop, pillPadding * 2 + logoWidth, pillHeight, pillHeight / 2);
     ctx.fill();
-    ctx.drawImage(logo, MARGIN + 28, pillTop + (pillHeight - logoHeight) / 2, logoWidth, logoHeight);
-    ctx.fillStyle = token("white");
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillText(credit, MARGIN + 28 + logoWidth + 22, pillTop + pillHeight / 2 + 2);
+    ctx.drawImage(logo, MARGIN + pillPadding, pillTop + (pillHeight - logoHeight) / 2, logoWidth, logoHeight);
 
+    ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
     let baseline = pillTop - 56;
     if (poster.name) {

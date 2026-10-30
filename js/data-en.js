@@ -165,8 +165,8 @@ const EVENT = {
  *            the page's header.
  *            PLACEHOLDER: the lines and names are made up for illustration.
  * camera   → which phone camera "Camera" opens ("user" = front, "environment" = back).
- * logo     → the brand logo in the poster's "made at" credit.
- * address  → printed on the poster and sent with it. PLACEHOLDER until the web team sets it up.
+ * logo     → the brand logo in the credit at the foot of the poster.
+ * address  → the site's final address, sent with the poster when it is shared.
  */
 const POSTER = {
   prompts: {
@@ -201,8 +201,7 @@ const POSTER = {
   camera: "user",
   placeholder: "Your photo",
   logo: "https://images.assettype.com/deccanherald/2026-10-08/pxdtubqa/deccan-herald.svg",
-  credit: "Made at {address}",
-  address: "deccanherald.com/rajyotsava",
+  address: "deccanherald.com/karunadotsava",
   fileName: "dh-rajyotsava-poster.jpg",
   // Ends the message sent with the poster, after the reader's own words.
   shareInvite: "Make your own Rajyotsava poster at https://{address}",

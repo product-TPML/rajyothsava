@@ -262,8 +262,9 @@ Define them as CSS custom properties in one place.
   WhatsApp (owner's request). A two-colour border runs round the whole poster, yellow
   outside and red inside (owner's request). The Karunadotsava mark sits at the top left
   (136px tall, owner's request), with nothing beside it: no date line (owner's request).
-  The Prajavani logo is small, in a dark red "made at prajavani.net/rajyotsava" pill
-  (owner's choice: readers write their own words, so the brand is a credit).
+  The Prajavani logo is small, alone in a dark red pill, with no address on the poster
+  (owner's choice: readers write their own words, so the brand is a credit). The address
+  (`POSTER.address`, /karunadotsava) goes only in the share message.
 - The reader's line runs to 4 lines (90 characters), set smaller the more lines it takes
   (`LINE_SIZES` in js/poster.js: 104, 96, 84, 72px for 1 to 4 lines; owner's request).
 - The photo opens filling the poster; the size slider zooms in, or out until the whole photo
