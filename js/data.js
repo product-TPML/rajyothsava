@@ -7,6 +7,11 @@
 
 /* Interface text. Elements in index.html with data-text="key" receive these. */
 const UI = {
+  // Until the launch, the page is only this countdown (its time is in the <head> script).
+  countdownEyebrow: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ ವಿಶೇಷ",
+  countdownTitle: "ನವೆಂಬರ್ 1ರ ಮಧ್ಯರಾತ್ರಿ ಕರುನಾಡೋತ್ಸವ ತೆರೆದುಕೊಳ್ಳಲಿದೆ",
+  countdownUnits: ["ದಿನ", "ಗಂಟೆ", "ನಿಮಿಷ", "ಸೆಕೆಂಡ್"],
+  countdownLabel: "ಆರಂಭಕ್ಕೆ ಉಳಿದಿರುವ ಸಮಯ",
   skipLink: "ಮುಖ್ಯ ವಿಷಯಕ್ಕೆ ತೆರಳಿ",
   headerAction: "ಪ್ರಜಾವಾಣಿ ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ", // the header's logo-and-home-icon link: its name and hover text
   searchLabel: "ಪ್ರಜಾವಾಣಿಯಲ್ಲಿ ಹುಡುಕಿ",

@@ -36,30 +36,8 @@ body {
   padding-top: env(safe-area-inset-top, 0px);
 }
 .bar .brand { margin-right: auto; }
-/* Year as a split-flap calendar: one card per digit, each card in two halves.
-   A changing digit's top half folds down (leaf) to reveal the new digit. */
+/* Year as split-flap cards (js/flip.js; their look is .flip in the main stylesheet). */
 .year { display: flex; gap: 3px; }
-.flip {
-  --flip-h: 34px;
-  position: relative; width: 21px; height: var(--flip-h);
-  perspective: 160px;
-  font: 600 24px/var(--flip-h) var(--font-headline); color: var(--ink);
-  text-align: center; font-variant-numeric: tabular-nums;
-}
-.flip-half {
-  position: absolute; left: 0; right: 0; height: 50%; overflow: hidden;
-  backface-visibility: hidden;
-}
-.flip-half > span { display: block; height: var(--flip-h); }
-.flip-top { top: 0; transform-origin: bottom; border-radius: 4px 4px 0 0; background: var(--white); }
-.flip-bottom { bottom: 0; transform-origin: top; border-radius: 0 0 4px 4px; background: var(--paper); }
-.flip-bottom > span { margin-top: calc(var(--flip-h) / -2); }
-.flip-leaf { visibility: hidden; }
-/* The hinge line across the middle of each card. */
-.flip::after {
-  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px;
-  background: rgb(0 0 0 / 22%);
-}
 /* Header button: plain icon on the red, like the main site's menu button. */
 .bar .icon-button { flex: none; color: var(--white); }
 .bar .icon-button:hover, .bar .icon-button[aria-expanded="true"] { background: var(--red-dark); }
@@ -508,6 +486,7 @@ body {
 </div>
 
 <script src="https://rajyothsava.pages.dev/js/subscription.js"></script>
+<script src="https://rajyothsava.pages.dev/js/flip.js"></script>
 <script>
 // Sample entries. Real page scans and write-ups replace these. Each needs its date (iso),
 // headline and paragraphs; the year, weekday and Kannada date are worked out from iso.
@@ -1131,44 +1110,9 @@ function drawScene(c, t) {
   ctx.globalAlpha = 1;
 }
 
-// Header year: four split-flap cards. Only digits that change flip; a new change
-// mid-flip cuts the old one short, so fast trips flutter like a real flip board.
-const FLIP_MS = 260;
-const flaps = [0, 1, 2, 3].map(() => {
-  const el = document.createElement("span");
-  el.className = "flip";
-  el.innerHTML = ["flip-top", "flip-bottom", "flip-top flip-leaf", "flip-bottom flip-leaf"]
-    .map(c => `<span class="flip-half ${c}"><span></span></span>`).join("");
-  $("year").appendChild(el);
-  const [top, bottom, leafTop, leafBottom] = [...el.children].map(h => ({ half: h, text: h.firstChild }));
-  return { top, bottom, leafTop, leafBottom, digit: null, anims: [] };
-});
-function setDigit(f, digit) {
-  if (f.digit === digit) return;
-  const old = f.digit ?? digit;
-  f.digit = digit;
-  f.anims.forEach(a => a.cancel());
-  // Behind the leaves: new digit on top, old digit below until the lower leaf covers it.
-  f.top.text.textContent = digit;
-  f.bottom.text.textContent = old;
-  f.leafTop.text.textContent = old;
-  f.leafBottom.text.textContent = digit;
-  const settle = () => {
-    f.bottom.text.textContent = digit;
-    f.leafTop.half.style.visibility = f.leafBottom.half.style.visibility = "";
-  };
-  if (old === digit || reduceMotion.matches) { settle(); return; }
-  f.leafTop.half.style.visibility = f.leafBottom.half.style.visibility = "visible";
-  const half = FLIP_MS / 2;
-  f.anims = [
-    f.leafTop.half.animate([{ transform: "rotateX(0)" }, { transform: "rotateX(-90deg)" }],
-      { duration: half, easing: "ease-in", fill: "forwards" }),
-    f.leafBottom.half.animate([{ transform: "rotateX(90deg)" }, { transform: "rotateX(0)" }],
-      { duration: half, delay: half, easing: "ease-out", fill: "both" })
-  ];
-  f.anims[1].onfinish = () => { if (f.digit === digit) settle(); };
-}
-const setYear = year => String(year).split("").forEach((d, i) => setDigit(flaps[i], d));
+// Header year: four split-flap cards (js/flip.js).
+const flaps = [0, 1, 2, 3].map(() => flipCard($("year")));
+const setYear = year => String(year).split("").forEach((d, i) => flaps[i](d));
 
 function place(item, c, xOffset, worldW, worldH, baseW) {
   const o = visibility(item.z - c.z);

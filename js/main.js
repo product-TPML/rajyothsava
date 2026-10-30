@@ -1009,7 +1009,59 @@
     show(0);
   }
 
+  /*
+   * Before the launch the <head> script hides the page and leaves the launch time in
+   * data-launch: a countdown stands in, and the page reloads at zero to open the site.
+   */
+  function renderCountdown() {
+    const launch = Number(document.documentElement.dataset.launch);
+    // Each number is two flip cards (js/flip.js); screen readers get it as plain text.
+    const units = UI.countdownUnits.map((label) => {
+      const cards = el("span", { class: "countdown__value", "aria-hidden": "true" });
+      const spoken = el("span", { class: "visually-hidden" });
+      return { label, cards, spoken, digits: [flipCard(cards), flipCard(cards)] };
+    });
+    const mark = document.querySelector(".brand__mark").cloneNode();
+    mark.className = "countdown__mark";
+    // The menu panel's link home, with the newspaper's white logo (applyText has filled it in).
+    const home = document.querySelector(".menu-panel__home").cloneNode(true);
+    home.classList.add("countdown__home");
+    home.querySelector("img").removeAttribute("loading");
+    document.body.append(
+      el("div", { class: "countdown" },
+        el("div", { class: "countdown__header" }, mark),
+        el("div", { class: "container countdown__body" },
+          el("p", { class: "countdown__eyebrow" }, UI.countdownEyebrow),
+          el("h2", { class: "countdown__title" }, UI.countdownTitle),
+          el("ul", { class: "countdown__clock", role: "timer", "aria-label": UI.countdownLabel },
+            ...units.map(({ label, cards, spoken }) =>
+              el("li", { class: "countdown__unit" }, cards, spoken, el("span", { class: "countdown__label" }, label)))),
+          home),
+        el("div", { class: "flag-bar" })));
+
+    function tick() {
+      const left = launch - Date.now();
+      if (left <= 0) {
+        location.reload();
+        return;
+      }
+      const seconds = Math.ceil(left / 1000);
+      [Math.floor(seconds / 86400), Math.floor(seconds / 3600) % 24, Math.floor(seconds / 60) % 60, seconds % 60]
+        .forEach((n, i) => {
+          units[i].spoken.textContent = n;
+          [...String(n).padStart(2, "0")].forEach((digit, d) => units[i].digits[d](digit));
+        });
+      setTimeout(tick, left % 1000 || 1000);
+    }
+    tick();
+  }
+
   applyText();
+  if (document.documentElement.classList.contains("is-countdown")) {
+    renderCountdown();
+    return;
+  }
+
   renderNavigation();
   renderEvent();
   const quotes = has("quotes-list") ? quotesRunSoFar() : [];

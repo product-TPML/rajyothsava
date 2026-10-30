@@ -3531,3 +3531,179 @@ span.pager__step {
     max-width: 40em;
   }
 }
+
+/* ---------- Split-flap cards ---------- */
+
+/*
+ * One card per digit, in two halves; a changing digit's top half folds down (the leaf) to
+ * reveal the new one (js/flip.js). Used by the exhibition road's year and the countdown,
+ * which sizes its cards through --flip-h, --flip-w and --flip-font.
+ */
+.flip {
+  --flip-h: 34px;
+  --flip-w: 21px;
+  --flip-font: 24px;
+  position: relative;
+  width: var(--flip-w);
+  height: var(--flip-h);
+  perspective: calc(var(--flip-h) * 4.7);
+  color: var(--ink);
+  font: 600 var(--flip-font) / var(--flip-h) var(--font-headline);
+  font-variant-numeric: lining-nums tabular-nums;
+  text-align: center;
+}
+
+.flip-half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-half > span {
+  display: block;
+  height: var(--flip-h);
+}
+
+.flip-top {
+  top: 0;
+  transform-origin: bottom;
+  border-radius: 4px 4px 0 0;
+  background: var(--white);
+}
+
+.flip-bottom {
+  bottom: 0;
+  transform-origin: top;
+  border-radius: 0 0 4px 4px;
+  background: var(--paper);
+}
+
+.flip-bottom > span {
+  margin-top: calc(var(--flip-h) / -2);
+}
+
+.flip-leaf {
+  visibility: hidden;
+}
+
+/* The hinge line across the middle of each card. */
+.flip::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgb(0 0 0 / 22%);
+}
+
+/* ---------- Countdown ---------- */
+
+/* Until the launch the <head> script adds .is-countdown: the page is only the countdown (js/main.js). */
+.is-countdown {
+  --bottom-nav-height: 0px; /* the bottom bar is hidden with the rest */
+}
+
+.is-countdown body > :not(.countdown) {
+  display: none;
+}
+
+.countdown {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--red-dark);
+  color: var(--white);
+}
+
+.countdown__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 64px;
+  background: var(--red);
+}
+
+.countdown__mark {
+  width: auto;
+  height: 48px;
+}
+
+.countdown__body {
+  --focus-ring: var(--yellow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-5);
+  width: 100%;
+  padding-block: var(--space-7);
+  text-align: center;
+}
+
+.countdown__eyebrow {
+  margin: 0;
+  color: var(--yellow);
+  font-weight: 600;
+}
+
+.countdown__title {
+  max-width: 22em;
+  margin: 0;
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.countdown__clock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 640px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Two flip cards (js/flip.js), sized so four numbers fit across a phone. */
+.countdown__value {
+  display: flex;
+  gap: 3px;
+}
+
+.countdown__value .flip {
+  --flip-h: clamp(52px, 15vw, 104px);
+  --flip-w: calc(var(--flip-h) * 0.62);
+  --flip-font: calc(var(--flip-h) * 0.7);
+}
+
+.countdown__label {
+  font-size: 0.875rem;
+}
+
+/* The menu panel's red link home (js/main.js copies it), set under the clock with a gold edge. */
+.countdown__home {
+  margin-top: 0;
+  border: 1px solid var(--gold-deep);
+  border-radius: var(--radius);
+}
+
+@media (min-width: 768px) {
+  .countdown__clock {
+    gap: var(--space-4);
+  }
+}

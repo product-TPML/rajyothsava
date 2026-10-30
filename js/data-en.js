@@ -7,6 +7,11 @@
 
 /* Interface text. Elements in index-en.html with data-text="key" receive these. */
 const UI = {
+  // Until the launch, the page is only this countdown (its time is in the <head> script).
+  countdownEyebrow: "Karnataka Rajyotsava special",
+  countdownTitle: "Karunadotsava opens at midnight on 1 November",
+  countdownUnits: ["Days", "Hours", "Minutes", "Seconds"],
+  countdownLabel: "Time until it opens",
   skipLink: "Skip to main content",
   headerAction: "Back to Deccan Herald home", // the header's logo-and-home-icon link: its name and hover text
   searchLabel: "Search Deccan Herald",
