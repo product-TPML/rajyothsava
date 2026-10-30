@@ -10,8 +10,10 @@
   const COLLECTION_TIMEOUT_MS = 5000;
   const TOP_STORIES = 20; // read from the top collection
   const CAROUSEL_STORIES = 10; // the first of those, in the desk's order, for the carousel
-  const HIGHLIGHTS_SHOWN = 8; // the newest of them in the stories section: three full rows on desktop (lead and one, then three and three); "See all" for the rest
-  const PHOTO_STORIES_SHOWN = 5; // one large and four small fill the grid evenly
+  // How many of a collection a section shows: the largest of these it has stories for, as
+  // each one fills its layout evenly. "See all" appears only when the collection has more.
+  const HIGHLIGHTS_COUNTS = [8, 5, 2, 1]; // the newest of the top stories; on desktop, the lead and one, then rows of three
+  const PHOTO_STORIES_COUNTS = [5, 3, 1]; // one large photo with four, two or no small ones
   const FACTS_SHOWN = 6; // fills two or three columns evenly
   const ARCHIVE_SHOWN = 6; // the same
   const VIDEOS_SHOWN = 5; // in the player's list; about as tall as the player on desktop
@@ -227,7 +229,7 @@
     const stories = await collectionStories(COLLECTIONS.top, TOP_STORIES).catch(() => []);
     return {
       slides: stories.slice(0, CAROUSEL_STORIES),
-      highlights: newestFirst(stories).slice(0, HIGHLIGHTS_SHOWN),
+      highlights: newestFirst(stories),
     };
   }
 
@@ -373,8 +375,20 @@
     );
   }
 
+  /* The largest of counts (biggest first) that there are enough stories for. */
+  function fittingCount(available, counts) {
+    return counts.find((count) => count <= available) ?? 0;
+  }
+
+  /* A section's "See all" button shows only when its collection has more than the section shows. */
+  function showSeeAll(sectionId, hasMore) {
+    document.querySelector(`#${sectionId} .see-all .button`).hidden = !hasMore;
+  }
+
   function renderHighlights(stories) {
-    document.getElementById("highlights-list").append(...stories.map((story, i) => storyCard(story, { lead: i === 0 })));
+    const shown = stories.slice(0, fittingCount(stories.length, HIGHLIGHTS_COUNTS));
+    document.getElementById("highlights-list").append(...shown.map((story, i) => storyCard(story, { lead: i === 0 })));
+    showSeeAll("highlights", stories.length > shown.length);
   }
 
   /*
@@ -525,7 +539,7 @@
         )
       )
     );
-    document.getElementById("archive-more").hidden = stories.length <= ARCHIVE_SHOWN;
+    showSeeAll("archive", stories.length > ARCHIVE_SHOWN);
   }
 
   /*
@@ -753,10 +767,16 @@
     document.getElementById("reels-more").hidden = upright.length <= REELS_SHOWN;
   }
 
-  /* The first photo stories in their collection, each opening on prajavani.net; the first is shown large. */
+  /*
+   * The first photo stories in their collection, each opening on prajavani.net; the first is
+   * shown large. data-count tells the stylesheet which layout fills the grid.
+   */
   function renderPhotoStories(stories) {
-    document.getElementById("photo-stories-list").append(
-      ...stories.map((story, i) =>
+    const shown = stories.slice(0, fittingCount(stories.length, PHOTO_STORIES_COUNTS));
+    const list = document.getElementById("photo-stories-list");
+    list.dataset.count = shown.length;
+    list.append(
+      ...shown.map((story, i) =>
         el(
           "li",
           { class: i === 0 ? "photo-stories__cell photo-stories__cell--lead" : "photo-stories__cell" },
@@ -769,12 +789,13 @@
         )
       )
     );
+    showSeeAll("photo-stories", stories.length > shown.length);
   }
 
   /* Interesting facts, numbered, each opening its story on prajavani.net. */
   function renderFacts(stories) {
     document.getElementById("facts-list").append(
-      ...stories.map((story, i) =>
+      ...stories.slice(0, FACTS_SHOWN).map((story, i) =>
         el(
           "li",
           { class: "fact" },
@@ -788,6 +809,7 @@
         )
       )
     );
+    showSeeAll("facts", stories.length > FACTS_SHOWN);
   }
 
   /*
@@ -924,6 +946,11 @@
     }
 
     show(0);
+    // A single story has nothing to move to: no arrows, swiping or autoplay.
+    if (slides.length < 2) {
+      root.querySelectorAll(".carousel__arrow").forEach((arrow) => arrow.remove());
+      return;
+    }
     const restartAutoplay = autoplay(root, track, () => show(current + 1));
 
     // A manual move restarts the count, so the next card doesn't come too soon.
@@ -1009,12 +1036,13 @@
     watchVideoFocus();
   }
   if (has("photo-stories-list")) {
-    collectionStories(COLLECTIONS.photo, PHOTO_STORIES_SHOWN)
+    // One more than can be shown, to know whether "See all" has more to show.
+    collectionStories(COLLECTIONS.photo, PHOTO_STORIES_COUNTS[0] + 1)
       .catch(() => [])
       .then((stories) => (stories.length ? renderPhotoStories(stories) : showEmpty("photo-stories", UI.emptyStories)));
   }
   if (has("facts-list")) {
-    collectionStories(COLLECTIONS.facts, FACTS_SHOWN)
+    collectionStories(COLLECTIONS.facts, FACTS_SHOWN + 1)
       .catch(() => [])
       .then((stories) => (stories.length ? renderFacts(stories) : showEmpty("facts", UI.emptyStories)));
   }

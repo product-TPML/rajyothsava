@@ -80,7 +80,6 @@ const UI = {
     "stories of the state's pride, people and heritage.",
   footerCopyright: "© 2026 Deccan Herald",
   openingReplay: "Watch the opening again",
-  footerDraftNote: "This is a draft. It needs review before publishing.",
 };
 
 /*

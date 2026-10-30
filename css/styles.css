@@ -2097,6 +2097,10 @@ main[data-view="all"] ~ .poster-cta {
     grid-column: span 2;
   }
 
+  .card--lead:only-child {
+    grid-column: 1 / -1;
+  }
+
   .card--lead .card__title {
     font-size: 1.625rem;
   }
@@ -2557,10 +2561,19 @@ span.pager__step {
   color: var(--white);
 }
 
+/*
+ * Tablet and up: the large photo is square, two columns by two rows, and sets the height;
+ * the small ones fill the rows beside it. One layout per count (data-count, set by
+ * renderPhotoStories): five in four columns, three in three, one alone across the width.
+ */
 @media (min-width: 768px) {
   .photo-stories__grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-3);
+  }
+
+  .photo-stories__grid[data-count="3"] {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .photo-stories__cell--lead {
@@ -2569,7 +2582,20 @@ span.pager__step {
   }
 
   .photo-stories__cell--lead .photo-stories__item {
+    aspect-ratio: 1;
+  }
+
+  .photo-stories__cell:not(.photo-stories__cell--lead) .photo-stories__item {
     aspect-ratio: auto;
+  }
+
+  .photo-stories__grid[data-count="1"] .photo-stories__cell--lead {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .photo-stories__grid[data-count="1"] .photo-stories__item {
+    aspect-ratio: 21 / 9;
   }
 
   .photo-stories__cell--lead .photo-stories__caption {
@@ -2581,10 +2607,6 @@ span.pager__step {
 @media (min-width: 1024px) {
   .photo-stories {
     padding-block: var(--space-8);
-  }
-
-  .photo-stories__grid {
-    grid-template-columns: repeat(4, 1fr);
   }
 }
 

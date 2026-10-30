@@ -107,7 +107,9 @@ Define them as CSS custom properties in one place.
   The same collection feeds both: the carousel takes its **first 10 stories in the desk's
   order**; the stories section below ("ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು") shows the **newest 8 of its first
   20 by publish time**, ignoring the collection order: three rows on desktop, then "See all"
-  for the whole collection (owner's choice). Reading
+  for the whole collection (owner's choice). With fewer stories it shows 5, 2 or 1, so the
+  desktop rows always end full (`HIGHLIGHTS_COUNTS`); a single carousel story has no arrows,
+  swiping or autoplay. Reading
   it only works when the site is served from www.prajavani.net (the browser blocks it from
   other addresses). The English page does the same with DH's **"karunadothsava-stories"**
   collection on deccanherald.com (owner's choice).
@@ -200,12 +202,14 @@ Define them as CSS custom properties in one place.
 
 - From the **"karunadotsava-photo"** collection (`COLLECTIONS.photo`), same reading as the
   carousel. The first 5 show (one large, four small fill the grid evenly), each opening the
-  story on prajavani.net. If the collection can't be read, the section shows its "coming soon" note.
+  story on prajavani.net. With fewer it shows 3 (one large, two small) or 1 (across the
+  width), each a complete layout (`PHOTO_STORIES_COUNTS`, `data-count` in the CSS). If the collection can't be read, the section shows its "coming soon" note.
 
 ## "See all" buttons
 
 - Every section with more stories than it shows ends with a "see all" button (owner's
-  request). Stories and photo stories open the full list **on the same page**: the address
+  request); a section showing all its collection has none (each reads one story more than it
+  shows, to know). Stories and photo stories open the full list **on the same page**: the address
   becomes `#all/top` or `#all/photo` and the home content is swapped for every story in that
   collection (up to 500), newest first, 24 to a page with numbered page links (owner's request).
   The collection is read only when the list is opened, and with only the fields shown, so the

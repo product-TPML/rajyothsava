@@ -100,7 +100,6 @@ The opening and the quotes share one set of silhouettes. The source images are i
 - [ ] **Polls and contests:** confirm https://www.facebook.com/prajavani.net is the page running them, and approve the card's wording (`contests…` in `js/data.js`).
 - [ ] **Story collection:** "karunadotsava-top" has 5 stories; it can feed 10 to the carousel and 20 to the stories section. The line under the carousel and on the cards shows only a story's subheadline, so each story the desk adds needs one.
 - [ ] **Photo stories:** "karunadotsava-photo" needs its final picks (the section shows the first 5).
-- [ ] **Draft note:** the footer says "ಇದು ಮಾದರಿ ಕರಡು. ಪ್ರಕಟಣೆಗೆ ಮುನ್ನ ಪರಿಶೀಲನೆ ಅಗತ್ಯ." (`footerDraftNote`); remove it at launch.
 - [ ] **Images to the CMS media gallery:** the marks, favicons and Facebook QR code are uploaded. Still on Cloudflare: the exhibition road's gate artwork and paywall icons (`assets/Gate.svg`, `assets/paywall/`). Any new or changed image (such as the poster example photos) needs uploading too: put its gallery address in the page in place of the Cloudflare one, and paste the page again.
 - [ ] **Poster example posters:** the photos are Prajavani's own (Western Ghats, dollu kunitha, Mysuru Palace), linked from images.prajavani.net in `POSTER.samples`; the lines and names on them are still made up for illustration.
 - [ ] **Poster sharing:** test "Share → WhatsApp → My status" on a real Android phone and iPhone, including whether the message and link come through.
