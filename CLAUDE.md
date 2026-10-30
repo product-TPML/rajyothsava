@@ -241,7 +241,7 @@ Define them as CSS custom properties in one place.
   text leaves the name out; the offer is a small white caption above the price, large and in
   gold (owner's choice). Desktop: one low row (owner's request): logo and tag, a thin gold
   rule, the offer, the button.
-- The Nandi (`assets/icons/nandi.svg`, the premium icon of the newspapers' subscription
+- The Nandi (`assets/icons/nandi.svg`, in the CMS gallery as images.assettype.com/…/tsp6ixf7/nandi.svg; the premium icon of the newspapers' subscription
   theme, `Experiments/Subscription/Navbar`) is a faint watermark, never cutting its head:
   on phones at the right, its back cut by the card's edge; on desktop whole, before the button
   (owner's requests). The button is the theme's raised gold one, with the Nandi and the
