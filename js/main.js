@@ -20,7 +20,7 @@
   const ALL_STORIES = 500; // the most a "See all" list is expected to hold, read in one go
   const STORIES_PER_PAGE = 24; // fills two or three columns evenly
   // Only what the page shows, so a collection of 500 stays around 100 KB.
-  const STORY_FIELDS = "headline,subheadline,author-name,sections,url,published-at,hero-image-s3-key,hero-image-alt-text,hero-image-caption";
+  const STORY_FIELDS = "headline,subheadline,author-name,sections,url,published-at,hero-image-s3-key,hero-image-alt-text,hero-image-caption,hero-image-metadata";
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   /*
@@ -42,13 +42,20 @@
     return node;
   }
 
-  /* A story photo from the newspaper's image server (COLLECTIONS.imageHost), which resizes on request. */
+  /*
+   * A story photo from the newspaper's image server (COLLECTIONS.imageHost), which resizes on request.
+   * focus → the desk's focus point as a CSS position ("40% 30%"), or null if the photo has none.
+   */
   function collectionImage(story) {
     const at = (width) => `${COLLECTIONS.imageHost}${story["hero-image-s3-key"]}?w=${width}&auto=format%2Ccompress`;
+    const meta = story["hero-image-metadata"];
+    const point = meta?.["focus-point"];
+    const percent = (value, size) => `${((value / size) * 100).toFixed(1)}%`;
     return {
       src: at(640),
       srcset: `${at(640)} 640w, ${at(1280)} 1280w`,
       alt: story["hero-image-alt-text"] || story["hero-image-caption"] || story.headline,
+      focus: point && meta.width && meta.height ? `${percent(point[0], meta.width)} ${percent(point[1], meta.height)}` : null,
     };
   }
 
@@ -63,6 +70,24 @@
       fetchpriority: priority ? "high" : false,
       decoding: "async",
     });
+  }
+
+  /*
+   * A story photo in a card (put the parent in class "media"). A photo with a focus point fills
+   * the frame, cropped round that point. One without is shown whole, on a blurred copy of
+   * itself (the same file, so nothing more to download).
+   */
+  function storyPhoto(image, options) {
+    const img = photo(image, options);
+    if (image.focus) {
+      img.style.objectPosition = image.focus;
+      return [img];
+    }
+    img.classList.add("media__img--whole");
+    const backdrop = photo({ ...image, alt: "" }, options);
+    backdrop.className = "media__backdrop";
+    backdrop.setAttribute("aria-hidden", "true");
+    return [backdrop, img];
   }
 
   const RECENCY_UNITS = [["minute", 60], ["hour", 24], ["day", 7]];
@@ -332,9 +357,9 @@
       { class: lead ? "card card--lead" : "card" },
       el(
         "div",
-        { class: "card__media" },
-        photo(story.image, {
-          sizes: lead ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 120px",
+        { class: "card__media media" },
+        ...storyPhoto(story.image, {
+          sizes: lead ? "(min-width: 1024px) 760px, 100vw" : "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 40vw",
         })
       ),
       el(
@@ -494,7 +519,7 @@
         el(
           "li",
           { class: "archive__item" },
-          el("div", { class: "archive__media" }, photo(story.image, { sizes: "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw" })),
+          el("div", { class: "archive__media media" }, ...storyPhoto(story.image, { sizes: "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw" })),
           el("h3", { class: "archive__title" }, el("a", { class: "card__link", href: story.href }, story.title)),
           story.summary && el("p", { class: "archive__summary" }, story.summary)
         )
@@ -737,8 +762,8 @@
           { class: i === 0 ? "photo-stories__cell photo-stories__cell--lead" : "photo-stories__cell" },
           el(
             "a",
-            { class: "photo-stories__item", href: story.href },
-            photo(story.image, { sizes: i === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 50vw" }),
+            { class: "photo-stories__item media", href: story.href },
+            ...storyPhoto(story.image, { sizes: i === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 50vw" }),
             el("span", { class: "photo-stories__caption" }, story.title)
           )
         )
@@ -753,7 +778,7 @@
         el(
           "li",
           { class: "fact" },
-          el("div", { class: "fact__media" }, photo(story.image, { sizes: "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 112px" })),
+          el("div", { class: "fact__media media" }, ...storyPhoto(story.image, { sizes: "(min-width: 1024px) 380px, (min-width: 768px) 50vw, 40vw" })),
           el(
             "div",
             { class: "fact__body" },

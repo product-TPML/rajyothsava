@@ -122,6 +122,11 @@ Define them as CSS custom properties in one place.
   below the stack. It supports swipe, tap-a-side-card, arrows, pausing while hovered or focused (no dots or pause button, by the owner's choice). Only the
   look is borrowed: no code or assets from The Hindu.
 - Cards: one column on phone, two on tablet, three or four on desktop.
+- **Story photos are never cut blindly, at any width** (owner's request): outside the
+  carousel, a photo with the desk's focus point (`hero-image-metadata`) fills its frame,
+  cropped round that point; one without is shown whole, scaled down onto a blurred copy of
+  itself (`storyPhoto` in js/main.js). On phones the photo in a row card (stories, facts)
+  takes 40% of the card's width (owner's request).
 - Test at 360px, 390px, 768px, 1024px and 1440px widths.
 
 ## Header search and home link
