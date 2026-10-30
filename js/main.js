@@ -45,6 +45,34 @@
   }
 
   /*
+   * A page view for Google Tag Manager, in the shape prajavani.net and deccanherald.com push
+   * for their own pages, so their GTM page_view triggers count this page (as on the Dasara
+   * site). Story fields this page doesn't have are "NA", as on their section pages. Logged in
+   * is read as the main sites read it: their saved user and login token on this same site.
+   */
+  function trackPageView(title = document.title) {
+    let auth = { status: "anonymous", uuid: "NA" };
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const id = user?.userData?.id || user?.id;
+      if (id && (localStorage.getItem("access_token") || localStorage.getItem("refresh_token"))) {
+        auth = { status: "logged_in", uuid: String(id).slice(0, 36) };
+      }
+    } catch {}
+    const NA = "NA";
+    (window.dataLayer ||= []).push({
+      event: "page_view",
+      page_type: "microsite",
+      section_name: "Karunadotsava",
+      content_title: title,
+      author_name: NA, author_id: NA, published_date: NA, created_date: NA, last_updated_date: NA,
+      content_id: NA, article_id: NA, article_type: NA, story_tags: NA, story_words: NA,
+      creator_name: NA, comment_number: NA,
+      premium_article: "no", auth_status: auth.status, uuid: auth.uuid,
+    });
+  }
+
+  /*
    * A story photo from the newspaper's image server (COLLECTIONS.imageHost), which resizes on request.
    * focus → the desk's focus point as a CSS position ("40% 30%"), or null if the photo has none.
    */
@@ -478,6 +506,7 @@
     const pager = document.getElementById("all-stories-pager");
     const lists = seeAllLists();
     const read = {};
+    let counted = null; // the view last counted as a page view: "home" or "<key>/<page>"
 
     async function show(key, page) {
       const config = lists[key];
@@ -507,12 +536,25 @@
       if (pages > 1) pager.append(...pagerLinks(key, current, pages));
     }
 
+    // Each list page counts as a page view, like a new page on the main sites; jumps between
+    // the home page's sections don't.
+    function count(view, title) {
+      if (view === counted) return;
+      counted = view;
+      trackPageView(title);
+    }
+
     function route() {
       const [, key, page] = location.hash.match(/^#all\/(\w+)(?:\/(\d+))?$/) || [];
       if (Object.hasOwn(lists, key ?? "")) {
+        const number = Math.max(1, Number(page) || 1);
         main.dataset.view = "all";
-        show(key, Math.max(1, Number(page) || 1));
-      } else if (main.dataset.view) {
+        count(`${key}/${number}`, `${lists[key].title} | ${document.title}`);
+        show(key, number);
+        return;
+      }
+      count("home");
+      if (main.dataset.view) {
         // Back to the home page, at the place the address points to.
         delete main.dataset.view;
         document.getElementById(location.hash.slice(1))?.scrollIntoView();
@@ -1058,6 +1100,7 @@
 
   applyText();
   if (document.documentElement.classList.contains("is-countdown")) {
+    trackPageView();
     renderCountdown();
     return;
   }
@@ -1070,7 +1113,8 @@
   setupSearch();
   setupMenu();
   setupScrollSpy();
-  if (has("all-stories")) setupAllStories();
+  if (has("all-stories")) setupAllStories(); // counts the page view for the view it opens on
+  else trackPageView();
   // The carousel waits for its stories; its height is fixed, so nothing below it moves.
   topStories().then(({ slides, highlights }) => {
     if (!slides.length) {

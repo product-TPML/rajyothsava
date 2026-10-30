@@ -355,6 +355,11 @@ Define them as CSS custom properties in one place.
 - Google Tag Manager, as on the Dasara site (owner's request): `GTM-MGBFQ9R` (Prajavani) in
   `index.html`, `GTM-T46PRBZ` (Deccan Herald) in `index-en.html`, at the top of `<head>` with
   the noscript frame right after `<body>`.
+- **Page views (owner, 30 October):** the main sites' GA4 counts a visit only on their own
+  `page_view` dataLayer event, so `trackPageView` in js/main.js pushes one in the same shape
+  (as on the Dasara site): `page_type: "microsite"`, `section_name: "Karunadotsava"`, story
+  fields "NA", login status read as the main sites read it. Each "See all" list page counts
+  as a page view too (owner's choice); jumps between the home page's sections don't.
 
 ## Tech and structure
 
