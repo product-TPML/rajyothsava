@@ -91,7 +91,7 @@ const UI = {
  */
 const PAGE_NAV = [
   { label: "Top stories", short: "Home", icon: "home", target: "featured" },
-  { label: "Poster", short: "Poster", icon: "camera", target: "poster" },
+  { label: "Poster", icon: "camera", target: "poster" },
   { label: "Highlights", short: "Latest", icon: "news", target: "highlights" },
   { label: "Archives", short: "Archives", icon: "archive", target: "archive" },
 ];

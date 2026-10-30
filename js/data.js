@@ -118,11 +118,11 @@ const UI = {
  */
 const PAGE_NAV = [
   { label: "ಮುಖ್ಯ ಕಥನಗಳು", short: "ಮುಖಪುಟ", icon: "home", target: "featured" },
-  { label: "ಪೋಸ್ಟರ್", short: "ಪೋಸ್ಟರ್", icon: "camera", target: "poster" },
+  { label: "ಪೋಸ್ಟರ್", icon: "camera", target: "poster" },
   { label: "ಮುಖ್ಯಾಂಶಗಳು", short: "ಸುದ್ದಿ", icon: "news", target: "highlights" },
   { label: "ವಿಡಿಯೊ", short: "ವಿಡಿಯೊ", icon: "play", target: "videos" },
   { label: "ಫೋಟೊ ಕಥನಗಳು", icon: "photo", target: "photo-stories" },
-  { label: "ಕುತೂಹಲ", icon: "bulb", target: "facts" },
+  { label: "ಕುತೂಹಲ", short: "ಕುತೂಹಲ", icon: "bulb", target: "facts" },
 ];
 
 /*

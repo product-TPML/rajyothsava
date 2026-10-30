@@ -90,9 +90,9 @@ Define them as CSS custom properties in one place.
   sits right under the carousel; owner's choice), each jumping to
   its section (`PAGE_NAV` in each data file). All fit in the bar on desktop; phones swipe the
   bar, and the menu button opens a panel with search and the same links.
-  **Phones also get a bottom bar** (owner's request): four icon links, ಮುಖಪುಟ, ಪೋಸ್ಟರ್,
-  ಸುದ್ದಿ, ವಿಡಿಯೊ (English: Home, Poster, Latest, Archives; the parts in `PAGE_NAV` with
-  `short` and `icon`), then "ಮೆನು" on the right, which opens the menu panel, because the
+  **Phones also get a bottom bar** (owner's request): icon links ಮುಖಪುಟ, ಸುದ್ದಿ, ವಿಡಿಯೊ,
+  ಕುತೂಹಲ (English: Home, Latest, Archives; the parts in `PAGE_NAV` with `short` and `icon`;
+  no Poster, because the floating poster button covers it: owner's choice), then "ಮೆನು" on the right, which opens the menu panel, because the
   masthead's menu button scrolls away (owner's request). The
   link for the part being read is marked in every menu as the reader scrolls. A part that isn't
   on the page drops out of the menu. There is no "All sections" list before the footer and
