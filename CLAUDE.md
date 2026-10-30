@@ -300,6 +300,24 @@ Define them as CSS custom properties in one place.
   each block only if the page has it. Never fork a script or stylesheet per edition;
   put the differences in the data file or a brand token.
 
+## Search engines, sharing and analytics
+
+- The final pages are `https://www.prajavani.net/karunadotsava` and
+  `https://www.deccanherald.com/karunadotsava` (owner, 30 October). The CMS serves the pasted
+  page whole, so its `<head>` is what search engines and social apps read. There is no server
+  of our own (owner): everything is in the pasted page or in the scripts on Cloudflare.
+- Each page's `<head>` names its final address (canonical, `og:url`), links the two editions
+  (`hreflang` kn/en), and carries the title, description, share tags and `#page-data`
+  (schema.org WebPage). These stay in the HTML, not the data files, because social apps
+  never run scripts. If the addresses change, update them there and in `POSTER.address`.
+- The exhibition's schema.org event data is built in the browser from `EVENT` and
+  `#page-data` (`addEventData` in js/main.js), so its dates live in one place.
+- Share picture: `assets/social/share-pv.jpg` / `share-dh.jpg` (1200x630), made by
+  `python tools/share-card.py` from the Karunadotsava marks.
+- Google Tag Manager, as on the Dasara site (owner's request): `GTM-MGBFQ9R` (Prajavani) in
+  `index.html`, `GTM-T46PRBZ` (Deccan Herald) in `index-en.html`, at the top of `<head>` with
+  the noscript frame right after `<body>`.
+
 ## Tech and structure
 
 - **Opening animation content is confirmed for both editions** (owner, 28 October): the seven

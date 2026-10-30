@@ -299,6 +299,31 @@
     document.getElementById("event-when").textContent =
       [EVENT.dateLabel, EVENT.time && EVENT.time.label].filter(Boolean).join(", ");
     document.getElementById("event-calendar").href = calendarUrl(EVENT);
+    addEventData();
+  }
+
+  /*
+   * The exhibition as schema.org event data, so search engines can list it as an event.
+   * Built from EVENT, with the page's address, picture and publisher from #page-data.
+   */
+  function addEventData() {
+    const page = JSON.parse(document.getElementById("page-data").textContent);
+    const data = {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      name: EVENT.calendarTitle,
+      description: EVENT.text,
+      startDate: EVENT.date,
+      endDate: EVENT.endDate || EVENT.date,
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      location: { "@type": "Place", name: EVENT.venue, address: EVENT.location },
+      image: [page.primaryImageOfPage],
+      url: page.url,
+      organizer: page.publisher,
+      inLanguage: page.inLanguage,
+    };
+    document.head.append(el("script", { type: "application/ld+json" }, JSON.stringify(data)));
   }
 
   function storyCard(story, { lead = false } = {}) {
