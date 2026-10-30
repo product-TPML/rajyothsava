@@ -294,6 +294,9 @@ Define them as CSS custom properties in one place.
   (`POSTER.address`, /karunadotsava) goes only in the share message.
 - The reader's line runs to 4 lines (90 characters), set smaller the more lines it takes
   (`LINE_SIZES` in js/poster.js: 104, 96, 84, 72px for 1 to 4 lines; owner's request).
+- The dark shade behind the words rises with them: it fades in just above the heading
+  (`SHADE_FADE`), so a short line leaves the middle of the photo at its true brightness
+  (owner's request). A second shade sits behind the mark at the top.
 - The photo opens filling the poster; the size slider zooms in, or out until the whole photo
   fits (a landscape photo at full width), on deep red, and it can be dragged (owner's request).
 - A disclaimer at the end of the maker's form (`posterDisclaimer`): the tool only makes the

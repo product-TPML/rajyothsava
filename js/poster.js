@@ -18,6 +18,8 @@
   // the largest size for 1, 2, 3 and 4 lines. Four lines at most.
   const LINE_SIZES = [104, 96, 84, 72];
   const MIN_LINE_SIZE = 52;
+  const HEADING_SIZE = 44;
+  const SHADE_FADE = 260; // how far above the words the bottom shade starts to fade in
   const MOVE_STEP = 24; // canvas pixels per arrow-key press
   const ZOOM_STEP = 0.1;
   const CTA_COMPACT_AFTER_PX = 240; // the floating button keeps its label for the first bit of scrolling
@@ -120,18 +122,21 @@
     ctx.drawImage(image, (WIDTH - w) / 2 + poster.offsetX, (HEIGHT - h) / 2 + poster.offsetY, w, h);
   }
 
-  /* Darkens the top and bottom of the photo so white words read on any picture. */
-  function drawShade(ctx) {
+  /*
+   * Darkens the photo behind the mark and behind the words, so white words read on any
+   * picture. The bottom shade rises with the words (wordsTop), leaving the rest of the photo as it is.
+   */
+  function drawShade(ctx, wordsTop) {
     const top = ctx.createLinearGradient(0, 0, 0, 480);
     top.addColorStop(0, shade("night", 0.7));
     top.addColorStop(1, shade("night", 0));
     ctx.fillStyle = top;
     ctx.fillRect(0, 0, WIDTH, 480);
 
-    const bottomTop = 250;
+    const bottomTop = wordsTop - SHADE_FADE;
     const bottom = ctx.createLinearGradient(0, bottomTop, 0, HEIGHT);
     bottom.addColorStop(0, shade("night", 0));
-    bottom.addColorStop(0.45, shade("night", 0.72));
+    bottom.addColorStop(SHADE_FADE / (HEIGHT - bottomTop), shade("night", 0.72));
     bottom.addColorStop(1, shade("night", 0.92));
     ctx.fillStyle = bottom;
     ctx.fillRect(0, bottomTop, WIDTH, HEIGHT - bottomTop);
@@ -180,15 +185,25 @@
   }
 
   /*
-   * From the bottom up: the brand credit, the name, the reader's line and the
-   * prompt's heading above it. Until the reader writes, the example line shows faintly.
+   * Where the words go, from the bottom up: the brand credit, the name, the reader's line
+   * and the prompt's heading above it. Until the reader writes, the example line shows.
    */
-  function drawWords(ctx, poster, logo) {
+  function layoutWords(ctx, poster) {
     const prompt = POSTER.prompts[poster.prompt];
-
-    // Credit: the white brand logo on a dark red pill.
     const pillHeight = 84;
     const pillTop = HEIGHT - MARGIN - pillHeight;
+    const nameBaseline = pillTop - 56;
+    const lineBaseline = poster.name ? nameBaseline - 92 : nameBaseline;
+    const { size, lines } = fitLine(ctx, poster.line || prompt.example);
+    const lineHeight = size * 1.4;
+    const headingBaseline = lineBaseline - (lines.length - 1) * lineHeight - size * 1.1 - 12;
+    return { prompt, pillHeight, pillTop, nameBaseline, lineBaseline, size, lines, lineHeight, headingBaseline, top: headingBaseline - HEADING_SIZE };
+  }
+
+  /* Draws the words where layoutWords placed them. The example line shows faintly. */
+  function drawWords(ctx, poster, words, logo) {
+    // Credit: the white brand logo on a dark red pill.
+    const { pillHeight, pillTop } = words;
     const logoHeight = 44;
     const logoWidth = (logo.width / logo.height) * logoHeight;
     const pillPadding = 30;
@@ -200,26 +215,22 @@
 
     ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
-    let baseline = pillTop - 56;
     if (poster.name) {
       ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
       ctx.font = font(600, 40, TEXT);
-      ctx.fillText(poster.name, MARGIN, baseline);
-      baseline -= 92;
+      ctx.fillText(poster.name, MARGIN, words.nameBaseline);
     }
 
-    const { size, lines } = fitLine(ctx, poster.line || prompt.example);
-    const lineHeight = size * 1.4;
     ctx.fillStyle = poster.line ? token("white") : "rgba(255, 255, 255, 0.5)";
-    lines
+    ctx.font = font(600, words.size, HEADLINE);
+    words.lines
       .slice()
       .reverse()
-      .forEach((line, i) => ctx.fillText(line, MARGIN, baseline - i * lineHeight));
+      .forEach((line, i) => ctx.fillText(line, MARGIN, words.lineBaseline - i * words.lineHeight));
 
-    const headingBaseline = baseline - (lines.length - 1) * lineHeight - size * 1.1 - 12;
     ctx.fillStyle = token("yellow");
-    ctx.font = font(600, 44, TEXT);
-    ctx.fillText(prompt.label, MARGIN, headingBaseline);
+    ctx.font = font(600, HEADING_SIZE, TEXT);
+    ctx.fillText(words.prompt.label, MARGIN, words.headingBaseline);
   }
 
   /* A border in the Kannada flag's colours round the whole poster: yellow outside, red inside.
@@ -244,10 +255,11 @@
     const ctx = target.getContext("2d");
     const scale = target.width / WIDTH;
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    const words = layoutWords(ctx, poster);
     drawPhoto(ctx, poster);
-    drawShade(ctx);
+    drawShade(ctx, words.top);
     drawMark(ctx, mark);
-    drawWords(ctx, poster, logo);
+    drawWords(ctx, poster, words, logo);
     drawBorder(ctx);
   }
 
