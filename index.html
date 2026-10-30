@@ -40,7 +40,8 @@
   <script>
     /*
      * Until the launch (midnight, 1 November, India time) the page is only a countdown, built by
-     * js/main.js from data-launch; "?preview" in the address shows the site anyway, for checking it.
+     * js/main.js from data-launch. The Vercel test copy always shows the site, and so does
+     * "?preview" in the address anywhere else, for checking it.
      * After the launch, the opening animation: once a day (India time), on the home page only:
      * never on a "See all" list (#all/…), nor for readers who prefer reduced motion. "?intro" in
      * the address (the footer's "watch again" link) plays it now. Runs before first paint so the
@@ -49,7 +50,8 @@
     try {
       const launch = Date.parse("2026-11-01T00:00:00+05:30");
       const address = new URL(location.href);
-      if (Date.now() < launch && !address.searchParams.has("preview")) {
+      const preview = location.hostname.endsWith(".vercel.app") || address.searchParams.has("preview");
+      if (Date.now() < launch && !preview) {
         document.documentElement.classList.add("is-countdown");
         document.documentElement.dataset.launch = launch;
       } else {

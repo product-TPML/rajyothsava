@@ -361,7 +361,7 @@ Define them as CSS custom properties in one place.
   index pages show only a countdown in split-flap cards; at zero the page reloads and opens
   normally, with the opening animation. The time is in each page's `<head>` script (`launch`),
   read from the reader's device clock (a cosmetic gate: the page and its data are public).
-  `?preview` shows the site before then. The cards are `js/flip.js` + `.flip`, shared with the
+  The Vercel test copy (`*.vercel.app`) always shows the site, and `?preview` does elsewhere. The cards are `js/flip.js` + `.flip`, shared with the
   exhibition road's year. Text: `countdown…` in `UI`.
 - **Opening animation (owner's choice):** once a day per reader (India time, remembered in the
   browser's localStorage, so a hard refresh doesn't replay it), and only on the home page: never
