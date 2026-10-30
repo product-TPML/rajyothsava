@@ -172,6 +172,7 @@
   /* The stories in a collection on the newspaper's site (COLLECTIONS in the data file), with a photo each. */
   async function collectionStories(slug, limit) {
     const response = await fetch(`${COLLECTIONS.api}${slug}?limit=${limit}&story-fields=${STORY_FIELDS}`, {
+      cache: "no-cache", // ask the server each time, so the desk's edits show on the next load
       signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS),
     });
     if (!response.ok) throw new Error(`Collection ${slug}: HTTP ${response.status}`);
@@ -497,7 +498,7 @@
 
   /* The links on the CMS page (VIDEO_FEED), which serves them as JSON: { "videos": [...] }. */
   async function videoLinks() {
-    const response = await fetch(VIDEO_FEED, { signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS) });
+    const response = await fetch(VIDEO_FEED, { cache: "no-cache", signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS) });
     if (!response.ok) throw new Error(`Video list: HTTP ${response.status}`);
     const { videos } = await response.json();
     return Array.isArray(videos) ? videos : [];
