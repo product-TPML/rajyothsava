@@ -301,7 +301,7 @@ Define them as CSS custom properties in one place.
   requested by the owner. It uses the DH Karunadotsava mark and DH logo (see Brand assets)
   in place of Prajavani's, spells the title "Karunadotsava" to match the mark (DH's collection slugs keep "karunadothsava"), and DH's typefaces through `data-brand="dh"` on `<html>`.
 - Owner's choices: no quotes banner, no videos, no photo stories, no facts; adds "From the
-  archives" from DH's **"karunadothsava-archives"** collection (the first 6 in the desk's
+  archives" from DH's **"karunadothsava-archives"** collection (the first 3 in the desk's
   order, as clippings with photo, headline and subheadline; "See all" for the rest).
 - Its collections are `COLLECTIONS` in `js/data-en.js` (api on deccanherald.com, photos from
   images.assettype.com); like Prajavani's, they can only be read from www.deccanherald.com.

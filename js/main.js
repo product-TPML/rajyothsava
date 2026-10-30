@@ -15,7 +15,7 @@
   const HIGHLIGHTS_COUNTS = [8, 5, 2, 1]; // the newest of the top stories; on desktop, the lead and one, then rows of three
   const PHOTO_STORIES_COUNTS = [5, 3, 1]; // one large photo with four, two or no small ones
   const FACTS_SHOWN = 6; // fills two or three columns evenly
-  const ARCHIVE_SHOWN = 6; // the same
+  const ARCHIVE_SHOWN = 3; // one row of clippings; "See all" for the rest
   const VIDEOS_SHOWN = 5; // in the player's list; about as tall as the player on desktop
   const REELS_SHOWN = 10; // each reel is Instagram's whole player, so the row stays short
   const VIDEOS_PER_PAGE = 12; // on a "See all" page: fills two or three columns evenly

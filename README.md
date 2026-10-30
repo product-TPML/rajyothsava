@@ -22,7 +22,7 @@ Open `index.html` in a browser. There's no build step.
 - **Change text or content:** `js/data-en.js` (menu, stories, archive, poster maker, opening).
 - **Left out** compared with the Kannada page: the quotes banner, the videos and the photo stories.
 - **Stories:** the carousel and stories section work as on the Kannada page, from DH's **karunadothsava-stories** collection on deccanherald.com.
-- **Added:** "From the archives", from DH's **karunadothsava-archives** collection: the first 6 in the desk's order, with "See all" for the rest.
+- **Added:** "From the archives", from DH's **karunadothsava-archives** collection: the first 3 in the desk's order (one row), with "See all" for the rest.
 - **Menu:** like the Kannada page, it jumps to the parts of the page (`PAGE_NAV`), with "Archives" in place of videos and photo stories. The phone's bottom bar has Home, Latest, Archives and Menu (no Poster: the floating poster button covers it).
 - **Look:** DH's typefaces (Playfair Display for headlines, Roboto Slab for text, as on deccanherald.com) with the same Rajyotsava red and yellow. The page sets `data-brand="dh"` on `<html>`, which switches the fonts in `css/styles.css`.
 

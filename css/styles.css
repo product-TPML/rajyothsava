@@ -2776,9 +2776,10 @@ span.pager__step {
   transform: scale(1.04);
 }
 
+/* Tablet and up: the three clippings side by side in one row. */
 @media (min-width: 768px) {
   .archive__list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-5);
   }
 }
@@ -2786,10 +2787,6 @@ span.pager__step {
 @media (min-width: 1024px) {
   .archive {
     padding-block: var(--space-8);
-  }
-
-  .archive__list {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 
