@@ -177,7 +177,8 @@ Define them as CSS custom properties in one place.
 
 - YouTube and Instagram embeds. **The editorial team keeps only a list of links** on the CMS
   page `/pages/karunadothsava-json` (`VIDEO_FEED`), served as JSON `{ "videos": [links] }`,
-  in any order; the front end does the rest (owner's decision). `videoSource` in
+  in any order; the front end does the rest (owner's decision). A stray comma after the last
+  link is forgiven (`videoLinks`), as the desk edits it by hand (owner's request). `videoSource` in
   `js/main.js` reads each link: wide YouTube videos go to the big player plus list (the
   first in the player); YouTube Shorts and Instagram Reels to their own sideways row.
   YouTube titles come from YouTube's oEmbed (readable from any address), cut at the first

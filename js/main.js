@@ -603,11 +603,12 @@
     return id ? { kind: "youtube", id, link, upright: first === "shorts" } : null;
   }
 
-  /* The links on the CMS page (VIDEO_FEED), which serves them as JSON: { "videos": [...] }. */
+  /* The links on the CMS page (VIDEO_FEED), which serves them as JSON: { "videos": [...] }.
+     The desk edits it by hand, so a stray comma after the last link is forgiven. */
   async function videoLinks() {
     const response = await fetch(VIDEO_FEED, { cache: "no-cache", signal: AbortSignal.timeout(COLLECTION_TIMEOUT_MS) });
     if (!response.ok) throw new Error(`Video list: HTTP ${response.status}`);
-    const { videos } = await response.json();
+    const { videos } = JSON.parse((await response.text()).replace(/,(\s*[\]}])/g, "$1"));
     return Array.isArray(videos) ? videos : [];
   }
 
