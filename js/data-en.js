@@ -36,7 +36,7 @@ const UI = {
   aboutText:
     "Karunadotsava celebrates the soul of Karnataka — its pride in Kannada, the richness of its linguistic " +
     "diversity, including Tulu, Konkani, Kodava and Urdu, its timeless heritage, vibrant culture and the " +
-    "indomitable spirit of its people.\n\nAs the State celebrates its rich legacy while embracing the " +
+    "indomitable spirit of its people.\n\nAs the State honors its rich legacy while embracing the " +
     "possibilities of the future, Deccan Herald brings these stories, voices and traditions to the forefront, " +
     "highlighting the many facets of Karnataka’s identity and championing the diverse expressions that make " +
     "the State truly special.",
@@ -97,9 +97,6 @@ const UI = {
   pagerPage: "Page {page}",
 
   archiveTitle: "From the archives",
-  archiveLead:
-    "Deccan Herald has reported on Karnataka since 1948. Revisit the moments that shaped the state, " +
-    "as our pages recorded them at the time.",
 
   footerAbout:
     "Deccan Herald is Karnataka's trusted English daily. This Rajyotsava special brings readers " +
