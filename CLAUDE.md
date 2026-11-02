@@ -160,9 +160,8 @@ Define them as CSS custom properties in one place.
   between them (owner's request).
 - The 30 quotes come in one sheet: date, quote, speaker and a link to the speaker's photo
   (owner's note).
-- Speaker pictures: from those photo links; the owner restyles them in ChatGPT
-  into the silhouette style (black on white, one feature in pure blue, square PNG). We then
-  run them through `tools/silhouette-art.py` as the README describes. Don't draw them ourselves.
+- Speaker pictures: the sheet's photo links themselves (`photo` in `QUOTES`, owner's
+  request, 2 November), in a round frame, cropped to keep the face; not silhouettes.
 
 ## Polls and contests (Kannada page)
 

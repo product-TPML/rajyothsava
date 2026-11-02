@@ -70,7 +70,7 @@ The photo stories section shows the first 5 stories in the **karunadotsava-photo
 
 ## Quotes
 
-One quote runs each day. Each quote in `QUOTES` in `js/data.js` has the `date` it runs (for example `"2026-11-01"`, India time). The red banner shows only the quotes whose day has come. Before the first date it doesn't appear at all. It opens on today's quote, beside the speaker's silhouette; the back arrow (or a swipe) goes to earlier days and the forward arrow comes back. Each quote names its silhouette with `art`; until that silhouette is made, the quote shows without a portrait. The editorial team supplies speakers' photos; they are restyled in ChatGPT into the silhouette style and added as described under Silhouettes.
+One quote runs each day. Each quote in `QUOTES` in `js/data.js` has the `date` it runs (for example `"2026-11-01"`, India time). The red banner shows only the quotes whose day has come. Before the first date it doesn't appear at all. It opens on today's quote, beside the speaker's photo; the back arrow (or a swipe) goes to earlier days and the forward arrow comes back. Each quote's `photo` is the speaker's photo link from the desk's sheet, as given; the page asks the image server for a small copy and shows it in a round frame. A quote without one shows without a portrait.
 
 ## Poster maker
 
@@ -81,19 +81,19 @@ Readers add a photo and write one line about their pride in Kannada and Karnatak
 
 ## Silhouettes
 
-The opening and the quotes share one set of silhouettes. The source images are in `assets/silhouettes`. Each is black on white, with one feature in pure blue (#0000FF), as a square PNG; the facing direction doesn't matter. To add or change one:
+The opening's silhouettes. The source images are in `assets/silhouettes`. Each is black on white, with one feature in pure blue (#0000FF), as a square PNG; the facing direction doesn't matter. To add or change one:
 
 1. Save the image there as `<id>.png`.
 2. List its id and the way it faces in `FACES` in `tools/silhouette-art.py`.
 3. Run `python tools/silhouette-art.py` (needs Python with OpenCV and NumPy). It writes `js/silhouette-art.js`; don't edit that file by hand.
-4. Use the id as `art` in `OPENING` or `QUOTES` in `js/data.js`.
+4. Use the id as `art` in `OPENING` in `js/data.js`.
 
 ## Temporary / to replace before launch
 
 - [ ] **Collections:** work only when each page is served from its newspaper's site (www.prajavani.net, www.deccanherald.com). If they will live elsewhere, the web team must allow it (a CORS header on the collection address).
 - [ ] **DH collections:** "karunadothsava-stories" and "karunadothsava-archives" currently return about 37,000 general news stories each (they look automatic, not hand-picked), so the archives section shows ordinary news. The DH desk should make them hand-picked collections with only Karunadothsava stories and archive pages.
 - [ ] **Videos:** the CMS page `/pages/karunadothsava-json` holds the test links (picked to try the layout). The editors replace them with the final links.
-- [ ] **Quotes:** the desk's sheet is in, running 1–29 November in its order; its second copy of Bendre's "ಒಂದೇ ಒಂದೇ…" is left out, and 30 November is Bendre's "ಕನ್ನಡವು ಕನ್ನಡವ ಕನ್ನಡಿಸುತಿರಬೇಕು" (sent separately; same photo as his 7 November quote). Still to do: (1) Aluru Venkata Rao's photo link ("AryanKurup-AVRoad-Photo2") looks like a road, not him; the desk checks it. (2) Silhouettes: only Kuvempu, Rajkumar and Visvesvaraya are made; the other speakers' quotes show without a portrait until theirs are (see Silhouettes; the `art` ids are in `QUOTES`).
+- [ ] **Quotes:** the desk's sheet is in, running 1–29 November in its order; its second copy of Bendre's "ಒಂದೇ ಒಂದೇ…" is left out, and 30 November is Bendre's "ಕನ್ನಡವು ಕನ್ನಡವ ಕನ್ನಡಿಸುತಿರಬೇಕು" (sent separately; same photo as his 7 November quote). Each shows the speaker's photo from the sheet's link. Still to do: the desk confirms that the photo on Aluru Venkata Rao's link ("AryanKurup-AVRoad-Photo2", 5 November) is him.
 - [ ] **Site addresses:** the final addresses are `https://www.prajavani.net/karunadotsava` (Kannada) and `https://www.deccanherald.com/karunadotsava` (English): in each page's canonical, share and hreflang tags, and sent with every shared poster (`POSTER.address`; not printed on the poster). Check both open the pages, exactly at those addresses (with www), once the CMS pages are set up there.
 - [ ] **Search engines (web team):** link both pages from the newspapers' home pages and menus, add them to each site's sitemap, and ask Google to index them in Search Console. Then check them with Google's Rich Results Test (the exhibition should show as an event).
 - [ ] **Share pictures:** `assets/social/share-pv.jpg` and `share-dh.jpg` load from Cloudflare until they are uploaded to the media gallery.

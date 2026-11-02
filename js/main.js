@@ -309,8 +309,17 @@
         el(
           "li",
           { class: "quote" },
-          // facing the words; a speaker whose silhouette isn't made yet shows the words alone
-          SILHOUETTE_ART[quote.art] && el("span", { class: "quote__portrait" }, drawSilhouette(quote.art, "quote", "right")),
+          // a small copy from the image server: twice the largest frame (120px), for sharp screens
+          quote.photo &&
+            el("img", {
+              class: "quote__portrait",
+              src: `${quote.photo}?w=240&auto=format%2Ccompress`,
+              alt: "",
+              width: 120,
+              height: 120,
+              loading: "lazy",
+              decoding: "async",
+            }),
           el(
             "blockquote",
             { class: "quote__words" },

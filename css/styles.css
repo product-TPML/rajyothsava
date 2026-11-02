@@ -1512,32 +1512,20 @@ body {
   opacity: 0;
 }
 
-/* A round cream frame with a yellow ring; the figure stands on its lower edge, cut off by the curve. */
+/*
+ * The speaker's photo in a round frame with a yellow ring, filling it. Portraits keep the
+ * face in their upper part, so the crop holds the top rather than the middle.
+ */
 .quote__portrait {
   flex: 0 0 88px;
-  display: grid;
-  align-items: end;
-  justify-items: center;
+  width: 88px;
+  height: auto;
   aspect-ratio: 1;
-  padding-top: 12%;
+  object-fit: cover;
+  object-position: 50% 20%;
   border-radius: 50%;
-  overflow: hidden;
   background: var(--cream);
   box-shadow: 0 0 0 3px var(--yellow), 0 6px 18px rgb(0 0 0 / 30%);
-}
-
-.quote__silhouette {
-  width: 88%;
-  height: 100%;
-}
-
-.quote__body {
-  fill: var(--ink);
-}
-
-/* The highlighted feature (turban, beads…) in the flag's yellow, as in the opening. */
-.quote__accent {
-  fill: var(--yellow);
 }
 
 .quote__text {
@@ -1625,6 +1613,7 @@ body {
 
   .quote__portrait {
     flex-basis: 120px;
+    width: 120px;
   }
 
   .quote__text {

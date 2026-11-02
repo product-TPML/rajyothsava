@@ -1,6 +1,6 @@
 """
-Turns the silhouettes of Kannada personalities into js/silhouette-art.js. The
-opening animation and the quotes section both draw from it (js/silhouette.js).
+Turns the silhouettes of Kannada personalities into js/silhouette-art.js, which
+the opening animation draws (js/silhouette.js).
 
 Each source image in assets/silhouettes/<id>.png is black on white, with one
 highlighted feature in pure blue. The script traces two shapes from it: the whole
