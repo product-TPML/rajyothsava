@@ -41,7 +41,7 @@ const UI = {
     "highlighting the many facets of Karnataka’s identity and championing the diverse expressions that make " +
     "the State truly special.",
 
-  // The digital subscription offer, after "About Karunadotsava". The newspaper's name is its logo,
+  // The digital subscription offer, after the carousel. The newspaper's name is its logo,
   // so the text leaves it out; the price is set large in gold.
   subscribeTag: "Premium",
   subscribeText: "Digital subscription, now at",
@@ -116,6 +116,7 @@ const PAGE_NAV = [
   { label: "Poster", icon: "camera", target: "poster" },
   { label: "Highlights", short: "Latest", icon: "news", target: "highlights" },
   { label: "Archives", short: "Archives", icon: "archive", target: "archive" },
+  { label: "About", icon: "info", target: "about" },
 ];
 
 /*

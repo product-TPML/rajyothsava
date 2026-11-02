@@ -186,18 +186,6 @@
       </div>
     </section>
 
-    <section class="about" aria-labelledby="about-title">
-      <div class="container about__inner">
-        <div class="about__mark">
-          <img src="https://rajyothsava.pages.dev/assets/hero/karunadotsava-dh-720.webp" alt="" width="720" height="245" loading="lazy">
-        </div>
-        <div class="about__body">
-          <h2 class="about__title" id="about-title" data-text="aboutTitle"></h2>
-          <p class="about__text" data-text="aboutText"></p>
-        </div>
-      </div>
-    </section>
-
     <!-- The digital subscription offer, under the newspaper's logo; its text, button and address are in UI in the data file. -->
     <aside class="subscribe" aria-labelledby="subscribe-copy">
       <div class="container">
@@ -217,33 +205,6 @@
         </div>
       </div>
     </aside>
-
-    <section class="event" id="event" aria-labelledby="event-title">
-      <div class="container">
-        <!-- Text and the calendar link come from EVENT in the data file. -->
-        <article class="event__card">
-          <p class="event__date" aria-hidden="true">
-            <span class="event__day" data-event="day"></span>
-            <span class="event__month" data-event="month"></span>
-          </p>
-          <div class="event__head">
-            <p class="tag" data-event="eyebrow"></p>
-            <h2 class="event__title" id="event-title" data-event="title"></h2>
-          </div>
-          <div class="event__body">
-            <p class="event__text" data-event="text"></p>
-            <dl class="event__facts">
-              <div class="event__fact"><dt data-event="whenLabel"></dt><dd id="event-when"></dd></div>
-              <div class="event__fact"><dt data-event="whereLabel"></dt><dd data-event="venue"></dd></div>
-            </dl>
-            <a class="button button--primary" id="event-calendar" target="_blank" rel="noopener">
-              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-              <span data-event="calendarButton"></span>
-            </a>
-          </div>
-        </article>
-      </div>
-    </section>
 
     <!-- A one-screen teaser; the poster maker itself opens full screen. -->
     <section class="poster" id="poster" aria-labelledby="poster-title">
@@ -354,6 +315,45 @@
         <ol class="archive__list" id="archive-list"></ol>
         <div class="see-all">
           <a class="button button--outline" data-text="seeAll" data-href="seeAllArchive" hidden></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="event" id="event" aria-labelledby="event-title">
+      <div class="container">
+        <!-- Text and the calendar link come from EVENT in the data file. -->
+        <article class="event__card">
+          <p class="event__date" aria-hidden="true">
+            <span class="event__day" data-event="day"></span>
+            <span class="event__month" data-event="month"></span>
+          </p>
+          <div class="event__head">
+            <p class="tag" data-event="eyebrow"></p>
+            <h2 class="event__title" id="event-title" data-event="title"></h2>
+          </div>
+          <div class="event__body">
+            <p class="event__text" data-event="text"></p>
+            <dl class="event__facts">
+              <div class="event__fact"><dt data-event="whenLabel"></dt><dd id="event-when"></dd></div>
+              <div class="event__fact"><dt data-event="whereLabel"></dt><dd data-event="venue"></dd></div>
+            </dl>
+            <a class="button button--primary" id="event-calendar" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+              <span data-event="calendarButton"></span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-title">
+      <div class="container about__inner">
+        <div class="about__mark">
+          <img src="https://rajyothsava.pages.dev/assets/hero/karunadotsava-dh-720.webp" alt="" width="720" height="245" loading="lazy">
+        </div>
+        <div class="about__body">
+          <h2 class="about__title" id="about-title" data-text="aboutTitle"></h2>
+          <p class="about__text" data-text="aboutText"></p>
         </div>
       </div>
     </section>

@@ -232,8 +232,8 @@ Define them as CSS custom properties in one place.
 ## Subscription offer
 
 - A banner with the newspaper's digital subscription offer (owner's request, 30 October):
-  on the Kannada page right after the carousel, on the English page after "About
-  Karunadotsava". Tag, text, price, button and address (with the `utm_` tags) are
+  right after the carousel on both pages (owner moved it on the English page, 2 November).
+  Tag, text, price, button and address (with the `utm_` tags) are
   `subscribe…` in `UI` in each data file.
 - It must stand out from the carousel (owner's request): a deep red card with a gold edge on
   white. The newspaper's white logo with a "Premium" tag centred below it (a flat gold-gradient label, not
@@ -249,7 +249,8 @@ Define them as CSS custom properties in one place.
 
 ## Exhibition
 
-- `EVENT` in each data file, shown right after the carousel on both pages: the
+- `EVENT` in each data file, shown right after the carousel on the Kannada page and
+  second from last on the English page, above "About Karunadotsava" (owner, 2 November): the
   physical exhibition of Prajavani and DH pages on Karnataka and Kannada (19 to 29 November,
   Rangoli Metro Art Center, MG Road). Owner's request.
 - "Add to Google Calendar" is a plain Google Calendar link built in `js/main.js`
@@ -322,7 +323,8 @@ Define them as CSS custom properties in one place.
   requested by the owner. It uses the DH Karunadotsava mark and DH logo (see Brand assets)
   in place of Prajavani's, spells the title "Karunadotsava" to match the mark (DH's collection slugs keep "karunadothsava"), and DH's typefaces through `data-brand="dh"` on `<html>`.
 - "About Karunadotsava" (owner, 30 October): the desk's paragraph (`UI.aboutText`) in a band
-  right after the carousel, with the Karunadotsava mark on a red tile to its left on desktop
+  last on the page, just before the footer (moved 2 November), with an "About" link at the
+  end of the menus (`PAGE_NAV`), and with the Karunadotsava mark on a red tile to its left on desktop
   (text only on phones). It is also the opening's closing text, and there the closing screen
   waits for the reader's tap (`holdMs: null`) so it can be read; the Kannada opening still
   moves on by itself. The map arrives at its usual size, then shrinks (to `--map-min`) only

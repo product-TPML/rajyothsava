@@ -166,6 +166,7 @@
     archive: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v11h14V9M10 13h4"/>',
     photo: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-8 8"/>',
     bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
     instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
   };
 
@@ -197,6 +198,15 @@
     );
   }
 
+  /* Swipes the top bar (on phones it scrolls sideways) so the link of the part being read is in view. */
+  function showInTopBar(link) {
+    const bar = document.getElementById("nav-list");
+    if (bar.scrollWidth <= bar.clientWidth) return;
+    const gap = link.getBoundingClientRect().left - bar.getBoundingClientRect().left;
+    const left = bar.scrollLeft + gap - (bar.clientWidth - link.offsetWidth) / 2;
+    bar.scrollTo({ left, behavior: reducedMotion.matches ? "auto" : "smooth" });
+  }
+
   /* Marks the menu links of the part being read (aria-current) as the reader scrolls. */
   function setupScrollSpy() {
     const links = document.querySelectorAll(".site-nav__link, .menu-panel__link, .bottom-nav__link");
@@ -205,8 +215,10 @@
         const reading = entries.find((entry) => entry.isIntersecting);
         if (!reading) return;
         links.forEach((link) => {
-          if (link.hash === `#${reading.target.id}`) link.setAttribute("aria-current", "location");
-          else link.removeAttribute("aria-current");
+          if (link.hash === `#${reading.target.id}`) {
+            link.setAttribute("aria-current", "location");
+            if (link.classList.contains("site-nav__link")) showInTopBar(link);
+          } else link.removeAttribute("aria-current");
         });
       },
       { rootMargin: "-45% 0px -50% 0px" } // a thin band across the middle of the screen
