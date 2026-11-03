@@ -9,7 +9,7 @@
   const SWIPE_PX = 40;
   const COLLECTION_TIMEOUT_MS = 5000;
   const TOP_STORIES = 20; // read from the top collection
-  const CAROUSEL_STORIES = 10; // the first of those, in the desk's order, for the carousel
+  const CAROUSEL_STORIES = 5; // the first of those, in the desk's order, for the carousel
   // How many of a collection a section shows: the largest of these it has stories for, as
   // each one fills its layout evenly. "See all" appears only when the collection has more.
   const HIGHLIGHTS_COUNTS = [8, 5, 2, 1]; // the newest of the top stories; on desktop, the lead and one, then rows of three

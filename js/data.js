@@ -117,6 +117,18 @@ const UI = {
   factsTitle: "ಕರುನಾಡ ಕುತೂಹಲ",
   factsLead: "ಕರ್ನಾಟಕ ಮತ್ತು ಕನ್ನಡದ ಬಗ್ಗೆ ನಿಮಗೆ ಗೊತ್ತಿರದ ಸಂಗತಿಗಳು",
 
+  // The executive editor's note on Karunadotsava: in a band just before the footer, and on the
+  // opening's closing screen. A blank line ("\n\n") starts a new paragraph.
+  aboutTitle: "ಕರುನಾಡೋತ್ಸವದ ಬಗ್ಗೆ",
+  aboutText:
+    "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವವನ್ನು ಅರ್ಥಪೂರ್ಣವಾಗಿಸಲು 'ಪ್ರಜಾವಾಣಿ'ಯು ನವೆಂಬರ್ ತಿಂಗಳಿಡೀ ಕರುನಾಡೋತ್ಸವ ಹಮ್ಮಿಕೊಂಡಿದೆ. " +
+    "ಈ ಅವಧಿಯಲ್ಲಿ, ನಾಡಿನ ನಾಡಿಮಿಡಿತವನ್ನು ಹಿಡಿದಿಡಬಲ್ಲ 'ನುಡಿತೋರಣ' ಕಟ್ಟುವ ಕೆಲಸವನ್ನು 'ಪ್ರಜಾವಾಣಿ'ಯ ಡಿಜಿಟಲ್ ವೇದಿಕೆ " +
+    "ಮಾಡುತ್ತಿದ್ದು, ಓದುಗರಿಗೆ ವಿಶೇಷ ಬರಹಗಳ ರಸದೌತಣ ಉಣಬಡಿಸುತ್ತಿದೆ. ವಿಶೇಷ ಲೇಖನಗಳು, ಕನ್ನಡದ ಕುತೂಹಲಗಳು, " +
+    "ಇಂಗ್ಲಿಷ್ ಪದಕ್ಕೆ ಕನ್ನಡದ ಪದ ಹುಡುಕುವ ನುಡಿಕಟ್ಟುವ ಆಟ, ಕನ್ನಡ, ಕರ್ನಾಟಕ ಕುರಿತ ಪ್ರಶ್ನೆಗಳಿಗೆ ಓದುಗರ ಪ್ರತಿಕ್ರಿಯೆ, " +
+    "ಚಿತ್ರಕಥೆಗಳು, ವಿಡಿಯೊ ಸಂವಾದ, ನಿಮ್ಮ ಹಾಗೂ ಸಮುದಾಯದ ಕರುನಾಡೋತ್ಸವ ಸಂಭ್ರಮವನ್ನು ಚಿತ್ರಗಳಲ್ಲಿ ಸೆರೆಹಿಡಿದು " +
+    "ಹಂಚಿಕೊಳ್ಳಲು ವೇದಿಕೆ... ಹೀಗೆ ಹತ್ತು ಹಲವುಗಳಿವೆ. ಈ ಸಂಭ್ರಮದಲ್ಲಿ ನೀವೂ ಭಾಗಿಯಾಗಿ, ಓದಿ, ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು " +
+    "ಹಂಚಿಕೊಳ್ಳಿ.\n\nನಾಡಿನ ಸಮಸ್ತ ಜನತೆಗೆ 71ನೇ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವದ ಶುಭಾಶಯಗಳು\n\nಕಾರ್ಯನಿರ್ವಾಹಕ ಸಂಪಾದಕ",
+
   footerAbout:
     "ಪ್ರಜಾವಾಣಿ ಕನ್ನಡದ ವಿಶ್ವಾಸಾರ್ಹ ದಿನಪತ್ರಿಕೆ. ರಾಜ್ಯೋತ್ಸವದ ಈ ವಿಶೇಷ ತಾಣ ನಾಡಿನ ಹೆಮ್ಮೆಯ ಕಥನಗಳನ್ನು ಓದುಗರಿಗೆ ತಲುಪಿಸುತ್ತದೆ.",
   footerCopyright: "© 2026 ಪ್ರಜಾವಾಣಿ",
@@ -136,12 +148,13 @@ const PAGE_NAV = [
   { label: "ವಿಡಿಯೊ", short: "ವಿಡಿಯೊ", icon: "play", target: "videos" },
   { label: "ಫೋಟೊ ಕಥನಗಳು", icon: "photo", target: "photo-stories" },
   { label: "ಕುತೂಹಲ", short: "ಕುತೂಹಲ", icon: "bulb", target: "facts" },
+  { label: "ಪರಿಚಯ", icon: "info", target: "about" },
 ];
 
 /*
  * Collections on prajavani.net, read each time the page opens. The desk picks the
  * stories and their order there.
- * top   → its first 10 stories, in the desk's order, are the featured carousel; its
+ * top   → its first 5 stories, in the desk's order, are the featured carousel; its
  *         first 20, newest first, are the stories section below.
  * photo → photo stories.
  * facts → interesting facts about Karnataka and Kannada, at the end of the page.
@@ -324,7 +337,7 @@ const OPENING = {
   finale: {
     eyebrow: "71ನೇ ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ · ನವೆಂಬರ್ 1, 2026",
     title: "ಕರುನಾಡೋತ್ಸವ",
-    text: "ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವದ ಶುಭಾಶಯಗಳು. ನಾಡು, ನುಡಿ ಮತ್ತು ಸಂಸ್ಕೃತಿಯ ಸಂಭ್ರಮವನ್ನು ಪ್ರಜಾವಾಣಿಯೊಂದಿಗೆ ಆಚರಿಸಿ",
+    text: UI.aboutText,
     enter: "ವಿಶೇಷ ಸಂಚಿಕೆ ಓದಿ",
   },
   figures: [
@@ -336,5 +349,5 @@ const OPENING = {
     { name: "ಕುವೆಂಪು", art: "kuvempu" },
     { name: "ಡಾ. ರಾಜ್‌ಕುಮಾರ್", art: "rajkumar" },
   ],
-  timing: { figureMs: 600, finaleMs: 2600, holdMs: 3000, exitMs: 700 },
+  timing: { figureMs: 600, finaleMs: 2600, holdMs: null, exitMs: 700 },
 };

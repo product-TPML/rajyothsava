@@ -122,7 +122,7 @@ const PAGE_NAV = [
 /*
  * Collections on deccanherald.com, read each time the page opens. The desk picks the
  * stories and their order there.
- * top     → its first 10 stories, in the desk's order, are the featured carousel; its
+ * top     → its first 5 stories, in the desk's order, are the featured carousel; its
  *           first 20, newest first, are the stories section below.
  * archive → "From the archives", in the desk's order.
  */

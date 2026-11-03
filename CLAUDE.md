@@ -104,7 +104,7 @@ Define them as CSS custom properties in one place.
   The summary line is the desk's **subheadline only**, never the story's opening paragraph
   (owner's choice); stories without one show no summary, and if no carousel story has one,
   the line under the carousel is left out.
-  The same collection feeds both: the carousel takes its **first 10 stories in the desk's
+  The same collection feeds both: the carousel takes its **first 5 stories in the desk's
   order**; the stories section below ("ಇತ್ತೀಚಿನ ಮುಖ್ಯಾಂಶಗಳು") shows the **newest 8 of its first
   20 by publish time**, ignoring the collection order: three rows on desktop, then "See all"
   for the whole collection (owner's choice). With fewer stories it shows 5, 2 or 1, so the
@@ -326,8 +326,10 @@ Define them as CSS custom properties in one place.
   last on the page, just before the footer (moved 2 November), with an "About" link at the
   end of the menus (`PAGE_NAV`), and with the Karunadotsava mark on a red tile to its left on desktop
   (text only on phones). It is also the opening's closing text, and there the closing screen
-  waits for the reader's tap (`holdMs: null`) so it can be read; the Kannada opening still
-  moves on by itself. The map arrives at its usual size, then shrinks (to `--map-min`) only
+  waits for the reader's tap (`holdMs: null`) so it can be read. The Kannada page has the
+  same (owner, 3 November): the executive editor's note "ಕರುನಾಡೋತ್ಸವದ ಬಗ್ಗೆ" (`UI.aboutText`
+  in js/data.js, ending with the Rajyotsava greeting and "ಕಾರ್ಯನಿರ್ವಾಹಕ ಸಂಪಾದಕ") in the band
+  before the footer, a "ಪರಿಚಯ" menu link, and as its opening's closing text. The map arrives at its usual size, then shrinks (to `--map-min`) only
   as far as the text needs, and text longer than that scrolls (owner's request).
 - Poster maker (owner, 30 October): headed "My pride. My dream. My Karnataka." with the DH
   desk's intro; the third tab is "My Karnataka" (key `karnataka`) in place of community.
